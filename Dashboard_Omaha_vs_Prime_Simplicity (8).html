@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Comparativo — Omaha vs Prime | Proyecto Simplicity</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --o:#185FA5;--o-lt:#D6EAF8;--o-dk:#0C447C;
+  --p:#534AB7;--p-lt:#EEEDFE;--p-dk:#3C3489;
+  --bg:#F7F6F2;--sur:#FFFFFF;--bdr:rgba(0,0,0,0.09);
+  --tx:#1A1916;--mu:#6B6A63;--fa:#ADACA5;
+  --gn:#1E7145;--gn-bg:#E8F5EE;
+  --rd:#9C0006;--rd-bg:#FFECEC;
+  --am:#7F6000;--am-bg:#FFF8E6;
+  --r:10px;--rl:14px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5;min-height:100vh}
+.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hdr{margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--bdr)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.hdr h1{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.hdr p{font-size:12px;color:var(--mu);margin-top:3px}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.t-o{background:var(--o-lt);color:var(--o-dk)}.t-p{background:var(--p-lt);color:var(--p-dk)}
+.t-ok{background:var(--gn-bg);color:var(--gn)}.t-bad{background:var(--rd-bg);color:var(--rd)}.t-warn{background:var(--am-bg);color:var(--am)}
+.sec{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--fa);margin:2rem 0 .85rem;padding-top:1.4rem;border-top:1px solid var(--bdr)}
+
+/* ── CONTROLS ─────────────────────────────────────────── */
+.ctrl-panel{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1.4rem;margin-bottom:1.4rem}
+.ctrl-hdr{font-size:12px;font-weight:500;color:var(--mu);margin-bottom:1rem}
+.ctrl-shared{margin-bottom:.25rem}
+.ctrl-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--bdr)}
+.ctrl-row:last-child{border-bottom:none}
+.ctrl-lbl{font-size:11px;color:var(--mu);flex:1;min-width:0;line-height:1.35}
+.ctrl-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:90px;text-align:right;flex-shrink:0}
+.cv-o{color:var(--o)}.cv-p{color:var(--p)}.cv-s{color:var(--tx)}
+.ctrl-funds{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--bdr);margin-top:1rem}
+.ctrl-fund-col{padding:1rem 1rem 0}
+.ctrl-fund-col:first-child{border-right:1px solid var(--bdr)}
+.ctrl-fund-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.65rem;padding-bottom:.45rem;border-bottom:1px solid var(--bdr)}
+
+/* sliders with fill track */
+input[type=range]{flex:1;height:4px;appearance:none;-webkit-appearance:none;border-radius:2px;outline:none;cursor:pointer;min-width:0;background:#DDD}
+input[type=range].sl-o{background:linear-gradient(to right,var(--o) 0%,var(--o) var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range].sl-p{background:linear-gradient(to right,var(--p) 0%,var(--p) var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range].sl-s{background:linear-gradient(to right,#888 0%,#888 var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;cursor:pointer;border:2px solid #BBB;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-top:-5.5px}
+input[type=range].sl-o::-webkit-slider-thumb{border-color:var(--o)}
+input[type=range].sl-p::-webkit-slider-thumb{border-color:var(--p)}
+input[type=range].sl-s::-webkit-slider-thumb{border-color:#888}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#fff;cursor:pointer;border:2px solid #BBB}
+input[type=range].sl-o::-moz-range-thumb{border-color:var(--o)}
+input[type=range].sl-p::-moz-range-thumb{border-color:var(--p)}
+input[type=range].sl-s::-moz-range-thumb{border-color:#888}
+input[type=range].sl-o::-moz-range-progress{background:var(--o);border-radius:2px}
+input[type=range].sl-p::-moz-range-progress{background:var(--p);border-radius:2px}
+input[type=range].sl-s::-moz-range-progress{background:#888;border-radius:2px}
+
+/* ── KPIs ─────────────────────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:9px}
+.kpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px}
+.kpi.win{background:var(--gn-bg);border-color:var(--gn)}.kpi.los{background:var(--rd-bg);border-color:var(--rd)}
+.kpi-lbl{font-size:10px;color:var(--mu);margin-bottom:3px}
+.kpi-val{font-size:20px;font-weight:600;letter-spacing:-.5px;line-height:1.1}
+.kpi-sub{font-size:10px;color:var(--fa);margin-top:2px}
+.kpi.win .kpi-val{color:var(--gn)}.kpi.los .kpi-val{color:var(--rd)}
+
+/* ── FUND CARDS ───────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.fcard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1.1rem;position:relative;overflow:hidden}
+.fcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fcard.fc-o::before{background:var(--o)}.fcard.fc-p::before{background:var(--p)}
+.fcard-hdr{display:flex;align-items:center;gap:8px;margin-bottom:.75rem}
+.fdot{width:9px;height:9px;border-radius:50%}.fdot-o{background:var(--o)}.fdot-p{background:var(--p)}
+.fname{font-size:13px;font-weight:600}
+.ftotal{margin-left:auto;font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.fc-o .ftotal{color:var(--rd)}.fc-p .ftotal{color:var(--gn)}
+/* CEA */
+.cea-big{font-family:'DM Mono',monospace;font-size:28px;font-weight:600;line-height:1}
+.fc-o .cea-big{color:var(--rd)}.fc-p .cea-big{color:var(--gn)}
+.cea-sub{font-size:10px;color:var(--fa);margin-top:3px;margin-bottom:.65rem}
+/* generic rows inside cards */
+.crow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.crow:last-child{border-bottom:none}
+.clbl{color:var(--mu)}.cval{font-family:'DM Mono',monospace;font-size:12px}
+.cval.ex{color:var(--rd)}.cval.ok{color:var(--gn)}
+/* cost breakdown */
+.cost-section{margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--bdr)}
+.cost-sec-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--fa);margin-bottom:.45rem}
+.cost-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.cost-item:last-of-type{border-bottom:none}
+.cost-lbl{color:var(--mu);flex:1;padding-right:8px;line-height:1.35}
+.cost-val{font-family:'DM Mono',monospace;font-size:12px;flex-shrink:0;text-align:right}
+.cost-val.ci-ex{color:var(--rd)}.cost-val.ci-ok{color:var(--gn)}
+.cost-total{display:flex;justify-content:space-between;align-items:center;padding:8px 0 0;margin-top:4px;border-top:2px solid var(--bdr);font-size:13px;font-weight:600}
+.cost-total-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:600}
+.fc-o .cost-total-val{color:var(--rd)}.fc-p .cost-total-val{color:var(--gn)}
+
+/* ── CHARTS ───────────────────────────────────────────── */
+.chart-wrap{position:relative;width:100%}
+.leg-row{display:flex;gap:16px;margin-bottom:8px;font-size:11px;color:var(--mu);flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ── AMORT TABLES ─────────────────────────────────────── */
+.sch-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.sch-wrap{grid-template-columns:1fr}}
+.sch-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto}
+.sch-card h3{font-size:11px;font-weight:500;margin-bottom:.75rem}
+.amort-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:320px}
+.amort-tbl th{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--fa);padding:4px 5px;text-align:right;border-bottom:1px solid var(--bdr)}
+.amort-tbl th:first-child{text-align:left}
+.amort-tbl td{padding:4px 5px;text-align:right;border-bottom:1px solid var(--bdr);font-family:'DM Mono',monospace;font-size:10px}
+.amort-tbl td:first-child{text-align:left;font-family:'DM Sans',sans-serif;color:var(--mu);font-size:10px}
+.amort-tbl tr.forced td:first-child::after{content:' ●';color:var(--rd);font-size:8px}
+.amort-tbl tr.free td{color:var(--gn)}.amort-tbl tr.free td:first-child{color:var(--gn)}
+.amort-tbl tr.total-row td{font-weight:600;background:var(--bg);border-top:1px solid var(--bdr)}
+
+/* ── MATRIZ FIDUCIARIA ───────────────────────────────── */
+.matriz-wrap{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden}
+.mrow{display:grid;grid-template-columns:1.7fr 1fr 1fr;border-bottom:1px solid var(--bdr)}
+.mrow:last-child{border-bottom:none}
+.mrow.hdr-row{background:var(--bg)}.mrow.grp{background:var(--bg)}
+.mcell{padding:9px 12px;font-size:12px;display:flex;align-items:flex-start;gap:7px}
+.mcell:not(:last-child){border-right:1px solid var(--bdr)}
+.mcell.mhdr{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--fa)}
+.mcell.grp-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fa);grid-column:1/-1;border-right:none;padding:7px 12px}
+.crit-txt{color:var(--mu);font-size:11px;line-height:1.4}
+.detail{font-size:11px;color:var(--tx);line-height:1.45}
+.ind{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:12px;flex-shrink:0;margin-top:1px}
+.ind-ok{background:var(--gn-bg);color:var(--gn)}.ind-bad{background:var(--rd-bg);color:var(--rd)}.ind-warn{background:var(--am-bg);color:var(--am)}
+
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:11px;color:var(--fa)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <h1>Dashboard comparativo de financiamiento — Proyecto Simplicity</h1>
+      <p>Deuda TURF · Variables ajustables en tiempo real · Comparación normalizada a 12 meses · CEA por metodología TIR</p>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:2px">
+      <span class="tag t-o">Omaha Capital 2</span>
+      <span class="tag t-p">Prime Gestora de Fondos</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLES -->
+<div class="ctrl-panel">
+  <div class="ctrl-hdr">Variables del modelo — mueve los sliders para recalcular en tiempo real</div>
+
+  <!-- Parámetros compartidos -->
+  <div class="ctrl-shared">
+    <div class="ctrl-row">
+      <span class="ctrl-lbl" style="width:210px;flex:none">Monto del préstamo (US$)</span>
+      <input type="range" class="sl-s" id="sl-monto" min="500000" max="3000000" step="50000" value="1500000">
+      <span class="ctrl-val cv-s" id="lv-monto">1,500,000</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-lbl" style="width:210px;flex:none">IGV (%)</span>
+      <input type="range" class="sl-s" id="sl-igv" min="0" max="20" step="1" value="18">
+      <span class="ctrl-val cv-s" id="lv-igv">18%</span>
+    </div>
+    <div class="ctrl-row" style="border-bottom:none">
+      <span class="ctrl-lbl" style="width:210px;flex:none">Gastos notariales estimados (US$)</span>
+      <input type="range" class="sl-s" id="sl-not" min="1000" max="10000" step="500" value="4000">
+      <span class="ctrl-val cv-s" id="lv-not">4,000</span>
+    </div>
+  </div>
+
+  <!-- Omaha y Prime lado a lado -->
+  <div class="ctrl-funds">
+    <div class="ctrl-fund-col">
+      <div class="ctrl-fund-title" style="color:var(--o-dk)">&#9632; Omaha Capital 2</div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">TEA base (%)</span>
+        <input type="range" class="sl-o" id="sl-o-tea" min="10" max="28" step="0.5" value="15.5">
+        <span class="ctrl-val cv-o" id="lv-o-tea">15.5%</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Intermediario Akamai (%)</span>
+        <input type="range" class="sl-o" id="sl-o-int" min="0" max="6" step="0.25" value="2.5">
+        <span class="ctrl-val cv-o" id="lv-o-int">2.5%</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Comisión estructuración OSG (US$)</span>
+        <input type="range" class="sl-o" id="sl-o-osg" min="0" max="20000" step="500" value="9000">
+        <span class="ctrl-val cv-o" id="lv-o-osg">9,000</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Plazo (meses)</span>
+        <input type="range" class="sl-o" id="sl-o-plazo" min="6" max="24" step="1" value="12">
+        <span class="ctrl-val cv-o" id="lv-o-plazo">12 m</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Meses forzosos sin prepago</span>
+        <input type="range" class="sl-o" id="sl-o-fm" min="1" max="12" step="1" value="6">
+        <span class="ctrl-val cv-o" id="lv-o-fm">6 m</span>
+      </div>
+    </div>
+
+    <div class="ctrl-fund-col">
+      <div class="ctrl-fund-title" style="color:var(--p-dk)">&#9632; Prime Gestora de Fondos</div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">TEA all-in (%)</span>
+        <input type="range" class="sl-p" id="sl-p-tea" min="10" max="28" step="0.5" value="16">
+        <span class="ctrl-val cv-p" id="lv-p-tea">16.0%</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">ACRES — Rep. Obligacionistas (US$/mes)</span>
+        <input type="range" class="sl-p" id="sl-p-acres" min="0" max="2000" step="50" value="500">
+        <span class="ctrl-val cv-p" id="lv-p-acres">500/mes</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">DD + Estructuración + Modif. (US$)</span>
+        <input type="range" class="sl-p" id="sl-p-dd" min="5000" max="30000" step="250" value="14750">
+        <span class="ctrl-val cv-p" id="lv-p-dd">14,750</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Plazo real (meses)</span>
+        <input type="range" class="sl-p" id="sl-p-plazo" min="12" max="36" step="1" value="24">
+        <span class="ctrl-val cv-p" id="lv-p-plazo">24 m</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Meses forzosos sin prepago</span>
+        <input type="range" class="sl-p" id="sl-p-fm" min="1" max="18" step="1" value="12">
+        <span class="ctrl-val cv-p" id="lv-p-fm">12 m</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CEA -->
+<div class="sec">Costo efectivo anual (CEA) — metodología TIR sobre flujos reales</div>
+<div class="two-col">
+  <div class="fcard fc-o">
+    <div class="fcard-hdr"><div class="fdot fdot-o"></div><span class="fname">Omaha Capital 2</span><span class="ftotal" id="o-cea-hdr">—</span></div>
+    <div class="cea-big" id="o-cea">—</div>
+    <div class="cea-sub">TEA + IGV intereses + intermediario + comisión OSG + notariales</div>
+    <div class="crow"><span class="clbl">Tasa base nominal</span><span class="cval" id="o-tea-d">—</span></div>
+    <div class="crow"><span class="clbl">+ Spread intermediario + IGV</span><span class="cval ex" id="o-sp1">—</span></div>
+    <div class="crow"><span class="clbl">+ Spread IGV s/intereses</span><span class="cval ex" id="o-sp2">—</span></div>
+    <div class="crow"><span class="clbl">Monto neto recibido</span><span class="cval" id="o-neto">—</span></div>
+  </div>
+  <div class="fcard fc-p">
+    <div class="fcard-hdr"><div class="fdot fdot-p"></div><span class="fname">Prime Gestora de Fondos</span><span class="ftotal" id="p-cea-hdr">—</span></div>
+    <div class="cea-big" id="p-cea">—</div>
+    <div class="cea-sub">TEA all-in + ACRES mensual + DD/Estructuración + notariales · base 12m equiv.</div>
+    <div class="crow"><span class="clbl">Tasa all-in nominal</span><span class="cval" id="p-tea-d">—</span></div>
+    <div class="crow"><span class="clbl">+ Spread ACRES anualizado</span><span class="cval ex" id="p-sp1">—</span></div>
+    <div class="crow"><span class="clbl">ACRES 12 meses</span><span class="cval ex" id="p-acres12">—</span></div>
+    <div class="crow"><span class="clbl">Monto neto recibido</span><span class="cval" id="p-neto">—</span></div>
+  </div>
+</div>
+
+<!-- DESGLOSE DE COSTOS -->
+<div class="sec">Desglose de costos totales — base comparable 12 meses</div>
+<div class="two-col">
+  <div class="fcard fc-o">
+    <div class="fcard-hdr"><div class="fdot fdot-o"></div><span class="fname">Omaha Capital 2</span><span class="ftotal" id="oc-hdr">—</span></div>
+    <div class="cost-section">
+      <div class="cost-sec-title">Componentes del costo</div>
+      <div id="o-cost-rows"></div>
+      <div class="cost-total"><span>Total estimado 12 meses</span><span class="cost-total-val" id="oc-total">—</span></div>
+    </div>
+  </div>
+  <div class="fcard fc-p">
+    <div class="fcard-hdr"><div class="fdot fdot-p"></div><span class="fname">Prime Gestora de Fondos</span><span class="ftotal" id="pc-hdr">—</span></div>
+    <div class="cost-section">
+      <div class="cost-sec-title">Componentes del costo</div>
+      <div id="p-cost-rows"></div>
+      <div class="cost-total"><span>Total estimado 12 meses equiv.</span><span class="cost-total-val" id="pc-total">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="sec">Resumen comparativo — base 12 meses</div>
+<div class="kpi-grid" id="kpi-grid"></div>
+
+<!-- GRÁFICO SALDO -->
+<div class="sec">Evolución del saldo de capital y pagos acumulados</div>
+<div class="leg-row">
+  <span class="leg"><span class="leg-sq" style="background:#185FA5"></span>Omaha — saldo capital</span>
+  <span class="leg"><span class="leg-sq" style="background:#534AB7"></span>Prime — saldo capital</span>
+  <span class="leg"><span class="leg-sq" style="background:#85B7EB"></span>Omaha — pagos acum.</span>
+  <span class="leg"><span class="leg-sq" style="background:#AFA9EC"></span>Prime — pagos acum.</span>
+</div>
+<div class="chart-wrap" style="height:250px">
+  <canvas id="chartBal" role="img" aria-label="Evolución del saldo de capital y pagos acumulados de Omaha y Prime."></canvas>
+</div>
+
+<!-- GRÁFICO CUOTA -->
+<div class="sec">Cuota mensual estimada (intereses + capital + ACRES)</div>
+<div class="leg-row">
+  <span class="leg"><span class="leg-sq" style="background:#185FA5"></span>Omaha</span>
+  <span class="leg"><span class="leg-sq" style="background:#534AB7"></span>Prime</span>
+</div>
+<div class="chart-wrap" style="height:210px">
+  <canvas id="chartPay" role="img" aria-label="Cuota mensual de Omaha y Prime."></canvas>
+</div>
+
+<!-- CRONOGRAMAS -->
+<div class="sec">Cronogramas de amortización</div>
+<div class="sch-wrap">
+  <div class="sch-card">
+    <h3 style="color:var(--o)">Omaha Capital 2</h3>
+    <table class="amort-tbl">
+      <thead><tr><th>Mes</th><th>Interés</th><th>IGV</th><th>Capital</th><th>Cuota</th><th>Saldo</th></tr></thead>
+      <tbody id="o-amort"></tbody>
+    </table>
+    <p style="font-size:9px;color:var(--fa);margin-top:6px">● meses forzosos sin prepago &nbsp;·&nbsp; verde = prepago libre</p>
+  </div>
+  <div class="sch-card">
+    <h3 style="color:var(--p)">Prime Gestora de Fondos</h3>
+    <table class="amort-tbl">
+      <thead><tr><th>Mes</th><th>Interés</th><th>ACRES</th><th>Capital</th><th>Cuota</th><th>Saldo</th></tr></thead>
+      <tbody id="p-amort"></tbody>
+    </table>
+    <p style="font-size:9px;color:var(--fa);margin-top:6px">● meses forzosos sin prepago &nbsp;·&nbsp; verde = prepago libre</p>
+  </div>
+</div>
+
+<!-- MATRIZ FIDUCIARIA -->
+<div class="sec">Estructura fiduciaria — lo que permiten los contratos</div>
+<div class="matriz-wrap" id="matriz-wrap"></div>
+
+<footer>
+  <p>Fuente: correos Omaha Capital 2 (28 may 2026) y Prime Gestora de Fondos (2 jun 2026). CEA calculado con metodología TIR sobre flujos reales mensuales. Comparación normalizada a 12 meses. Basado en contratos de Fideicomiso de Activos, Fideicomiso de Flujos y Convenio Marco Operativo Interbank (Num. 19.1.25). Uso exclusivo de Directorio — Inmobiliaria La Pacífica S.A.C. · Junio 2026</p>
+</footer>
+</div>
+
+<script>
+const fmt  = n => '$' + Math.round(n).toLocaleString('es-PE');
+const fmtP = n => n.toFixed(2) + '%';
+const fmtK = n => '$' + (n/1000).toFixed(0) + 'k';
+
+function getV() {
+  return {
+    monto:  +document.getElementById('sl-monto').value,
+    igv:    +document.getElementById('sl-igv').value / 100,
+    not:    +document.getElementById('sl-not').value,
+    oTea:   +document.getElementById('sl-o-tea').value / 100,
+    oInt:   +document.getElementById('sl-o-int').value / 100,
+    oOsg:   +document.getElementById('sl-o-osg').value,
+    oPlazo: +document.getElementById('sl-o-plazo').value,
+    oFm:    +document.getElementById('sl-o-fm').value,
+    pTea:   +document.getElementById('sl-p-tea').value / 100,
+    pPlazo: +document.getElementById('sl-p-plazo').value,
+    pFm:    +document.getElementById('sl-p-fm').value,
+    pDd:    +document.getElementById('sl-p-dd').value,
+    pAcres: +document.getElementById('sl-p-acres').value,
+  };
+}
+
+function syncLabels(v) {
+  document.getElementById('lv-monto').textContent  = Math.round(v.monto).toLocaleString('es-PE');
+  document.getElementById('lv-igv').textContent    = (v.igv*100).toFixed(0) + '%';
+  document.getElementById('lv-not').textContent    = Math.round(v.not).toLocaleString('es-PE');
+  document.getElementById('lv-o-tea').textContent  = (v.oTea*100).toFixed(1) + '%';
+  document.getElementById('lv-o-int').textContent  = (v.oInt*100).toFixed(2) + '%';
+  document.getElementById('lv-o-osg').textContent  = Math.round(v.oOsg).toLocaleString('es-PE');
+  document.getElementById('lv-o-plazo').textContent= v.oPlazo + ' m';
+  document.getElementById('lv-o-fm').textContent   = v.oFm + ' m';
+  document.getElementById('lv-p-tea').textContent  = (v.pTea*100).toFixed(1) + '%';
+  document.getElementById('lv-p-plazo').textContent= v.pPlazo + ' m';
+  document.getElementById('lv-p-fm').textContent   = v.pFm + ' m';
+  document.getElementById('lv-p-dd').textContent   = Math.round(v.pDd).toLocaleString('es-PE');
+  document.getElementById('lv-p-acres').textContent= Math.round(v.pAcres).toLocaleString('es-PE') + '/mes';
+  // slider fill
+  document.querySelectorAll('input[type=range]').forEach(el => {
+    const pct = ((+el.value - +el.min) / (+el.max - +el.min) * 100).toFixed(1) + '%';
+    el.style.setProperty('--fill', pct);
+  });
+}
+
+function tirCalc(flows, g=0.02) {
+  let r = g;
+  for (let i = 0; i < 1000; i++) {
+    let f = 0, df = 0;
+    for (let j = 0; j < flows.length; j++) {
+      const d = Math.pow(1+r, j);
+      f  += flows[j] / d;
+      df -= j * flows[j] / (d * (1+r));
+    }
+    if (Math.abs(df) < 1e-12) break;
+    r -= f / df;
+    if (r <= -0.999) r = 0.001;
+  }
+  return r;
+}
+
+function calcAll(v) {
+  const ro = Math.pow(1+v.oTea, 1/12) - 1;
+  const rp = Math.pow(1+v.pTea, 1/12) - 1;
+
+  const oInt12  = v.monto * v.oTea;
+  const oIgvInt = oInt12 * v.igv;
+  const oInterm = v.monto * v.oInt * (1 + v.igv);
+  const oOsgT   = v.oOsg * (1 + v.igv);
+  const oTotal12= oInt12 + oIgvInt + oInterm + oOsgT + v.not;
+  const oNeto   = v.monto - oOsgT - oInterm;
+  const oSpInt  = v.oInt*(1+v.igv)*100;
+  const oSpIgv  = v.oTea*v.igv*100;
+
+  const f_o = [-oNeto];
+  for (let m=1; m<v.oPlazo; m++) f_o.push(v.monto*ro*(1+v.igv));
+  f_o.push(v.monto*ro*(1+v.igv) + v.monto + v.not);
+  const cea_o = (Math.pow(1+tirCalc(f_o), 12)-1)*100;
+
+  const pInt12  = v.monto * v.pTea;
+  const pAcr12  = v.pAcres * 12;
+  const pTotal12= pInt12 + pAcr12 + v.pDd + v.not;
+  const pNeto   = v.monto - v.pDd - v.not;
+  const pAcrSprd= (v.pAcres*12/v.monto)*100;
+
+  const f_p = [-pNeto];
+  for (let m=1; m<v.pPlazo; m++) f_p.push(v.monto*rp + v.pAcres);
+  f_p.push(v.monto*rp + v.pAcres + v.monto);
+  const cea_p = (Math.pow(1+tirCalc(f_p), 12)-1)*100;
+
+  return { oInt12, oIgvInt, oInterm, oOsgT, oTotal12, oNeto, oSpInt, oSpIgv, cea_o,
+           pInt12, pAcr12, pTotal12, pNeto, pAcrSprd, cea_p, ro, rp,
+           diff: oTotal12 - pTotal12 };
+}
+
+function buildCostRows(rowsId, items) {
+  document.getElementById(rowsId).innerHTML = items.map(it =>
+    `<div class="cost-item"><span class="cost-lbl">${it.l}</span><span class="cost-val ${it.c||''}">${it.v}</span></div>`
+  ).join('');
+}
+
+function buildAmort(monto, r, plazo, fm, acresM, igv) {
+  const rows=[]; let s=monto;
+  for (let m=1; m<=plazo; m++) {
+    const int=s*r, igvI=int*igv;
+    let cap=0;
+    if (m===plazo) cap=s; else if (m>fm) cap=monto/plazo;
+    s=Math.max(0,s-cap);
+    rows.push({m,int,igvI,cap,acres:acresM,cuota:int+igvI+cap+acresM,s,forced:m<=fm});
+  }
+  return rows;
+}
+
+function renderAmort(id, rows, fm, col3IsIgv) {
+  const el=document.getElementById(id);
+  let html=rows.map(r=>{
+    const cls=r.forced?'forced':(r.m>fm?'free':'');
+    const c3=col3IsIgv?fmt(r.igvI):(r.acres>0?fmt(r.acres):'—');
+    return `<tr class="${cls}"><td>Mes ${r.m}</td><td>${fmt(r.int)}</td><td>${c3}</td><td>${r.cap>0.5?fmt(r.cap):'—'}</td><td>${fmt(r.cuota)}</td><td>${fmt(r.s)}</td></tr>`;
+  }).join('');
+  const tI=rows.reduce((a,r)=>a+r.int,0), tC=rows.reduce((a,r)=>a+r.cap,0),
+        tA=rows.reduce((a,r)=>a+r.acres,0), tQ=rows.reduce((a,r)=>a+r.cuota,0);
+  html+=`<tr class="total-row"><td>Total</td><td>${fmt(tI)}</td><td>${tA>0?fmt(tA):'—'}</td><td>${fmt(tC)}</td><td>${fmt(tQ)}</td><td>—</td></tr>`;
+  el.innerHTML=html;
+}
+
+let cBal=null, cPay=null;
+function buildCharts(v, c) {
+  const oR=buildAmort(v.monto,c.ro,v.oPlazo,v.oFm,0,v.igv);
+  const pR=buildAmort(v.monto,c.rp,v.pPlazo,v.pFm,v.pAcres,0);
+  renderAmort('o-amort',oR,v.oFm,true);
+  renderAmort('p-amort',pR,v.pFm,false);
+
+  const mx=Math.max(v.oPlazo,v.pPlazo);
+  const lbl=Array.from({length:mx},(_,i)=>`M${i+1}`);
+  const oS=lbl.map((_,i)=>i<oR.length?Math.round(oR[i].s):null);
+  const pS=lbl.map((_,i)=>i<pR.length?Math.round(pR[i].s):null);
+  let oa=0,pa=0;
+  const oA=lbl.map((_,i)=>{if(i<oR.length){oa+=oR[i].cuota;return Math.round(oa);}return null;});
+  const pA=lbl.map((_,i)=>{if(i<pR.length){pa+=pR[i].cuota;return Math.round(pa);}return null;});
+  const oQ=lbl.map((_,i)=>i<oR.length?Math.round(oR[i].cuota):null);
+  const pQ=lbl.map((_,i)=>i<pR.length?Math.round(pR[i].cuota):null);
+
+  const dk=matchMedia('(prefers-color-scheme: dark)').matches;
+  const gc=dk?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+  const tc=dk?'#B4B2A9':'#888780';
+
+  if(cBal)cBal.destroy();
+  cBal=new Chart(document.getElementById('chartBal'),{
+    type:'line', data:{labels:lbl, datasets:[
+      {label:'Omaha saldo',data:oS,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.07)',borderWidth:2,tension:.3,fill:false,pointRadius:2,borderDash:[]},
+      {label:'Prime saldo',data:pS,borderColor:'#534AB7',backgroundColor:'rgba(83,74,183,0.07)',borderWidth:2,tension:.3,fill:false,pointRadius:2,borderDash:[5,3]},
+      {label:'Omaha acum.',data:oA,borderColor:'#85B7EB',backgroundColor:'transparent',borderWidth:1.5,tension:.3,fill:false,pointRadius:1,borderDash:[3,3]},
+      {label:'Prime acum.',data:pA,borderColor:'#AFA9EC',backgroundColor:'transparent',borderWidth:1.5,tension:.3,fill:false,pointRadius:1,borderDash:[6,3]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtK(ctx.parsed.y)}`}}},
+      scales:{x:{ticks:{color:tc,font:{size:10},autoSkip:true,maxTicksLimit:13,maxRotation:0},grid:{color:gc}},
+              y:{ticks:{color:tc,font:{size:10},callback:n=>fmtK(n)},grid:{color:gc},beginAtZero:true}}}
+  });
+
+  if(cPay)cPay.destroy();
+  cPay=new Chart(document.getElementById('chartPay'),{
+    type:'bar', data:{labels:lbl, datasets:[
+      {label:'Omaha',data:oQ,backgroundColor:'#185FA5',borderColor:'#0C447C',borderWidth:.5},
+      {label:'Prime',data:pQ,backgroundColor:'#7F77DD',borderColor:'#534AB7',borderWidth:.5},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`}}},
+      scales:{x:{ticks:{color:tc,font:{size:10},autoSkip:true,maxTicksLimit:13,maxRotation:0},grid:{color:gc}},
+              y:{ticks:{color:tc,font:{size:10},callback:n=>fmtK(n)},grid:{color:gc},beginAtZero:true}}}
+  });
+}
+
+function ind(t){const m={ok:['ind-ok','✓'],bad:['ind-bad','✗'],warn:['ind-warn','~']};const[c,s]=m[t]||m.warn;return`<span class="ind ${c}">${s}</span>`;}
+
+function buildMatriz(v,c){
+  const rows=[
+    {group:'Condiciones financieras'},
+    {crit:'Instrumento legal',o:{st:'ok',txt:'Mutuo + Pagaré + adendas a ambos fideicomisos'},p:{st:'ok',txt:'Bono corporativo + Representante de Obligacionistas (ACRES)'}},
+    {crit:'CEA (TIR anualizada)',o:{st:'bad',txt:fmtP(c.cea_o)+' — TEA + IGV intereses + intermediario + OSG'},p:{st:'ok',txt:fmtP(c.cea_p)+' — TEA all-in + ACRES mensual'}},
+    {crit:'Costo total comparable 12m',o:{st:'bad',txt:fmt(c.oTotal12)},p:{st:'ok',txt:fmt(c.pTotal12)}},
+    {crit:'Diferencia de costo 12m',o:{st:c.diff>0?'bad':'ok',txt:c.diff>0?'Omaha: '+fmt(c.diff)+' más cara':'Omaha: '+fmt(Math.abs(c.diff))+' más económica'},p:{st:c.diff>0?'ok':'bad',txt:c.diff>0?'Prime: '+fmt(c.diff)+' más económica':'Prime: '+fmt(Math.abs(c.diff))+' más cara'}},
+    {crit:'Plazo',o:{st:'ok',txt:v.oPlazo+' meses'},p:{st:'warn',txt:v.pPlazo+' meses (comparación en base 12m equiv.)'}},
+    {crit:'Meses forzosos / prepago libre desde',o:{st:'warn',txt:v.oFm+' meses forzosos · prepago libre desde mes '+(v.oFm+1)},p:{st:'warn',txt:v.pFm+' meses forzosos · prepago libre desde mes '+(v.pFm+1)}},
+    {group:'Ingreso al fideicomiso — ¿lo permiten los contratos?'},
+    {crit:'¿Permiten los contratos el ingreso?',o:{st:'warn',txt:'Sí — mediante adendas. Precedente: Modificación 2023. Requiere aprobación unánime.'},p:{st:'ok',txt:'Sí — Numeral 19.1.25 del CMO Interbank lo prevé expresamente para terceros financiadores.'}},
+    {crit:'Posición solicitada en fideicomiso',o:{st:'bad',txt:'Primer beneficiario — exige desplazar a Interbank en activos y flujos de Etapa 1.'},p:{st:'ok',txt:'Fideicomisario Junior — acepta detrás de Interbank Senior. Compatible con estructura vigente.'}},
+    {crit:'¿Interbank debe ceder su posición?',o:{st:'bad',txt:'Sí. Debe emitir carta cediendo derechos sobre Etapa 1. Sin ella: operación inviable.'},p:{st:'ok',txt:'No. Prime no requiere que IBK ceda posición. IBK mantiene primer rango sin modificación.'}},
+    {crit:'Respaldo contractual explícito',o:{st:'warn',txt:'Sin cláusula específica. Requiere negociación ad hoc con Interbank y La Fiduciaria.'},p:{st:'ok',txt:'Numeral 19.1.25 CMO: cláusula vigente que permite endeudamiento con terceros bajo condiciones.'}},
+    {group:'Modificaciones necesarias a los fideicomisos'},
+    {crit:'Fideicomiso de activos',o:{st:'warn',txt:'Adenda específica para liberar activos Etapa 1 y constituirlos como garantía de Omaha.'},p:{st:'warn',txt:'Modificación integral para incorporar a ACRES como nuevo Fideicomisario Junior.'}},
+    {crit:'Fideicomiso de flujos',o:{st:'bad',txt:'Adenda para desviar flujos de ventas Etapa 1 hacia Omaha. Conflicto con waterfall fiduciario vigente.'},p:{st:'warn',txt:'Modificación integral — flujos se canalizan vía ACRES según nuevo waterfall acordado.'}},
+    {crit:'¿Son posibles estas modificaciones?',o:{st:'warn',txt:'Sí, con aprobación unánime. Los contratos admiten modificaciones (precedente: Adendas 2017 y 2023).'},p:{st:'ok',txt:'Sí, expresamente previsto. Estructura bono + representante de obligacionistas es el mecanismo estándar.'}},
+    {crit:'Aprobaciones requeridas',o:{st:'warn',txt:'Interbank (carta) + TURF (acepta nueva estructura) + La Fiduciaria. Las tres simultáneas.'},p:{st:'warn',txt:'Interbank (coordinación) + La Fiduciaria (modificación integral) + ACRES (acepta rol de Junior).'}},
+    {group:'Garantías — compatibilidad con el fideicomiso vigente'},
+    {crit:'Departamentos Etapa 1 como garantía',o:{st:'bad',txt:'Conflicto: ya están fideicometidos. Solo viable si IBK libera formalmente los activos.'},p:{st:'warn',txt:'Compatible si IBK acepta nueva estructura Junior. Activos permanecen dentro del fideicomiso.'}},
+    {crit:'Flujos de ventas Etapa 1',o:{st:'bad',txt:'Omaha exige captura directa. Contradice el cash waterfall fiduciario vigente.'},p:{st:'warn',txt:'Se redirigen dentro del fideicomiso de flujos vía ACRES conforme al nuevo waterfall.'}},
+    {crit:'Etapa 1 sin deuda con Interbank',o:{st:'ok',txt:'Facilita la carta de comfort de IBK liberando activos y flujos de Etapa 1.'},p:{st:'ok',txt:'Facilita negociación con IBK para aceptar incorporación de Prime como nuevo Junior.'}},
+    {group:'Riesgos y pendientes'},
+    {crit:'Riesgo principal',o:{st:'bad',txt:'IBK no emite carta de comfort. Sin ella la operación es completamente inviable.'},p:{st:'warn',txt:'Proceso largo (DD + bono + mod. integral) puede superar el vencimiento de junio de TURF.'}},
+    {crit:'Celeridad estimada',o:{st:'ok',txt:'Más rápido: si IBK coopera, el proceso puede cerrarse en semanas.'},p:{st:'warn',txt:'Más lento: meses. Due Diligence + estructuración legal + emisión de bono corporativo.'}},
+    {crit:'Costos legales previos al desembolso',o:{st:'ok',txt:'Solo gastos notariales (~'+fmt(v.not)+'). Sin DD previo.'},p:{st:'warn',txt:fmt(v.pDd)+' (DD + estructuración + modificatorias) antes de recibir los fondos.'}},
+    {crit:'Reunión de cierre pendiente',o:{st:'ok',txt:'No — propuesta ya enviada con condiciones definidas.'},p:{st:'warn',txt:'Sí — Prime solicita reunión urgente esta semana para afinar condiciones adicionales.'}},
+    {crit:'Recomendación de la Dirección',o:{st:'warn',txt:'Alternativa de contingencia si Prime no formaliza a tiempo. Negociar eliminar meses forzosos e IGV sobre intereses.'},p:{st:'ok',txt:'Propuesta principal: menor CEA, compatible con fideicomiso, respaldo legal explícito. Priorizar cierre esta semana.'}},
+  ];
+
+  const hdr=`<div class="mrow hdr-row"><div class="mcell mhdr">Criterio</div><div class="mcell mhdr" style="color:var(--o-dk)">Omaha Capital 2</div><div class="mcell mhdr" style="color:var(--p-dk)">Prime Gestora de Fondos</div></div>`;
+  const body=rows.map(r=>{
+    if(r.group)return`<div class="mrow grp"><div class="mcell grp-lbl">${r.group}</div></div>`;
+    return`<div class="mrow"><div class="mcell"><span class="crit-txt">${r.crit}</span></div><div class="mcell">${ind(r.o.st)}<span class="detail">${r.o.txt}</span></div><div class="mcell">${ind(r.p.st)}<span class="detail">${r.p.txt}</span></div></div>`;
+  }).join('');
+  document.getElementById('matriz-wrap').innerHTML=hdr+body;
+}
+
+function update() {
+  const v=getV();
+  syncLabels(v);
+  const c=calcAll(v);
+
+  // CEA section
+  document.getElementById('o-cea').textContent     = fmtP(c.cea_o);
+  document.getElementById('o-cea-hdr').textContent = fmtP(c.cea_o);
+  document.getElementById('o-tea-d').textContent   = fmtP(v.oTea*100);
+  document.getElementById('o-sp1').textContent     = '+'+fmtP(c.oSpInt)+' (intermediario+IGV)';
+  document.getElementById('o-sp2').textContent     = '+'+fmtP(c.oSpIgv)+' (IGV s/intereses)';
+  document.getElementById('o-neto').textContent    = fmt(c.oNeto);
+
+  document.getElementById('p-cea').textContent     = fmtP(c.cea_p);
+  document.getElementById('p-cea-hdr').textContent = fmtP(c.cea_p);
+  document.getElementById('p-tea-d').textContent   = fmtP(v.pTea*100);
+  document.getElementById('p-sp1').textContent     = '+'+fmtP(c.pAcrSprd)+' (ACRES anualizado)';
+  document.getElementById('p-acres12').textContent = fmt(c.pAcr12)+' ('+fmt(v.pAcres)+'/mes×12)';
+  document.getElementById('p-neto').textContent    = fmt(c.pNeto);
+
+  // Cost breakdown
+  buildCostRows('o-cost-rows',[
+    {l:`Intereses (${(v.oTea*100).toFixed(1)}% TEA × 12m)`,         v:fmt(c.oInt12)},
+    {l:`IGV sobre intereses (${(v.igv*100).toFixed(0)}%)`,           v:fmt(c.oIgvInt),  c:'ci-ex'},
+    {l:`Intermediario Akamai (${(v.oInt*100).toFixed(2)}% + IGV)`,   v:fmt(c.oInterm),  c:'ci-ex'},
+    {l:`Comisión OSG + IGV (${(v.igv*100).toFixed(0)}%)`,            v:fmt(c.oOsgT)},
+    {l:'Gastos notariales / registrales (est.)',                      v:fmt(v.not)},
+  ]);
+  document.getElementById('oc-hdr').textContent  = fmt(c.oTotal12);
+  document.getElementById('oc-total').textContent= fmt(c.oTotal12);
+
+  buildCostRows('p-cost-rows',[
+    {l:`Intereses (${(v.pTea*100).toFixed(1)}% all-in × 12m equiv.)`,v:fmt(c.pInt12)},
+    {l:`ACRES Rep. Obligacionistas (${fmt(v.pAcres)}/mes × 12)`,     v:fmt(c.pAcr12),   c:'ci-ex'},
+    {l:'DD + Estructuración + Modificatorias',                        v:fmt(v.pDd)},
+    {l:'Gastos notariales / registrales (est.)',                      v:fmt(v.not)},
+    {l:'IGV sobre intereses',                                         v:'Incluido en tasa',c:'ci-ok'},
+    {l:'Intermediario adicional',                                     v:'No aplica',       c:'ci-ok'},
+  ]);
+  document.getElementById('pc-hdr').textContent  = fmt(c.pTotal12);
+  document.getElementById('pc-total').textContent= fmt(c.pTotal12);
+
+  // KPIs
+  document.getElementById('kpi-grid').innerHTML=[
+    {l:'Monto préstamo',           v:fmt(v.monto),          s:'ambas propuestas',          cls:''},
+    {l:'CEA Omaha (TIR)',          v:fmtP(c.cea_o),         s:'tasa efectiva real anual',  cls:'los'},
+    {l:'CEA Prime (TIR)',          v:fmtP(c.cea_p),         s:'base 12m equiv.',           cls:'win'},
+    {l:'Diferencia CEA',           v:fmtP(c.cea_o-c.cea_p), s:'puntos Omaha sobre Prime',  cls:'los'},
+    {l:'Costo Omaha 12m',          v:fmt(c.oTotal12),       s:`plazo ${v.oPlazo}m`,        cls:'los'},
+    {l:'Costo Prime 12m equiv.',   v:fmt(c.pTotal12),       s:`base ${v.pPlazo}m/norm.12`, cls:'win'},
+    {l:c.diff>0?'Omaha cuesta más':'Prime cuesta más',v:fmt(Math.abs(c.diff)),s:'diferencia absoluta 12m',cls:c.diff>0?'los':'win'},
+  ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+  buildCharts(v, c);
+  buildMatriz(v, c);
+}
+
+// init
+document.querySelectorAll('input[type=range]').forEach(el => {
+  const pct=((+el.value-+el.min)/(+el.max-+el.min)*100).toFixed(1)+'%';
+  el.style.setProperty('--fill',pct);
+  el.addEventListener('input', update);
+});
+update();
+</script>
+</body>
+</html>
