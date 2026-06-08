@@ -988,7 +988,10 @@ function switchTab(tab){
     document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
-  if(tab==='proyeccion') updateProy();
+  if(tab==='proyeccion'){
+    // Force chart redraw after tab becomes visible
+    setTimeout(()=>{ updateProy(); }, 50);
+  }
 }
 
 // ── PROJECTION LOGIC ──────────────────────────────────────────────
@@ -1057,7 +1060,6 @@ function costoMes(m, v){
   const base  = sched[m] || 25000;
   // Scale: if user changes slider (baseline=150k), apply proportionally
   // but floor at 25k and cap changes proportionally
-  const ratio = v.teaF !== undefined ? 1 : 1; // placeholder — just use schedule
   return base;
 }
 
@@ -1200,14 +1202,14 @@ function buildPrKPIs(rows, v){
   // Jun(m=1) pays 50%turf, Jul(m=2) pays other 50% — check after both paid
   const cubreTurf1 = rows[2]&&rows[2].saldoCaja>0; // After Jul 50% payment
   const cubreTurf2 = rows[10]&&rows[10].saldoCaja>0; // After Mar27 payment
-  const totalVentas= Math.min(v.qx, v.vxm*(N_MONTHS-1));
+  const totalVentas= Math.min(v.qx, v.vxm*(NM-1));
   const valorStock = totalVentas * v.px;
 
   const kpis=[
     {l:'Total ingresos proyectados',v:fmtSK(totalIngr),s:'período completo',cls:''},
-    {l:'Total pago TURF',v:fmtSK(v.turf1+v.turf2),s:'jun + dic 2026',cls:'los'},
+    {l:'Total pago TURF',v:fmtSK(v.turf1+v.turf2),s:'jun 26 + mar 27',cls:'los'},
     {l:'Cubre cuota junio',v:cubreTurf1?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[2]?rows[2].saldoCaja:0)} jul26`,cls:cubreTurf1?'win':'los'},
-    {l:'Cubre cuota diciembre',v:cubreTurf2?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[9]?rows[9].saldoCaja:0)}`,cls:cubreTurf2?'win':'los'},
+    {l:'Cubre cuota diciembre',v:cubreTurf2?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[10]?rows[10].saldoCaja:0)} mar27`,cls:cubreTurf2?'win':'los'},
     {l:'Saldo caja final',v:fmtSK(saldoFinal),s:'fin del período',cls:saldoFinal>=0?'win':'los'},
     {l:'Dptos. vendidos',v:totalVentas+' / '+v.qx,s:'proyectados vs disponibles',cls:''},
     {l:'Valor stock proyectado',v:fmtSK(valorStock),s:`${totalVentas} dptos × S/${Math.round(v.px).toLocaleString()}`,cls:''},
@@ -1251,7 +1253,7 @@ function buildPrCharts(rows, v){
       {label:'Cuota inicial',    data:rows.map(r=>Math.round(r.ciMes)),     backgroundColor:'rgba(30,113,69,0.8)', borderWidth:.5},
       {label:'Saldo restante',   data:rows.map(r=>Math.round(r.saldoMes)),  backgroundColor:'rgba(30,113,69,0.4)', borderWidth:.5},
       {label:'Cob. pendientes',data:rows.map(r=>Math.round(r.cobPend)),backgroundColor:'rgba(30,113,69,0.2)',borderWidth:.5},
-      {label:'Fondeo',           data:rows.map(r=>Math.round(r.fondeoIngreso)),backgroundColor:'rgba(156,0,6,0.5)', borderWidth:.5},
+      {label:'Fondeo',           data:rows.map(r=>Math.round(r.fondeoIn)),backgroundColor:'rgba(156,0,6,0.5)', borderWidth:.5},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:true,labels:{font:{size:10},color:tc}},
@@ -1295,6 +1297,8 @@ document.querySelectorAll('[id^="psl-"]').forEach(el=>{
   updateFill(el);
   el.addEventListener('input',()=>{ updateFill(el); updateProy(); });
 });
+// Pre-render projection tab even while hidden
+try { updateProy(); } catch(e){ console.error('updateProy init error:', e); }
 
 // Frequency buttons
 document.querySelectorAll('.freq-btn').forEach(btn=>{
