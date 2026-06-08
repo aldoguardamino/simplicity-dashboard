@@ -153,11 +153,32 @@ input[type=range].sl-s::-moz-range-progress{background:#888}
 .freq-btn.active-o{background:var(--o-lt);border-color:var(--o);color:var(--o-dk)}
 .freq-btn.active-p{background:var(--p-lt);border-color:var(--p);color:var(--p-dk)}
 
+.tab-btn{
+  padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;
+  background:transparent;border:none;border-bottom:3px solid transparent;
+  color:var(--mu);transition:all .15s;margin-bottom:-2px;
+}
+.tab-btn:hover{color:var(--tx)}
+.tab-btn.active{color:var(--o);border-bottom-color:var(--o)}
+
 footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:11px;color:var(--fa)}
 </style>
 </head>
 <body>
 <div class="page">
+
+<!-- TAB NAV -->
+<div style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--bdr)">
+  <button class="tab-btn active" onclick="switchTab('financiamiento')" id="tab-financiamiento">
+    Comparativo de Financiamiento
+  </button>
+  <button class="tab-btn" onclick="switchTab('proyeccion')" id="tab-proyeccion">
+    Proyección de Ventas y Pago TURF
+  </button>
+</div>
+
+<!-- TAB: FINANCIAMIENTO -->
+<div id="panel-financiamiento">
 
 <div class="hdr">
   <div class="hdr-top">
@@ -394,6 +415,139 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 <!-- MATRIZ FIDUCIARIA -->
 <div class="sec">Estructura fiduciaria — lo que permiten los contratos</div>
 <div class="matriz-wrap" id="matriz-wrap"></div>
+
+</div><!-- end panel-financiamiento -->
+
+<!-- TAB: PROYECCIÓN DE VENTAS Y PAGO TURF -->
+<div id="panel-proyeccion" style="display:none">
+
+<div class="hdr" style="margin-top:1.75rem">
+  <div class="hdr-top">
+    <div>
+      <h1>Proyección de ventas Etapa 1 — Capacidad de pago deuda TURF</h1>
+      <p>Simplicity Etapa 1 · Flujo de caja proyectado · Variables ajustables en tiempo real · Soles (S/)</p>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:2px">
+      <span class="tag t-ok">Stock disponible</span>
+      <span class="tag t-warn">Deuda TURF</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLES PROYECCIÓN -->
+<div class="ctrl-panel">
+  <div class="ctrl-hdr">Variables del modelo de ventas — mueve los sliders para recalcular en tiempo real</div>
+  <div class="ctrl-shared">
+    <div class="ctrl-row">
+      <span class="ctrl-lbl" style="width:240px;flex:none">Tipo de cambio (S/ x US$)</span>
+      <input type="range" class="sl-s" id="psl-tc" min="3.20" max="4.00" step="0.01" value="3.48">
+      <span class="ctrl-val cv-s" id="plv-tc">3.48</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-lbl" style="width:240px;flex:none">Saldo caja inicial Simplicity I (S/)</span>
+      <input type="range" class="sl-s" id="psl-caja" min="500000" max="5000000" step="50000" value="2027000">
+      <span class="ctrl-val cv-s" id="plv-caja">2,027,000</span>
+    </div>
+    <div class="ctrl-row" style="border-bottom:none">
+      <span class="ctrl-lbl" style="width:240px;flex:none">Costo indirecto mensual (S/)</span>
+      <input type="range" class="sl-s" id="psl-costo" min="25000" max="300000" step="5000" value="150000">
+      <span class="ctrl-val cv-s" id="plv-costo">150,000</span>
+    </div>
+  </div>
+  <div class="ctrl-funds">
+    <div class="ctrl-fund-col">
+      <div class="ctrl-fund-title" style="color:var(--gn)">&#9632; Ventas Etapa 1</div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Cantidad total dptos. por vender</span>
+        <input type="range" class="sl-s" id="psl-qx" min="5" max="40" step="1" value="20">
+        <span class="ctrl-val" style="color:var(--gn)" id="plv-qx">20 dptos</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Precio por dpto. (S/)</span>
+        <input type="range" class="sl-s" id="psl-px" min="300000" max="1200000" step="10000" value="650000">
+        <span class="ctrl-val" style="color:var(--gn)" id="plv-px">650,000</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Ventas por mes (dptos.)</span>
+        <input type="range" class="sl-s" id="psl-vxm" min="1" max="6" step="1" value="2">
+        <span class="ctrl-val" style="color:var(--gn)" id="plv-vxm">2/mes</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">% cuota inicial s/ precio</span>
+        <input type="range" class="sl-s" id="psl-ci" min="10" max="30" step="1" value="20">
+        <span class="ctrl-val" style="color:var(--gn)" id="plv-ci">20%</span>
+      </div>
+    </div>
+    <div class="ctrl-fund-col">
+      <div class="ctrl-fund-title" style="color:var(--am)">&#9632; Deuda TURF & Fondeo</div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Deuda TURF cuota junio (S/)</span>
+        <input type="range" class="sl-s" id="psl-turf1" min="1000000" max="8000000" step="50000" value="3373562">
+        <span class="ctrl-val" style="color:var(--am)" id="plv-turf1">3,373,562</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Deuda TURF cuota diciembre (S/)</span>
+        <input type="range" class="sl-s" id="psl-turf2" min="3000000" max="12000000" step="50000" value="7726807">
+        <span class="ctrl-val" style="color:var(--am)" id="plv-turf2">7,726,807</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">Monto del fondeo (S/)</span>
+        <input type="range" class="sl-s" id="psl-fondeo" min="1000000" max="8000000" step="100000" value="3500000">
+        <span class="ctrl-val" style="color:var(--rd)" id="plv-fondeo">3,500,000</span>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-lbl">TEA del fondeo (%)</span>
+        <input type="range" class="sl-s" id="psl-tea-fondeo" min="10" max="30" step="0.5" value="17">
+        <span class="ctrl-val" style="color:var(--rd)" id="plv-tea-fondeo">17.0%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPIs PROYECCIÓN -->
+<div class="sec">Resumen del escenario</div>
+<div class="kpi-grid" id="pkpi-grid"></div>
+
+<!-- TABLA DEUDA TURF -->
+<div class="sec">Deuda TURF contractual</div>
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:1rem">
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead>
+      <tr>
+        <th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Cuota</th>
+        <th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Fecha</th>
+        <th style="padding:8px 14px;text-align:right;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">USD</th>
+        <th style="padding:8px 14px;text-align:right;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Soles (S/)</th>
+      </tr>
+    </thead>
+    <tbody id="turf-table"></tbody>
+  </table>
+</div>
+
+<!-- FLUJO DE CAJA PROYECCIÓN -->
+<div class="sec">Flujo de caja proyectado — Simplicity Etapa 1</div>
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto">
+  <table id="flujo-proy" style="min-width:900px;width:100%;border-collapse:collapse;font-size:11px"></table>
+  <p style="font-size:9px;color:var(--fa);margin-top:8px">Cuota inicial = <span id="pct-ci-lbl">20</span>% del precio · Saldo restante se cobra en la fecha de entrega del dpto. · Fondeo se desembolsa en mes 2</p>
+</div>
+
+<!-- GRÁFICAS PROYECCIÓN -->
+<div class="sec">Evolución del saldo de caja y capacidad de pago TURF</div>
+<div class="leg-row">
+  <span class="leg"><span class="leg-sq" style="background:#1E7145"></span>Saldo caja mensual</span>
+  <span class="leg"><span class="leg-sq" style="background:var(--am);opacity:.7"></span>Pagos TURF</span>
+  <span class="leg"><span class="leg-sq" style="background:var(--rd);opacity:.6"></span>Intereses fondeo</span>
+</div>
+<div class="chart-wrap" style="height:260px">
+  <canvas id="chartProy" role="img" aria-label="Saldo de caja y pagos TURF proyectados."></canvas>
+</div>
+
+<div class="sec">Cobranzas proyectadas por mes (S/)</div>
+<div class="chart-wrap" style="height:200px">
+  <canvas id="chartCobr" role="img" aria-label="Cobranzas proyectadas por mes."></canvas>
+</div>
+
+</div><!-- end panel-proyeccion -->
 
 <footer>
   <p>Fuente: correos Omaha Capital 2 (28 may 2026) y Prime Gestora de Fondos (2 jun 2026) · Modelo de flujo bullet (capital al vencimiento) · CEA calculado con TIR sobre flujos reales · IGV aplicado sobre intereses Omaha · ACRES Prime mensual desde mes 1 · Basado en contratos de Fideicomiso de Activos, Fideicomiso de Flujos y CMO Interbank (Num. 19.1.25) · Uso exclusivo de Directorio — Inmobiliaria La Pacífica S.A.C. · Junio 2026</p>
@@ -815,7 +969,308 @@ function update(){
 document.querySelectorAll('input[type=range]').forEach(el=>{
   const pct=((+el.value-+el.min)/(+el.max-+el.min)*100).toFixed(1)+'%';
   el.style.setProperty('--fill',pct);
-  el.addEventListener('input',update);
+  el.addEventListener('input', ()=>{ updateFill(el); update(); });
+});
+
+function updateFill(el){
+  const pct=((+el.value-+el.min)/(+el.max-+el.min)*100).toFixed(1)+'%';
+  el.style.setProperty('--fill',pct);
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────────
+function switchTab(tab){
+  ['financiamiento','proyeccion'].forEach(t=>{
+    document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='proyeccion') updateProy();
+}
+
+// ── PROJECTION LOGIC ──────────────────────────────────────────────
+const fmtS = n => 'S/ ' + Math.round(n).toLocaleString('es-PE');
+const fmtSK = n => 'S/ ' + (Math.abs(n)>=1000000?(n/1000000).toFixed(2)+'M':(Math.abs(n)>=1000?(n/1000).toFixed(0)+'k':Math.round(n)));
+
+function getPV(){
+  return {
+    tc:    +document.getElementById('psl-tc').value,
+    caja:  +document.getElementById('psl-caja').value,
+    costo: +document.getElementById('psl-costo').value,
+    qx:    +document.getElementById('psl-qx').value,
+    px:    +document.getElementById('psl-px').value,
+    vxm:   +document.getElementById('psl-vxm').value,
+    ci:    +document.getElementById('psl-ci').value / 100,
+    turf1: +document.getElementById('psl-turf1').value,
+    turf2: +document.getElementById('psl-turf2').value,
+    fondeo:+document.getElementById('psl-fondeo').value,
+    teaF:  +document.getElementById('psl-tea-fondeo').value / 100,
+  };
+}
+
+function syncPVLabels(v){
+  document.getElementById('plv-tc').textContent       = v.tc.toFixed(2);
+  document.getElementById('plv-caja').textContent     = Math.round(v.caja).toLocaleString('es-PE');
+  document.getElementById('plv-costo').textContent    = Math.round(v.costo).toLocaleString('es-PE');
+  document.getElementById('plv-qx').textContent       = v.qx+' dptos';
+  document.getElementById('plv-px').textContent       = Math.round(v.px).toLocaleString('es-PE');
+  document.getElementById('plv-vxm').textContent      = v.vxm+'/mes';
+  document.getElementById('plv-ci').textContent       = (v.ci*100).toFixed(0)+'%';
+  document.getElementById('plv-turf1').textContent    = Math.round(v.turf1).toLocaleString('es-PE');
+  document.getElementById('plv-turf2').textContent    = Math.round(v.turf2).toLocaleString('es-PE');
+  document.getElementById('plv-fondeo').textContent   = Math.round(v.fondeo).toLocaleString('es-PE');
+  document.getElementById('plv-tea-fondeo').textContent=(v.teaF*100).toFixed(1)+'%';
+  document.getElementById('pct-ci-lbl').textContent   = (v.ci*100).toFixed(0);
+  document.querySelectorAll('[id^="psl-"]').forEach(el=>updateFill(el));
+}
+
+// Month labels: Apr=0, May=1, Jun=2, Jul=3, Aug=4, Sep=5, Oct=6, Nov=7, Dec=8, Jan=9...
+const MONTH_LABELS = ['Abr 26','May 26','Jun 26','Jul 26','Ago 26','Sep 26','Oct 26','Nov 26','Dic 26','Ene 27','Feb 27','Mar 27','Abr 27'];
+const N_MONTHS = 13;
+
+function buildProy(v){
+  // Cobranzas pendientes (mes 0 y mes 1 — ventas previas)
+  const cobPendiente = [610000, 830000];
+
+  // New sales: v.vxm dptos/mes starting from month 1
+  // Cuota inicial = v.ci * v.px por dpto vendido
+  // Saldo restante = (1-v.ci) * v.px — se cobra 10 meses después
+  const ciPorDpto   = v.ci * v.px;
+  const saldoPorDpto= (1 - v.ci) * v.px;
+
+  // Build month-by-month cash flow
+  const rows = [];
+  let saldoCaja = v.caja;
+  // Fondeo disbursed in month 2 (Jun), interest paid every 4 months
+  const rFondeo = Math.pow(1 + v.teaF, 1/12) - 1;
+  let fondeoActivo = 0;
+  let acumIntFondeo = 0;
+  const FONDEO_MES = 2; // month index when fondeo arrives (Jun)
+  const FONDEO_RETORNO_MES = 12; // return capital at month 12
+
+  for(let m=0; m<N_MONTHS; m++){
+    const row = { m, label: MONTH_LABELS[m] };
+
+    // Ingresos operativos
+    let ingreso = 0;
+    // Cobranzas pendientes (primeros meses)
+    if(m < cobPendiente.length) ingreso += cobPendiente[m];
+
+    // Nuevas ventas — cuota inicial cobrada en el mes de venta
+    const ventasMes = m >= 1 ? v.vxm : 0;
+    const ciMes = ventasMes * ciPorDpto;
+    ingreso += ciMes;
+
+    // Saldo restante cobrado 10 meses después de la venta
+    let saldoMes = 0;
+    const mesVenta = m - 10;
+    if(mesVenta >= 1 && mesVenta < N_MONTHS){
+      const dptsVendidos = v.vxm;
+      // Only if total sold doesn't exceed qx
+      const totalVendidoHastaMesVenta = Math.min(dptsVendidos * mesVenta, v.qx);
+      const vendidosEnMes = mesVenta >= 1 ? Math.min(v.vxm, Math.max(0, v.qx - v.vxm*(mesVenta-1))) : 0;
+      saldoMes = vendidosEnMes * saldoPorDpto;
+    }
+    ingreso += saldoMes;
+
+    row.cobPendiente = m < cobPendiente.length ? cobPendiente[m] : 0;
+    row.ciMes        = ciMes;
+    row.saldoMes     = saldoMes;
+    row.ingreso      = ingreso;
+
+    // Egresos
+    let egreso = 0;
+    egreso += v.costo; // costo indirecto mensual
+
+    // Deuda TURF
+    let pagoTurf = 0;
+    if(m === 2) pagoTurf = v.turf1;      // Jun: primera cuota
+    if(m === 9) pagoTurf = v.turf2;      // Dic: segunda cuota
+    egreso += pagoTurf;
+    row.pagoTurf = pagoTurf;
+
+    // Fondeo: desembolso en mes FONDEO_MES
+    let fondeoIngreso = 0;
+    if(m === FONDEO_MES){ fondeoIngreso = v.fondeo; fondeoActivo = v.fondeo; }
+    row.fondeoIngreso = fondeoIngreso;
+    ingreso += fondeoIngreso;
+    row.ingreso = ingreso; // update with fondeo
+
+    // Intereses fondeo: cada 4 meses a partir del desembolso
+    let intFondeo = 0;
+    if(fondeoActivo > 0){
+      acumIntFondeo += fondeoActivo * rFondeo;
+      if((m - FONDEO_MES) > 0 && (m - FONDEO_MES) % 4 === 0){
+        intFondeo = acumIntFondeo;
+        acumIntFondeo = 0;
+      }
+      if(m === FONDEO_RETORNO_MES){ egreso += fondeoActivo; intFondeo += acumIntFondeo; acumIntFondeo=0; fondeoActivo=0; }
+    }
+    egreso += intFondeo;
+    row.intFondeo = intFondeo;
+    row.egreso    = egreso;
+
+    const flujoNeto = ingreso - egreso;
+    saldoCaja += flujoNeto;
+    row.flujoNeto  = flujoNeto;
+    row.saldoCaja  = saldoCaja;
+    rows.push(row);
+  }
+  return rows;
+}
+
+let cProy=null, cCobr=null;
+
+function renderProyTable(rows, v){
+  const tbl = document.getElementById('flujo-proy');
+  const lbl = rows.map(r=>r.label);
+
+  const th = (t,cls='') => `<th style="padding:5px 7px;text-align:right;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr);white-space:nowrap;${cls}">${t}</th>`;
+  const td = (v,cls='')=>{
+    const num=Math.round(v);
+    const color = num<0?'color:var(--rd)':num>0?'':'color:var(--fa)';
+    return `<td style="padding:4px 7px;text-align:right;font-family:monospace;font-size:10px;border-bottom:1px solid var(--bdr);${color};${cls}">${num!==0?fmtSK(num):'—'}</td>`;
+  };
+  const tdLabel=(t)=>`<td style="padding:4px 7px;text-align:left;font-size:10px;color:var(--mu);font-weight:500;border-bottom:1px solid var(--bdr);white-space:nowrap">${t}</td>`;
+  const trTotal=(label,arr)=>{
+    const tot=arr.reduce((s,v)=>s+v,0);
+    return `<tr style="background:var(--bg);font-weight:600">${tdLabel(label)}${arr.map(v=>td(v,'background:var(--bg)')).join('')}${td(tot,'background:var(--bg);font-weight:700')}</tr>`;
+  };
+  const trRow=(label,arr,grp='')=>`<tr style="${grp}">${tdLabel(label)}${arr.map(v=>td(v)).join('')}${td(arr.reduce((s,v)=>s+v,0))}</tr>`;
+
+  const hdr=`<thead><tr>${th('Concepto','text-align:left')}${lbl.map(l=>th(l)).join('')}${th('Total')}</tr></thead>`;
+
+  const grpStyle='background:#F0FAF4';
+  const grpStyleE='background:#FFF5F5';
+  const grpStyleN='background:#F5F5FF';
+
+  let body='<tbody>';
+  body+=`<tr style="background:var(--bg)"><td colspan="${N_MONTHS+2}" style="padding:5px 7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--gn)">INGRESOS</td></tr>`;
+  body+=trRow('Cobranzas pendientes', rows.map(r=>r.cobPendiente), grpStyle);
+  body+=trRow(`Cuota inicial (${(v.ci*100).toFixed(0)}% × S/${Math.round(v.px).toLocaleString()})`, rows.map(r=>r.ciMes), grpStyle);
+  body+=trRow('Saldo restante (pago contra entrega)', rows.map(r=>r.saldoMes), grpStyle);
+  body+=trRow('Desembolso fondeo', rows.map(r=>r.fondeoIngreso), grpStyle);
+  body+=trTotal('TOTAL INGRESOS', rows.map(r=>r.ingreso));
+
+  body+=`<tr style="background:var(--bg)"><td colspan="${N_MONTHS+2}" style="padding:5px 7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--rd)">EGRESOS</td></tr>`;
+  body+=trRow('Costo indirecto mensual', rows.map(r=>r.costo||v.costo), grpStyleE);
+  body+=trRow('Pago TURF (cuotas)', rows.map(r=>r.pagoTurf), grpStyleE);
+  body+=trRow('Intereses fondeo', rows.map(r=>r.intFondeo), grpStyleE);
+  body+=trTotal('TOTAL EGRESOS', rows.map(r=>r.egreso));
+
+  body+=`<tr style="background:var(--bg)"><td colspan="${N_MONTHS+2}" style="padding:5px 7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--o)">RESULTADO</td></tr>`;
+  body+=trRow('Flujo neto del período', rows.map(r=>r.flujoNeto), grpStyleN);
+
+  // Saldo caja — no sum at end
+  let scRow=`<tr style="background:var(--bg);font-weight:600">${tdLabel('Saldo caja final')}${rows.map(r=>{
+    const num=Math.round(r.saldoCaja);
+    const color=num<0?'color:var(--rd);font-weight:700':'color:var(--gn);font-weight:700';
+    return `<td style="padding:4px 7px;text-align:right;font-family:monospace;font-size:10px;border-bottom:1px solid var(--bdr);background:var(--bg);${color}">${fmtSK(num)}</td>`;
+  }).join('')}<td style="background:var(--bg)"></td></tr>`;
+  body+=scRow;
+  body+='</tbody>';
+  tbl.innerHTML=hdr+body;
+}
+
+function buildPrKPIs(rows, v){
+  const totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
+  const totalTurf = rows.reduce((s,r)=>s+r.pagoTurf,0);
+  const totalIntF = rows.reduce((s,r)=>s+r.intFondeo,0);
+  const saldoFinal= rows[rows.length-1].saldoCaja;
+  const cubreTurf1= rows[2]&&rows[2].saldoCaja>0;
+  const cubreTurf2= rows[9]&&rows[9].saldoCaja>0;
+  const totalVentas= Math.min(v.qx, v.vxm*(N_MONTHS-1));
+  const valorStock = totalVentas * v.px;
+
+  const kpis=[
+    {l:'Total ingresos proyectados',v:fmtSK(totalIngr),s:'período completo',cls:''},
+    {l:'Total pago TURF',v:fmtSK(v.turf1+v.turf2),s:'jun + dic 2026',cls:'los'},
+    {l:'Cubre cuota junio',v:cubreTurf1?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[2]?rows[2].saldoCaja:0)}`,cls:cubreTurf1?'win':'los'},
+    {l:'Cubre cuota diciembre',v:cubreTurf2?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[9]?rows[9].saldoCaja:0)}`,cls:cubreTurf2?'win':'los'},
+    {l:'Saldo caja final',v:fmtSK(saldoFinal),s:'fin del período',cls:saldoFinal>=0?'win':'los'},
+    {l:'Dptos. vendidos',v:totalVentas+' / '+v.qx,s:'proyectados vs disponibles',cls:''},
+    {l:'Valor stock proyectado',v:fmtSK(valorStock),s:`${totalVentas} dptos × S/${Math.round(v.px).toLocaleString()}`,cls:''},
+  ];
+  document.getElementById('pkpi-grid').innerHTML=kpis.map(k=>
+    `<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`
+  ).join('');
+}
+
+function buildPrCharts(rows, v){
+  const lbl = rows.map(r=>r.label);
+  const saldos = rows.map(r=>Math.round(r.saldoCaja));
+  const turf   = rows.map(r=>Math.round(r.pagoTurf));
+  const intF   = rows.map(r=>Math.round(r.intFondeo));
+  const cobr   = rows.map(r=>Math.round(r.cobPendiente+r.ciMes+r.saldoMes));
+
+  const dk=matchMedia('(prefers-color-scheme: dark)').matches;
+  const gc=dk?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+  const tc=dk?'#B4B2A9':'#888780';
+
+  if(cProy)cProy.destroy();
+  cProy=new Chart(document.getElementById('chartProy'),{
+    data:{labels:lbl, datasets:[
+      {type:'bar', label:'Pago TURF', data:turf, backgroundColor:'rgba(127,96,0,0.65)', borderColor:'#7F6000', borderWidth:1, order:3},
+      {type:'bar', label:'Intereses fondeo', data:intF, backgroundColor:'rgba(156,0,6,0.5)', borderColor:'#9C0006', borderWidth:1, order:3},
+      {type:'line',label:'Saldo caja', data:saldos, borderColor:'#1E7145', backgroundColor:'rgba(30,113,69,0.08)', borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#1E7145', tension:.3, fill:true, order:1},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtSK(ctx.parsed.y)}`}}},
+      scales:{
+        x:{stacked:true,ticks:{color:tc,font:{size:10},maxRotation:0},grid:{color:gc}},
+        y:{stacked:false,ticks:{color:tc,font:{size:10},callback:n=>fmtSK(n)},grid:{color:gc},beginAtZero:true}
+      }
+    }
+  });
+
+  if(cCobr)cCobr.destroy();
+  cCobr=new Chart(document.getElementById('chartCobr'),{
+    type:'bar',
+    data:{labels:lbl, datasets:[
+      {label:'Cuota inicial',    data:rows.map(r=>Math.round(r.ciMes)),     backgroundColor:'rgba(30,113,69,0.8)', borderWidth:.5},
+      {label:'Saldo restante',   data:rows.map(r=>Math.round(r.saldoMes)),  backgroundColor:'rgba(30,113,69,0.4)', borderWidth:.5},
+      {label:'Cob. pendientes',  data:rows.map(r=>Math.round(r.cobPendiente)),backgroundColor:'rgba(30,113,69,0.2)',borderWidth:.5},
+      {label:'Fondeo',           data:rows.map(r=>Math.round(r.fondeoIngreso)),backgroundColor:'rgba(156,0,6,0.5)', borderWidth:.5},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{font:{size:10},color:tc}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtSK(ctx.parsed.y)}`}}},
+      scales:{
+        x:{stacked:true,ticks:{color:tc,font:{size:10},maxRotation:0},grid:{color:gc}},
+        y:{stacked:true,ticks:{color:tc,font:{size:10},callback:n=>fmtSK(n)},grid:{color:gc},beginAtZero:true}
+      }
+    }
+  });
+}
+
+function buildTurfTable(v){
+  const tc=v.tc;
+  const rows=[
+    {cuota:'Cuota Junio 2026', fecha:'Jun 2026', usd:v.turf1/tc, sol:v.turf1},
+    {cuota:'Cuota Diciembre 2026', fecha:'Dic 2026', usd:v.turf2/tc, sol:v.turf2},
+    {cuota:'TOTAL', fecha:'', usd:(v.turf1+v.turf2)/tc, sol:v.turf1+v.turf2, total:true},
+  ];
+  document.getElementById('turf-table').innerHTML=rows.map(r=>`
+    <tr style="${r.total?'background:var(--bg);font-weight:600':''}">
+      <td style="padding:8px 14px;border-bottom:1px solid var(--bdr);font-size:13px;font-weight:${r.total?'600':'400'}">${r.cuota}</td>
+      <td style="padding:8px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--mu)">${r.fecha}</td>
+      <td style="padding:8px 14px;border-bottom:1px solid var(--bdr);font-size:13px;text-align:right;font-family:monospace">US$ ${Math.round(r.usd).toLocaleString('es-PE')}</td>
+      <td style="padding:8px 14px;border-bottom:1px solid var(--bdr);font-size:13px;text-align:right;font-family:monospace;color:var(--am)">S/ ${Math.round(r.sol).toLocaleString('es-PE')}</td>
+    </tr>`).join('');
+}
+
+function updateProy(){
+  const v=getPV();
+  syncPVLabels(v);
+  const rows=buildProy(v);
+  buildPrKPIs(rows,v);
+  buildTurfTable(v);
+  renderProyTable(rows,v);
+  buildPrCharts(rows,v);
+}
+
+// Hook projection sliders
+document.querySelectorAll('[id^="psl-"]').forEach(el=>{
+  updateFill(el);
+  el.addEventListener('input',()=>{ updateFill(el); updateProy(); });
 });
 
 // Frequency buttons
