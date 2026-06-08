@@ -169,7 +169,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 
 <!-- TAB NAV -->
 <div style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--bdr)">
-  <button class="tab-btn active" onclick="switchTab('financiamiento')" id="tab-financiamiento">
+  <button class="tab-btn active" onclick="switchTab('resumen')" id="tab-resumen">
+    &#9679; Resumen &amp; Estado
+  </button>
+  <button class="tab-btn" onclick="switchTab('financiamiento')" id="tab-financiamiento">
     Comparativo de Financiamiento
   </button>
   <button class="tab-btn" onclick="switchTab('proyeccion')" id="tab-proyeccion">
@@ -177,8 +180,193 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
   </button>
 </div>
 
+<!-- TAB: RESUMEN & ESTADO -->
+<div id="panel-resumen">
+
+<div class="hdr" style="margin-top:1.75rem">
+  <div class="hdr-top">
+    <div>
+      <h1>Resumen ejecutivo — Financiamiento pago del terreno al TURF</h1>
+      <p>Proyecto Simplicity · Estado de avance y métricas clave · Junio 2026</p>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:2px">
+      <span class="tag t-warn">Vencimiento Jun 2026</span>
+      <span class="tag t-bad">Vencimiento Mar 2027</span>
+    </div>
+  </div>
+</div>
+
+<!-- HITOS -->
+<div class="sec">Hitos — estado de avance</div>
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:1.5rem">
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead>
+      <tr>
+        <th style="width:40px;padding:9px 14px;text-align:center;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">#</th>
+        <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Hito</th>
+        <th style="width:280px;padding:9px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">1</td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px">
+          Pago al TURF del 50% de la cuota de Junio — <strong>USD 1MM</strong>
+        </td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr)">
+          <span style="display:inline-flex;align-items:center;gap:7px;background:var(--am-bg);color:var(--am);border:1px solid var(--am);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--am);flex-shrink:0"></span>
+            Por realizar — 9 de Junio
+          </span>
+        </td>
+      </tr>
+      <tr style="background:var(--bg)">
+        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">2</td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px;background:var(--bg)">
+          DLA Piper en evaluación de los contratos de Fideicomisos y de las propuestas de los fondos
+        </td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);background:var(--bg)">
+          <span style="display:inline-flex;align-items:center;gap:7px;background:#EEF4FF;color:#2563EB;border:1px solid #93C5FD;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
+            <span style="width:7px;height:7px;border-radius:50%;background:#2563EB;flex-shrink:0;animation:pulse 1.5s infinite"></span>
+            En espera de evaluación
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">3</td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px">
+          Evaluación de propuestas OMAHA vs PRIME
+        </td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr)">
+          <span onclick="switchTab('financiamiento')" style="display:inline-flex;align-items:center;gap:7px;background:var(--o-lt);color:var(--o-dk);border:1px solid var(--o);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--o);flex-shrink:0"></span>
+            Ver pestaña Comparativo ↗
+          </span>
+        </td>
+      </tr>
+      <tr style="background:var(--bg)">
+        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">4</td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px;background:var(--bg)">
+          Proyección de pago al TURF
+        </td>
+        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);background:var(--bg)">
+          <span onclick="switchTab('proyeccion')" style="display:inline-flex;align-items:center;gap:7px;background:var(--gn-bg);color:var(--gn);border:1px solid var(--gn);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--gn);flex-shrink:0"></span>
+            Ver pestaña Proyección ↗
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:none;color:var(--mu)">5</td>
+        <td style="padding:12px 14px;border-bottom:none;font-size:13px">
+          Solicitud de préstamo directo al Interbank
+        </td>
+        <td style="padding:12px 14px;border-bottom:none">
+          <span style="display:inline-flex;align-items:center;gap:7px;background:#F0FDF4;color:#166534;border:1px solid #86EFAC;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
+            <span style="width:7px;height:7px;border-radius:50%;background:#22C55E;flex-shrink:0"></span>
+            Comunicado al Banco — 8 de Junio
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- MÉTRICAS CLAVE -->
+<div class="sec">Métricas clave — deuda TURF</div>
+<div class="kpi-grid" id="res-kpi-grid"></div>
+
+<!-- MINI COMPARATIVO -->
+<div class="sec">Resumen comparativo de propuestas</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem">
+
+  <div style="background:var(--sur);border:1.5px solid var(--o);border-radius:var(--rl);padding:1.25rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--o)"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--o)"></div>
+      <span style="font-size:14px;font-weight:600">Omaha Capital 2</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Monto</div>
+        <div style="font-size:18px;font-weight:600;font-family:monospace">US$1.5M</div>
+      </div>
+      <div style="background:var(--rd-bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">CEA (TIR)</div>
+        <div style="font-size:18px;font-weight:600;font-family:monospace;color:var(--rd)" id="res-o-cea">—</div>
+      </div>
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Tasa base</div>
+        <div style="font-size:15px;font-weight:500;font-family:monospace">15.5% TEA</div>
+      </div>
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Plazo</div>
+        <div style="font-size:15px;font-weight:500;font-family:monospace">12 meses</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;padding:.6rem;background:var(--rd-bg);border-radius:var(--r)">
+      ⚠ Requiere ser <strong>primer beneficiario</strong> — exige carta de Interbank cediendo derechos Etapa 1. Intermediario Akamai +2.5% + IGV sobre intereses elevan costo real.
+    </div>
+  </div>
+
+  <div style="background:var(--sur);border:1.5px solid var(--p);border-radius:var(--rl);padding:1.25rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--p)"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--p)"></div>
+      <span style="font-size:14px;font-weight:600">Prime Gestora de Fondos</span>
+      <span style="margin-left:auto;font-size:11px;background:var(--gn-bg);color:var(--gn);border:1px solid var(--gn);border-radius:20px;padding:2px 8px;font-weight:500">✓ Recomendado</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Monto</div>
+        <div style="font-size:18px;font-weight:600;font-family:monospace">US$1–3M</div>
+      </div>
+      <div style="background:var(--gn-bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">CEA (TIR)</div>
+        <div style="font-size:18px;font-weight:600;font-family:monospace;color:var(--gn)" id="res-p-cea">—</div>
+      </div>
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Tasa all-in</div>
+        <div style="font-size:15px;font-weight:500;font-family:monospace">16.0%</div>
+      </div>
+      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
+        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Plazo</div>
+        <div style="font-size:15px;font-weight:500;font-family:monospace">24 meses</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;padding:.6rem;background:var(--gn-bg);border-radius:var(--r)">
+      ✓ Acepta <strong>Fideicomisario Junior</strong> — compatible con Interbank Senior. Respaldo legal: Numeral 19.1.25 CMO. US$74k más económico que Omaha.
+    </div>
+  </div>
+
+</div>
+
+<!-- MINI PROYECCIÓN -->
+<div class="sec">Resumen proyección de ventas — capacidad de pago TURF</div>
+<div class="kpi-grid" id="res-proy-kpi" style="margin-bottom:1.5rem"></div>
+
+<!-- PREGUNTA CLAVE -->
+<div style="background:var(--o-lt);border:1.5px solid var(--o);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.5rem">
+  <div style="font-size:13px;font-weight:600;color:var(--o-dk);margin-bottom:.5rem">Pregunta clave para el Directorio</div>
+  <div style="font-size:15px;font-weight:500;color:var(--o-dk);font-style:italic;line-height:1.5">
+    "¿Está Interbank dispuesto a aprobar el ingreso de un nuevo financiador que cancele a TURF y ocupe su posición dentro de la estructura fiduciaria?"
+  </div>
+  <div style="margin-top:.75rem;font-size:12px;color:var(--mu)">
+    Si la respuesta es <strong>afirmativa</strong> → la operación es plenamente estructurable bajo los escenarios A o B.<br>
+    Si la respuesta es <strong>negativa</strong> → se deberá evaluar alternativas fuera del fideicomiso.
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%,100%{opacity:1} 50%{opacity:.4}
+}
+</style>
+
+</div><!-- end panel-resumen -->
+
 <!-- TAB: FINANCIAMIENTO -->
-<div id="panel-financiamiento">
+<div id="panel-financiamiento" style="display:none">
 
 <div class="hdr">
   <div class="hdr-top">
@@ -607,7 +795,53 @@ function syncLabels(v) {
   document.getElementById('lv-p-dd').textContent    = Math.round(v.pDd).toLocaleString('es-PE');
   document.getElementById('lv-p-plazo').textContent = 'Mes '+v.pPlazo;
   document.getElementById('lv-p-prepago').textContent='Mes '+v.pPrepago;
-  document.querySelectorAll('input[type=range]').forEach(el=>{
+  function updateResumen(){
+  // Pull CEA values from financing tab variables
+  try {
+    const v = getV();
+    const c = calcAll(v);
+    const oEl = document.getElementById('res-o-cea');
+    const pEl = document.getElementById('res-p-cea');
+    if(oEl) oEl.textContent = c.cea_o.toFixed(2)+'%';
+    if(pEl) pEl.textContent = c.cea_p.toFixed(2)+'%';
+
+    // Deuda TURF KPIs
+    const pv = getPV();
+    const fmt2 = n => 'US$ '+Math.round(n).toLocaleString('es-PE');
+    const fmtS2 = n => { const a=Math.abs(n); if(a>=1000000) return 'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return 'S/ '+(a/1000).toFixed(0)+'k'; return 'S/ '+Math.round(a); };
+
+    const totalTurfSol = pv.turf1 + pv.turf2;
+    const totalTurfUsd = totalTurfSol / pv.tc;
+
+    document.getElementById('res-kpi-grid').innerHTML = [
+      {l:'Deuda TURF total',     v:fmt2(4159176),           s:'US$ 1.94M jun + US$ 2.22M mar27', cls:'los'},
+      {l:'Cuota junio 2026',     v:fmtS2(pv.turf1),         s:'50%+50% jun/jul pagadero',        cls:'los'},
+      {l:'Cuota marzo 2027',     v:fmtS2(pv.turf2),         s:'pago único mar27',                cls:'los'},
+      {l:'TC aplicado',          v:pv.tc.toFixed(2)+' S//$', s:'tipo de cambio proyección',      cls:''},
+      {l:'CEA Omaha (TIR)',       v:c.cea_o.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'los'},
+      {l:'CEA Prime (TIR)',       v:c.cea_p.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'win'},
+      {l:'Ahorro eligiendo Prime',v:fmt2(Math.round(c.diff/v.tc)), s:'diferencia a 12m equiv.',  cls:'win'},
+    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+    // Proyección KPIs
+    const rows = buildProy(pv);
+    const totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
+    const saldoFinal = rows[rows.length-1].saldoCaja;
+    const cubreJun = rows[2]&&rows[2].saldoCaja>0;
+    const cubreMar = rows[10]&&rows[10].saldoCaja>0;
+    const totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+
+    document.getElementById('res-proy-kpi').innerHTML = [
+      {l:'Dptos. vendidos proyectados', v:String(totalVend),         s:'según grilla de ventas',         cls:''},
+      {l:'Total cobranzas proyectadas', v:fmtS2(totalIngr),          s:'may26–ago27',                    cls:''},
+      {l:'Cubre cuota junio',           v:cubreJun?'✔ Sí':'✖ No',   s:fmtS2(rows[2]?rows[2].saldoCaja:0)+' saldo jul26', cls:cubreJun?'win':'los'},
+      {l:'Cubre cuota marzo 2027',      v:cubreMar?'✔ Sí':'✖ No',   s:fmtS2(rows[10]?rows[10].saldoCaja:0)+' saldo mar27',cls:cubreMar?'win':'los'},
+      {l:'Saldo caja final',            v:fmtS2(saldoFinal),         s:'ago 2027',                       cls:saldoFinal>=0?'win':'los'},
+    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+  } catch(e){ console.error('updateResumen error:', e); }
+}
+
+document.querySelectorAll('input[type=range]').forEach(el=>{
     const pct=((+el.value-+el.min)/(+el.max-+el.min)*100).toFixed(1)+'%';
     el.style.setProperty('--fill',pct);
   });
@@ -979,6 +1213,52 @@ function update(){
   buildMatriz(v, ceaO, ceaP);
 }
 
+function updateResumen(){
+  // Pull CEA values from financing tab variables
+  try {
+    const v = getV();
+    const c = calcAll(v);
+    const oEl = document.getElementById('res-o-cea');
+    const pEl = document.getElementById('res-p-cea');
+    if(oEl) oEl.textContent = c.cea_o.toFixed(2)+'%';
+    if(pEl) pEl.textContent = c.cea_p.toFixed(2)+'%';
+
+    // Deuda TURF KPIs
+    const pv = getPV();
+    const fmt2 = n => 'US$ '+Math.round(n).toLocaleString('es-PE');
+    const fmtS2 = n => { const a=Math.abs(n); if(a>=1000000) return 'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return 'S/ '+(a/1000).toFixed(0)+'k'; return 'S/ '+Math.round(a); };
+
+    const totalTurfSol = pv.turf1 + pv.turf2;
+    const totalTurfUsd = totalTurfSol / pv.tc;
+
+    document.getElementById('res-kpi-grid').innerHTML = [
+      {l:'Deuda TURF total',     v:fmt2(4159176),           s:'US$ 1.94M jun + US$ 2.22M mar27', cls:'los'},
+      {l:'Cuota junio 2026',     v:fmtS2(pv.turf1),         s:'50%+50% jun/jul pagadero',        cls:'los'},
+      {l:'Cuota marzo 2027',     v:fmtS2(pv.turf2),         s:'pago único mar27',                cls:'los'},
+      {l:'TC aplicado',          v:pv.tc.toFixed(2)+' S//$', s:'tipo de cambio proyección',      cls:''},
+      {l:'CEA Omaha (TIR)',       v:c.cea_o.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'los'},
+      {l:'CEA Prime (TIR)',       v:c.cea_p.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'win'},
+      {l:'Ahorro eligiendo Prime',v:fmt2(Math.round(c.diff/v.tc)), s:'diferencia a 12m equiv.',  cls:'win'},
+    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+    // Proyección KPIs
+    const rows = buildProy(pv);
+    const totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
+    const saldoFinal = rows[rows.length-1].saldoCaja;
+    const cubreJun = rows[2]&&rows[2].saldoCaja>0;
+    const cubreMar = rows[10]&&rows[10].saldoCaja>0;
+    const totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+
+    document.getElementById('res-proy-kpi').innerHTML = [
+      {l:'Dptos. vendidos proyectados', v:String(totalVend),         s:'según grilla de ventas',         cls:''},
+      {l:'Total cobranzas proyectadas', v:fmtS2(totalIngr),          s:'may26–ago27',                    cls:''},
+      {l:'Cubre cuota junio',           v:cubreJun?'✔ Sí':'✖ No',   s:fmtS2(rows[2]?rows[2].saldoCaja:0)+' saldo jul26', cls:cubreJun?'win':'los'},
+      {l:'Cubre cuota marzo 2027',      v:cubreMar?'✔ Sí':'✖ No',   s:fmtS2(rows[10]?rows[10].saldoCaja:0)+' saldo mar27',cls:cubreMar?'win':'los'},
+      {l:'Saldo caja final',            v:fmtS2(saldoFinal),         s:'ago 2027',                       cls:saldoFinal>=0?'win':'los'},
+    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+  } catch(e){ console.error('updateResumen error:', e); }
+}
+
 document.querySelectorAll('input[type=range]').forEach(el=>{
   const pct=((+el.value-+el.min)/(+el.max-+el.min)*100).toFixed(1)+'%';
   el.style.setProperty('--fill',pct);
@@ -992,12 +1272,15 @@ function updateFill(el){
 
 // ── TAB SWITCH ────────────────────────────────────────────────────
 function switchTab(tab){
-  ['financiamiento','proyeccion'].forEach(t=>{
+  ['resumen','financiamiento','proyeccion'].forEach(t=>{
     document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
   if(tab==='proyeccion'){
     setTimeout(()=>{ buildVentasGrid(); updateProy(); }, 50);
+  }
+  if(tab==='resumen'){
+    setTimeout(()=>{ updateResumen(); }, 50);
   }
 }
 
@@ -1346,7 +1629,7 @@ document.querySelectorAll('[id^="psl-"]').forEach(el=>{
   el.addEventListener('input',()=>{ updateFill(el); updateProy(); });
 });
 // Pre-render projection tab even while hidden
-try { buildVentasGrid(); updateProy(); } catch(e){ console.error('updateProy init error:', e); }
+try { buildVentasGrid(); updateProy(); updateResumen(); } catch(e){ console.error('init error:', e); }
 
 // Frequency buttons
 document.querySelectorAll('.freq-btn').forEach(btn=>{
