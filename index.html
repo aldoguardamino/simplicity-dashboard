@@ -446,28 +446,26 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
       <span class="ctrl-val" style="color:var(--gn)" id="plv-px">650,000</span>
     </div>
     <div class="ctrl-row">
-      <span class="ctrl-lbl">Cantidad total dptos. por vender</span>
-      <input type="range" class="sl-s" id="psl-qx" min="5" max="40" step="1" value="20" style="accent-color:var(--gn)">
-      <span class="ctrl-val" style="color:var(--gn)" id="plv-qx">20 dptos</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Ventas por mes (dptos.)</span>
-      <input type="range" class="sl-s" id="psl-vxm" min="1" max="6" step="1" value="2" style="accent-color:var(--gn)">
-      <span class="ctrl-val" style="color:var(--gn)" id="plv-vxm">2/mes</span>
-    </div>
-    <div class="ctrl-row" style="border-bottom:none">
       <span class="ctrl-lbl">% cuota inicial s/ precio</span>
-      <input type="range" class="sl-s" id="psl-ci" min="10" max="30" step="1" value="20" style="accent-color:var(--gn)">
-      <span class="ctrl-val" style="color:var(--gn)" id="plv-ci">20%</span>
+      <input type="range" class="sl-s" id="psl-ci" min="5" max="30" step="1" value="10" style="accent-color:var(--gn)">
+      <span class="ctrl-val" style="color:var(--gn)" id="plv-ci">10%</span>
     </div>
-    <!-- Resumen de cobranza proyectada -->
-    <div style="margin-top:.75rem;padding:.7rem;background:var(--gn-bg);border-radius:var(--r);font-size:11px">
-      <div style="font-weight:600;color:var(--gn);margin-bottom:4px">Resumen de cobranza proyectada</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-        <span style="color:var(--mu)">Cuota inicial / dpto:</span><span id="p-ci-dpto" style="font-family:monospace;color:var(--gn)">—</span>
-        <span style="color:var(--mu)">Saldo restante / dpto:</span><span id="p-saldo-dpto" style="font-family:monospace;color:var(--gn)">—</span>
-        <span style="color:var(--mu)">Ingreso total ventas:</span><span id="p-total-ventas" style="font-family:monospace;font-weight:600;color:var(--gn)">—</span>
-        <span style="color:var(--mu)">Meses de venta:</span><span id="p-meses-venta" style="font-family:monospace;color:var(--gn)">—</span>
+    <div style="margin-top:.75rem;padding:.65rem;background:var(--gn-bg);border-radius:var(--r);font-size:11px">
+      <div style="font-weight:600;color:var(--gn);margin-bottom:6px">Resumen por dpto.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+        <span style="color:var(--mu)">Cuota inicial / dpto:</span><span id="p-ci-dpto" style="font-family:monospace;color:var(--gn);font-weight:600">—</span>
+        <span style="color:var(--mu)">Saldo restante / dpto:</span><span id="p-saldo-dpto" style="font-family:monospace;color:var(--gn);font-weight:600">—</span>
+      </div>
+    </div>
+    <div style="margin-top:.75rem">
+      <div style="font-size:11px;font-weight:600;color:var(--gn);margin-bottom:6px">Unidades vendidas por mes <span style="font-weight:400;color:var(--fa)">(edita directamente)</span></div>
+      <div id="ventas-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px"></div>
+      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11px;color:var(--mu)">Relleno rápido:</span>
+        <button onclick="fillVentas(2)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--gn);background:var(--gn-bg);color:var(--gn);cursor:pointer">2/mes</button>
+        <button onclick="fillVentas(3)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--gn);background:var(--gn-bg);color:var(--gn);cursor:pointer">3/mes</button>
+        <button onclick="fillVentas(0)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);color:var(--mu);cursor:pointer">Limpiar</button>
+        <span style="font-size:11px;color:var(--mu);margin-left:4px">Total: <strong id="p-total-vendidos" style="color:var(--gn)">0</strong> dptos</span>
       </div>
     </div>
   </div>
@@ -512,6 +510,16 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 <!-- KPIs PROYECCIÓN -->
 <div class="sec">Resumen del escenario</div>
 <div class="kpi-grid" id="pkpi-grid"></div>
+
+<!-- TABLA COBRANZAS -->
+<div class="sec">Proyección de cobranzas nuevas ventas — editable mes a mes</div>
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto;margin-bottom:.5rem">
+  <table id="cobr-table" style="min-width:700px;width:100%;border-collapse:collapse;font-size:11px"></table>
+  <p style="font-size:10px;color:var(--fa);margin-top:6px">
+    Cuota inicial = <span id="pct-ci-cobr">10</span>% cobrado en el mes de venta ·
+    Saldo restante = <span id="pct-sr-cobr">90</span>% cobrado el mes siguiente
+  </p>
+</div>
 
 <!-- TABLA DEUDA TURF -->
 <div class="sec">Deuda TURF contractual</div>
@@ -989,20 +997,22 @@ function switchTab(tab){
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
   if(tab==='proyeccion'){
-    // Force chart redraw after tab becomes visible
-    setTimeout(()=>{ updateProy(); }, 50);
+    setTimeout(()=>{ buildVentasGrid(); updateProy(); }, 50);
   }
 }
 
 // ── PROJECTION LOGIC ──────────────────────────────────────────────
 // Exact match with Excel "con distribución" sheet
-// Columns: May26(0) Jun26(1) Jul26(2) Ago26(3) Sep26(4) Oct26(5)
-//          Nov26(6) Dic26(7) Ene27(8) Feb27(9) Mar27(10) Abr27(11)
-//          May27(12) Jun27(13) Jul27(14) Ago27(15)
+// Col 0=May26 1=Jun26 2=Jul26 3=Ago26 4=Sep26 5=Oct26
+//     6=Nov26 7=Dic26 8=Ene27 9=Feb27 10=Mar27 11=Abr27
+//     12=May27 13=Jun27 14=Jul27 15=Ago27
 const MLBLS = ['May 26','Jun 26','Jul 26','Ago 26','Sep 26','Oct 26',
                'Nov 26','Dic 26','Ene 27','Feb 27','Mar 27','Abr 27',
                'May 27','Jun 27','Jul 27','Ago 27'];
 const NM = 16;
+
+// Ventas por mes — editable array (index 0=May26, starts selling Jun26=idx1)
+let ventasPorMes = [0,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0]; // default: 2/mes Jun-Mar
 
 const fmtSK = n => {
   const a=Math.abs(n), s=n<0?'-':'';
@@ -1016,14 +1026,11 @@ function getPV(){
     tc:    +document.getElementById('psl-tc').value,
     caja:  +document.getElementById('psl-caja').value,
     px:    +document.getElementById('psl-px').value,
-    qx:    +document.getElementById('psl-qx').value,
-    vxm:   +document.getElementById('psl-vxm').value,
     ci:    +document.getElementById('psl-ci').value / 100,
-    turf1: +document.getElementById('psl-turf1').value,   // Total cuota Jun (50%+50%)
-    turf2: +document.getElementById('psl-turf2').value,   // Cuota Mar27
+    turf1: +document.getElementById('psl-turf1').value,
+    turf2: +document.getElementById('psl-turf2').value,
     fondeo:+document.getElementById('psl-fondeo').value,
     teaF:  +document.getElementById('psl-tea-fondeo').value / 100,
-    caja0: +document.getElementById('psl-caja').value,
   };
 }
 
@@ -1032,115 +1039,153 @@ function syncPVLabels(v){
   document.getElementById('plv-tc').textContent         = v.tc.toFixed(2);
   document.getElementById('plv-caja').textContent       = fmtN(v.caja);
   document.getElementById('plv-px').textContent         = fmtN(v.px);
-  document.getElementById('plv-qx').textContent         = v.qx+' dptos';
-  document.getElementById('plv-vxm').textContent        = v.vxm+'/mes';
   document.getElementById('plv-ci').textContent         = (v.ci*100).toFixed(0)+'%';
   document.getElementById('plv-turf1').textContent      = fmtN(v.turf1);
   document.getElementById('plv-turf2').textContent      = fmtN(v.turf2);
   document.getElementById('plv-fondeo').textContent     = fmtN(v.fondeo);
   document.getElementById('plv-tea-fondeo').textContent = (v.teaF*100).toFixed(1)+'%';
-
-  // Sales summary box
-  const ciDpto    = v.ci * v.px;
-  const saldoDpto = (1-v.ci) * v.px;
-  const mesesVenta= Math.ceil(v.qx / v.vxm);
-  const totalVent = v.qx * v.px;
-  document.getElementById('p-ci-dpto').textContent      = fmtSK(ciDpto);
-  document.getElementById('p-saldo-dpto').textContent   = fmtSK(saldoDpto);
-  document.getElementById('p-total-ventas').textContent = fmtSK(totalVent);
-  document.getElementById('p-meses-venta').textContent  = mesesVenta+' meses';
   document.getElementById('pct-ci-lbl').textContent     = (v.ci*100).toFixed(0);
-
+  document.getElementById('p-ci-dpto').textContent      = fmtSK(v.ci * v.px);
+  document.getElementById('p-saldo-dpto').textContent   = fmtSK((1-v.ci) * v.px);
+  if(document.getElementById('pct-ci-cobr')){
+    document.getElementById('pct-ci-cobr').textContent  = (v.ci*100).toFixed(0);
+    document.getElementById('pct-sr-cobr').textContent  = ((1-v.ci)*100).toFixed(0);
+  }
   document.querySelectorAll('[id^="psl-"]').forEach(el=>updateFill(el));
 }
 
-// Costo indirecto schedule (proportional to slider vs default 150k baseline)
-function costoMes(m, v){
-  const sched = [65000,150000,150000,150000,150000,150000,150000,100000,60000,60000,25000,25000,25000,25000,25000,25000];
-  const base  = sched[m] || 25000;
-  // Scale: if user changes slider (baseline=150k), apply proportionally
-  // but floor at 25k and cap changes proportionally
-  return base;
+// Build and render the ventas input grid
+function buildVentasGrid(){
+  const grid = document.getElementById('ventas-grid');
+  if(!grid) return;
+  grid.innerHTML = MLBLS.map((lbl,i) => `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <span style="font-size:9px;color:var(--fa);white-space:nowrap">${lbl}</span>
+      <input type="number" min="0" max="10" value="${ventasPorMes[i]}"
+        id="vxm-${i}"
+        oninput="ventasPorMes[${i}]=+this.value||0; updateTotalVendidos(); updateProy();"
+        style="width:52px;height:32px;text-align:center;font-size:14px;font-weight:600;
+               border:1.5px solid ${ventasPorMes[i]>0?'var(--gn)':'var(--bdr)'};
+               border-radius:var(--r);background:${ventasPorMes[i]>0?'var(--gn-bg)':'var(--sur)'};
+               color:${ventasPorMes[i]>0?'var(--gn)':'var(--mu)'};outline:none;cursor:pointer">
+    </div>`).join('');
+  updateTotalVendidos();
 }
 
-// Devolución fondo de garantía: Jul(2)=200k, Ago(3)=150k, Sep(4)=150k — FIXED
+function updateTotalVendidos(){
+  const tot = ventasPorMes.reduce((s,v)=>s+v,0);
+  const el = document.getElementById('p-total-vendidos');
+  if(el) el.textContent = tot;
+}
+
+function fillVentas(n){
+  // Fill Jun-Mar (idx 1-10) with n, rest 0
+  ventasPorMes = ventasPorMes.map((v,i) => (i>=1&&i<=10) ? n : 0);
+  buildVentasGrid();
+  updateProy();
+}
+
+// Build cobranza table
+function buildCobrTable(v){
+  const tbl = document.getElementById('cobr-table');
+  if(!tbl) return;
+  const ciPct  = v.ci;
+  const srPct  = 1 - v.ci;
+  const ciDpto = v.ci * v.px;
+  const srDpto = (1-v.ci) * v.px;
+
+  // CI cobrado en mes de venta, Saldo cobrado mes siguiente
+  const ciArr = ventasPorMes.map(q => q * ciDpto);
+  const srArr = new Array(NM).fill(0);
+  ventasPorMes.forEach((q,i) => {
+    if(i+1 < NM) srArr[i+1] += q * srDpto;
+  });
+  const totalArr = ciArr.map((ci,i) => ci + srArr[i]);
+
+  const th  = t => `<th style="padding:5px 8px;text-align:right;font-size:9px;font-weight:500;text-transform:uppercase;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr);white-space:nowrap">${t}</th>`;
+  const thL = t => `<th style="padding:5px 8px;text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">${t}</th>`;
+  const td  = (n,bg) => {
+    const v=Math.round(n);
+    const c=v>0?'var(--gn)':v<0?'var(--rd)':'var(--fa)';
+    return `<td style="padding:4px 8px;text-align:right;font-family:monospace;font-size:10px;border-bottom:1px solid var(--bdr);color:${c};${bg?'background:'+bg:''}">${v?fmtSK(v):'—'}</td>`;
+  };
+  const tdL = t => `<td style="padding:4px 8px;font-size:11px;color:var(--mu);border-bottom:1px solid var(--bdr);white-space:nowrap">${t}</td>`;
+
+  const hdr = `<thead><tr>${thL('Concepto')}${MLBLS.map(th).join('')}${th('Total')}</tr></thead>`;
+  const trR = (lbl,arr,bg) => {
+    const tot=arr.reduce((s,x)=>s+x,0);
+    return `<tr>${tdL(lbl)}${arr.map(x=>td(x,bg)).join('')}${td(tot,bg)}</tr>`;
+  };
+  const trT = (lbl,arr) => {
+    const tot=arr.reduce((s,x)=>s+x,0);
+    return `<tr style="font-weight:700">${tdL(lbl)}${arr.map(x=>td(x,'var(--bg)')).join('')}${td(tot,'var(--bg)')}</tr>`;
+  };
+
+  tbl.innerHTML = hdr + '<tbody>' +
+    `<tr><td colspan="${NM+2}" style="padding:4px 8px;font-size:10px;font-weight:600;color:var(--gn);background:var(--bg)">VENTAS NUEVAS</td></tr>` +
+    `<tr style="background:var(--bg)">${tdL('Unidades vendidas')}${ventasPorMes.map(q=>`<td style="padding:4px 8px;text-align:right;font-size:11px;font-weight:600;border-bottom:1px solid var(--bdr);color:${q>0?'var(--gn)':'var(--fa)'}">${q||'—'}</td>`).join('')}<td style="padding:4px 8px;text-align:right;font-size:11px;font-weight:600;background:var(--bg)">${ventasPorMes.reduce((s,v)=>s+v,0)}</td></tr>` +
+    trR(`Cuota inicial (${(ciPct*100).toFixed(0)}% × S/${Math.round(v.px).toLocaleString()})`, ciArr, '#F0FAF4') +
+    trR(`Saldo restante (${((srPct)*100).toFixed(0)}%, cobrado mes siguiente)`, srArr, '#F0FAF4') +
+    trT('TOTAL COBRANZA NUEVAS VENTAS', totalArr) +
+    '</tbody>';
+
+  return totalArr;
+}
+
+// Costo indirecto schedule
+function costoMes(m){
+  const s=[65000,150000,150000,150000,150000,150000,150000,100000,60000,60000,25000,25000,25000,25000,25000,25000];
+  return s[m]||25000;
+}
 function devFondo(m){ return m===2?200000:m===3?150000:m===4?150000:0; }
 
 function buildProy(v){
-  const ciDpto    = v.ci * v.px;
-  const saldoDpto = (1-v.ci) * v.px;
+  // Cobranza nuevas ventas desde tabla de cobranzas
+  const ciDpto = v.ci * v.px;
+  const srDpto = (1-v.ci) * v.px;
+  const ciArr  = ventasPorMes.map(q => q * ciDpto);
+  const srArr  = new Array(NM).fill(0);
+  ventasPorMes.forEach((q,i) => { if(i+1<NM) srArr[i+1] += q*srDpto; });
+  const cobrNew = ciArr.map((ci,i) => ci+srArr[i]);
 
-  // Cobranzas pendientes (ventas actuales previas a May26)
-  const cobPend = [610000, 830000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  // Cobranzas pendientes (ventas actuales previas)
+  const cobPend = [610000,830000,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-  // COBRANZAS NUEVAS VENTAS:
-  // Ventas empiezan Jun26(m=1), v.vxm dptos/mes, hasta qx total
-  // Cuota inicial: cobrada en el mes de venta
-  // Saldo restante: cobrado 10 meses después de la fecha de venta
-  // Excel exacto: Jun=130k (solo CI), Jul-Mar27=1235k (CI+saldo del mes anterior)
-  // Abr27=1105k (solo saldo, ya no CI), May27+ = 0
-
-  // Build per-month arrays
-  const ciArr     = new Array(NM).fill(0);
-  const saldoArr  = new Array(NM).fill(0);
-  let totalVendidos = 0;
-
-  for(let m=1; m<NM; m++){
-    if(totalVendidos >= v.qx) break;
-    const vendMes = Math.min(v.vxm, v.qx - totalVendidos);
-    ciArr[m]    += vendMes * ciDpto;
-    // Saldo 10 months later
-    const mSaldo = m + 10;
-    if(mSaldo < NM) saldoArr[mSaldo] += vendMes * saldoDpto;
-    totalVendidos += vendMes;
-  }
-
-  // TURF: 50% Jun(1), 50% Jul(2), cuota2 Mar27(10)
-  const turf50a = v.turf1 / 2;
-  const turf50b = v.turf1 / 2;
+  // TURF: 50% Jun(1) + 50% Jul(2) + cuota2 Mar27(10)
   const turfArr = new Array(NM).fill(0);
-  turfArr[1]  = turf50a;
-  turfArr[2]  = turf50b;
-  turfArr[10] = v.turf2;   // Mar27
+  turfArr[1]=v.turf1/2; turfArr[2]=v.turf1/2; turfArr[10]=v.turf2;
 
-  // FONDEO: desembolso Jul(2), intereses Oct(5)/Ene27(8)/Abr27(11)/Jul27(14), retorno Jul27(14)
-  const fondeoArr = new Array(NM).fill(0);
-  fondeoArr[2] = v.fondeo;  // desembolso
-  const rMes   = Math.pow(1+v.teaF, 1/12) - 1;
-  const int4m  = v.fondeo * rMes * 4;
-  fondeoArr[5]  = -int4m;   // Oct26
-  fondeoArr[8]  = -int4m;   // Ene27
-  fondeoArr[11] = -int4m;   // Abr27
-  fondeoArr[14] = -int4m - v.fondeo; // Jul27: intereses + capital
+  // Fondeo: desembolso Jul(2), intereses Oct(5)/Ene27(8)/Abr27(11)/Jul27(14), retorno Jul27(14)
+  const rMes   = Math.pow(1+v.teaF,1/12)-1;
+  const int4m  = v.fondeo*rMes*4;
+  const fondArr = new Array(NM).fill(0);
+  fondArr[2]=v.fondeo;
+  fondArr[5]=-int4m; fondArr[8]=-int4m; fondArr[11]=-int4m;
+  fondArr[14]=-int4m-v.fondeo;
 
-  // Build rows
-  const rows = [];
-  let saldo = v.caja;
-
-  for(let m=0; m<NM; m++){
-    const row = { m, label: MLBLS[m] };
-
-    row.cobPend    = cobPend[m];
-    row.ciMes      = ciArr[m];
-    row.saldoMes   = saldoArr[m];
-    row.cobrNew    = ciArr[m] + saldoArr[m];
-    row.fondeoIn   = fondeoArr[m] > 0 ? fondeoArr[m] : 0;
-    row.ingreso    = row.cobPend + row.cobrNew + row.fondeoIn;
-
-    row.costoInd   = costoMes(m, v);
-    row.devFondoG  = devFondo(m);
-    row.pagoTurf   = turfArr[m];
-    row.intFondeo  = fondeoArr[m] < 0 && m !== 14 ? -fondeoArr[m] : 0;
-    row.devFondeoK = m === 14 ? v.fondeo : 0;
-    row.egreso     = row.costoInd + row.devFondoG + row.pagoTurf + row.intFondeo + row.devFondeoK;
-
-    row.ebitda     = row.ingreso - row.egreso;
-    saldo         += row.ebitda;
-    row.saldoCaja  = saldo;
-    rows.push(row);
+  const rows=[]; let saldo=v.caja;
+  for(let m=0;m<NM;m++){
+    const r={m, label:MLBLS[m]};
+    r.cobPend   = cobPend[m];
+    r.ciMes     = ciArr[m];
+    r.srMes     = srArr[m];
+    r.cobrNew   = cobrNew[m];
+    r.fondeoIn  = fondArr[m]>0?fondArr[m]:0;
+    r.ingreso   = r.cobPend+r.cobrNew+r.fondeoIn;
+    r.costoInd  = costoMes(m);
+    r.devFondoG = devFondo(m);
+    r.pagoTurf  = turfArr[m];
+    r.intFondeo = fondArr[m]<0&&m!==14?-fondArr[m]:0;
+    r.devFondeoK= m===14?v.fondeo:0;
+    r.egreso    = r.costoInd+r.devFondoG+r.pagoTurf+r.intFondeo+r.devFondeoK;
+    r.ebitda    = r.ingreso-r.egreso;
+    saldo      += r.ebitda;
+    r.saldoCaja = saldo;
+    rows.push(r);
   }
   return rows;
 }
+
 
 function renderProyTable(rows, v){
   const tbl = document.getElementById('flujo-proy');
@@ -1168,6 +1213,8 @@ function renderProyTable(rows, v){
   body+=sec('INGRESOS','#1E7145');
   body+=trR('Cobranzas pendientes (ventas actuales)', rows.map(r=>r.cobPend),   '#F0FAF4');
   body+=trR(`Cobranzas nuevas ventas`, rows.map(r=>r.cobrNew), '#F0FAF4');
+  body+=trR(`  ↳ Cuota inicial (${(v.ci*100).toFixed(0)}%)`, rows.map(r=>r.ciMes), '#F0FAF4');
+  body+=trR(`  ↳ Saldo restante mes siguiente (${((1-v.ci)*100).toFixed(0)}%)`, rows.map(r=>r.srMes), '#F0FAF4');
   body+=`<tr><td style="padding:2px 8px 2px 24px;font-size:10px;color:var(--fa);border-bottom:1px solid var(--bdr);background:#F0FAF4" colspan="${N+2}">&#8627; Cuota inicial (${(v.ci*100).toFixed(0)}% × S/${Math.round(v.px).toLocaleString()}) + Saldo restante 10m después</td></tr>`;
   body+=trR('Desembolso fondeo externo', rows.map(r=>r.fondeoIn), '#F0FAF4');
   body+=trT('TOTAL INGRESOS OPERATIVOS', rows.map(r=>r.ingreso));
@@ -1202,8 +1249,8 @@ function buildPrKPIs(rows, v){
   // Jun(m=1) pays 50%turf, Jul(m=2) pays other 50% — check after both paid
   const cubreTurf1 = rows[2]&&rows[2].saldoCaja>0; // After Jul 50% payment
   const cubreTurf2 = rows[10]&&rows[10].saldoCaja>0; // After Mar27 payment
-  const totalVentas= Math.min(v.qx, v.vxm*(NM-1));
-  const valorStock = totalVentas * v.px;
+  const totalVentas= ventasPorMes.reduce((s,v)=>s+v,0);
+  const valorStock = totalVentas * v.px; // v.px still in scope
 
   const kpis=[
     {l:'Total ingresos proyectados',v:fmtSK(totalIngr),s:'período completo',cls:''},
@@ -1211,7 +1258,7 @@ function buildPrKPIs(rows, v){
     {l:'Cubre cuota junio',v:cubreTurf1?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[2]?rows[2].saldoCaja:0)} jul26`,cls:cubreTurf1?'win':'los'},
     {l:'Cubre cuota diciembre',v:cubreTurf2?'✔ Sí':'✖ No',s:`saldo ${fmtSK(rows[10]?rows[10].saldoCaja:0)} mar27`,cls:cubreTurf2?'win':'los'},
     {l:'Saldo caja final',v:fmtSK(saldoFinal),s:'fin del período',cls:saldoFinal>=0?'win':'los'},
-    {l:'Dptos. vendidos',v:totalVentas+' / '+v.qx,s:'proyectados vs disponibles',cls:''},
+    {l:'Dptos. vendidos',v:String(totalVentas),s:'total proyectados',cls:''},
     {l:'Valor stock proyectado',v:fmtSK(valorStock),s:`${totalVentas} dptos × S/${Math.round(v.px).toLocaleString()}`,cls:''},
   ];
   document.getElementById('pkpi-grid').innerHTML=kpis.map(k=>
@@ -1285,6 +1332,7 @@ function buildTurfTable(v){
 function updateProy(){
   const v=getPV();
   syncPVLabels(v);
+  buildCobrTable(v);
   const rows=buildProy(v);
   buildPrKPIs(rows,v);
   buildTurfTable(v);
@@ -1298,7 +1346,7 @@ document.querySelectorAll('[id^="psl-"]').forEach(el=>{
   el.addEventListener('input',()=>{ updateFill(el); updateProy(); });
 });
 // Pre-render projection tab even while hidden
-try { updateProy(); } catch(e){ console.error('updateProy init error:', e); }
+try { buildVentasGrid(); updateProy(); } catch(e){ console.error('updateProy init error:', e); }
 
 // Frequency buttons
 document.querySelectorAll('.freq-btn').forEach(btn=>{
