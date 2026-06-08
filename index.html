@@ -147,6 +147,12 @@ input[type=range].sl-s::-moz-range-progress{background:#888}
 .ind{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:12px;flex-shrink:0;margin-top:1px}
 .ind-ok{background:var(--gn-bg);color:var(--gn)}.ind-bad{background:var(--rd-bg);color:var(--rd)}.ind-warn{background:var(--am-bg);color:var(--am)}
 
+.freq-group{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.freq-btn{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--bg);color:var(--mu);cursor:pointer;transition:all .15s}
+.freq-btn:hover{border-color:var(--mu)}
+.freq-btn.active-o{background:var(--o-lt);border-color:var(--o);color:var(--o-dk)}
+.freq-btn.active-p{background:var(--p-lt);border-color:var(--p);color:var(--p-dk)}
+
 footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:11px;color:var(--fa)}
 </style>
 </head>
@@ -214,6 +220,15 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
         <input type="range" class="sl-o" id="sl-o-prepago" min="1" max="12" step="1" value="9">
         <span class="ctrl-val cv-o" id="lv-o-prepago">Mes 9</span>
       </div>
+      <div class="ctrl-row" style="border-bottom:none;flex-direction:column;align-items:flex-start;gap:6px">
+        <span class="ctrl-lbl">Frecuencia de pago de intereses</span>
+        <div class="freq-group">
+          <button class="freq-btn active-o" data-fund="o" data-freq="1">Mensual</button>
+          <button class="freq-btn" data-fund="o" data-freq="3">Trimestral</button>
+          <button class="freq-btn" data-fund="o" data-freq="6">Semestral</button>
+          <button class="freq-btn" data-fund="o" data-freq="0">Bullet</button>
+        </div>
+      </div>
     </div>
     <div class="ctrl-fund-col">
       <div class="ctrl-fund-title" style="color:var(--p-dk)">&#9632; Prime Gestora de Fondos</div>
@@ -241,6 +256,15 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
         <span class="ctrl-lbl">Prepago posible desde (mes)</span>
         <input type="range" class="sl-p" id="sl-p-prepago" min="1" max="24" step="1" value="12">
         <span class="ctrl-val cv-p" id="lv-p-prepago">Mes 12</span>
+      </div>
+      <div class="ctrl-row" style="border-bottom:none;flex-direction:column;align-items:flex-start;gap:6px">
+        <span class="ctrl-lbl">Frecuencia de pago de intereses</span>
+        <div class="freq-group">
+          <button class="freq-btn active-p" data-fund="p" data-freq="1">Mensual</button>
+          <button class="freq-btn" data-fund="p" data-freq="3">Trimestral</button>
+          <button class="freq-btn" data-fund="p" data-freq="6">Semestral</button>
+          <button class="freq-btn" data-fund="p" data-freq="0">Bullet</button>
+        </div>
       </div>
     </div>
   </div>
@@ -288,7 +312,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
   <div class="fcard fc-o">
     <div class="fcard-hdr"><div class="fdot fdot-o"></div><span class="fname">Omaha Capital 2</span><span class="ftotal" id="o-cea-hdr">—</span></div>
     <div class="cea-big" id="o-cea">—</div>
-    <div class="cea-sub">CEA (TIR) al mes <span id="o-cea-mes">12</span> — TEA + IGV intereses + intermediario + OSG + notariales</div>
+    <div class="cea-sub">CEA (TIR) al mes <span id="o-cea-mes">12</span> — pago <span id="o-freq-lbl">mensual</span> · TEA + IGV intereses + intermediario + OSG + notariales</div>
     <div class="crow"><span class="clbl">Tasa base nominal</span><span class="cval" id="o-tea-d">—</span></div>
     <div class="crow"><span class="clbl">+ Spread intermediario + IGV</span><span class="cval ex" id="o-sp1">—</span></div>
     <div class="crow"><span class="clbl">+ Spread IGV s/intereses</span><span class="cval ex" id="o-sp2">—</span></div>
@@ -298,7 +322,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
   <div class="fcard fc-p">
     <div class="fcard-hdr"><div class="fdot fdot-p"></div><span class="fname">Prime Gestora de Fondos</span><span class="ftotal" id="p-cea-hdr">—</span></div>
     <div class="cea-big" id="p-cea">—</div>
-    <div class="cea-sub">CEA (TIR) al mes <span id="p-cea-mes">24</span> — TEA all-in + ACRES mensual + DD/Estructuración + notariales</div>
+    <div class="cea-sub">CEA (TIR) al mes <span id="p-cea-mes">24</span> — pago <span id="p-freq-lbl">mensual</span> · TEA all-in + ACRES mensual + DD/Estructuración + notariales</div>
     <div class="crow"><span class="clbl">Tasa all-in nominal</span><span class="cval" id="p-tea-d">—</span></div>
     <div class="crow"><span class="clbl">+ Spread ACRES anualizado</span><span class="cval ex" id="p-sp1">—</span></div>
     <div class="crow"><span class="clbl">ACRES total al vencimiento</span><span class="cval ex" id="p-acres-tot">—</span></div>
@@ -399,6 +423,9 @@ function getV() {
   };
 }
 
+// Frequency state: 1=mensual, 3=trimestral, 6=semestral, 0=bullet
+let oFreq = 1, pFreq = 1;
+
 function syncLabels(v) {
   document.getElementById('lv-monto').textContent   = Math.round(v.monto).toLocaleString('es-PE');
   document.getElementById('lv-igv').textContent     = (v.igv*100).toFixed(0)+'%';
@@ -432,33 +459,54 @@ function tirCalc(flows, g=0.02) {
 
 // Build bullet cash flow for a given fund
 // Returns array of {mes, interes, igvInt, acres, capital, egreso_sin_cap, egreso_total}
-function buildFlujoOmaha(v, horizon) {
-  const r = Math.pow(1+v.oTea,1/12)-1;
+function buildFlujoOmaha(v, horizon, freq) {
+  const r    = Math.pow(1+v.oTea,1/12)-1;
   const osgT = v.oOsg*(1+v.igv);
   const intermediario = v.monto*v.oInt*(1+v.igv);
   const plazo = horizon || v.oPlazo;
+  const f = (freq !== undefined ? freq : oFreq); // 1=monthly,3=quarterly,6=semi,0=bullet
   const rows=[];
+  let acumInt=0, acumIgv=0;
   for(let m=1;m<=plazo;m++){
-    const int   = v.monto*r;
-    const igvI  = int*v.igv;
-    const cap   = m===plazo ? v.monto : 0;
-    const egrSC = int+igvI;
+    const int  = v.monto*r;
+    const igvI = int*v.igv;
+    acumInt += int; acumIgv += igvI;
+    const cap = m===plazo ? v.monto : 0;
+    // Pay interest based on frequency; 0=bullet means pay all at end
+    let payInt=0, payIgv=0;
+    if(f===0){
+      // bullet: pay all accumulated interest only at maturity
+      if(m===plazo){ payInt=acumInt; payIgv=acumIgv; acumInt=0; acumIgv=0; }
+    } else {
+      if(m%f===0 || m===plazo){ payInt=acumInt; payIgv=acumIgv; acumInt=0; acumIgv=0; }
+    }
+    const egrSC = payInt+payIgv;
     const egr   = egrSC+cap;
-    rows.push({m, int, igvI, acres:0, cap, egrSC, egr});
+    rows.push({m, int:payInt, igvI:payIgv, acres:0, cap, egrSC, egr});
   }
   return {rows, osgT, intermediario, neto: v.monto-osgT-intermediario};
 }
 
-function buildFlujoPrime(v, horizon) {
-  const r = Math.pow(1+v.pTea,1/12)-1;
+function buildFlujoPrime(v, horizon, freq) {
+  const r    = Math.pow(1+v.pTea,1/12)-1;
   const plazo = horizon || v.pPlazo;
+  const f = (freq !== undefined ? freq : pFreq);
   const rows=[];
+  let acumInt=0;
   for(let m=1;m<=plazo;m++){
-    const int  = v.monto*r;
-    const cap  = m===plazo ? v.monto : 0;
-    const egrSC= int+v.pAcres;
-    const egr  = egrSC+cap;
-    rows.push({m, int, igvI:0, acres:v.pAcres, cap, egrSC, egr});
+    const int = v.monto*r;
+    acumInt += int;
+    const cap = m===plazo ? v.monto : 0;
+    // ACRES always monthly regardless of interest frequency
+    let payInt=0;
+    if(f===0){
+      if(m===plazo){ payInt=acumInt; acumInt=0; }
+    } else {
+      if(m%f===0 || m===plazo){ payInt=acumInt; acumInt=0; }
+    }
+    const egrSC = payInt+v.pAcres;
+    const egr   = egrSC+cap;
+    rows.push({m, int:payInt, igvI:0, acres:v.pAcres, cap, egrSC, egr});
   }
   return {rows, neto: v.monto-v.pDd-v.not};
 }
@@ -703,6 +751,9 @@ function update(){
   document.getElementById('o-cea').textContent=fmtP(ceaO);
   document.getElementById('o-cea-hdr').textContent=fmtP(ceaO);
   document.getElementById('o-cea-mes').textContent=v.oPlazo;
+  const freqNames={1:'mensual',3:'trimestral',6:'semestral',0:'bullet'};
+  document.getElementById('o-freq-lbl').textContent=freqNames[oFreq]||'mensual';
+  document.getElementById('p-freq-lbl').textContent=freqNames[pFreq]||'mensual';
   document.getElementById('o-tea-d').textContent=fmtP(v.oTea*100);
   document.getElementById('o-sp1').textContent='+'+fmtP(v.oInt*(1+v.igv)*100)+' (intermediario+IGV)';
   document.getElementById('o-sp2').textContent='+'+fmtP(v.oTea*v.igv*100)+' (IGV s/intereses)';
@@ -766,6 +817,25 @@ document.querySelectorAll('input[type=range]').forEach(el=>{
   el.style.setProperty('--fill',pct);
   el.addEventListener('input',update);
 });
+
+// Frequency buttons
+document.querySelectorAll('.freq-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const fund=btn.dataset.fund;
+    const freq=+btn.dataset.freq;
+    if(fund==='o'){
+      oFreq=freq;
+      document.querySelectorAll('.freq-btn[data-fund="o"]').forEach(b=>b.classList.remove('active-o'));
+      btn.classList.add('active-o');
+    } else {
+      pFreq=freq;
+      document.querySelectorAll('.freq-btn[data-fund="p"]').forEach(b=>b.classList.remove('active-p'));
+      btn.classList.add('active-p');
+    }
+    update();
+  });
+});
+
 update();
 </script>
 </body>
