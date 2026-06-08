@@ -796,49 +796,55 @@ function syncLabels(v) {
   document.getElementById('lv-p-plazo').textContent = 'Mes '+v.pPlazo;
   document.getElementById('lv-p-prepago').textContent='Mes '+v.pPrepago;
   function updateResumen(){
-  // Pull CEA values from financing tab variables
+  const fmtR = n => { const a=Math.abs(n),s=n<0?'-':''; if(a>=1000000) return s+'US$ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return s+'US$ '+(a/1000).toFixed(0)+'k'; return s+'US$ '+Math.round(a); };
+  const fmtS = n => { const a=Math.abs(n),s=n<0?'-':''; if(a>=1000000) return s+'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return s+'S/ '+(a/1000).toFixed(0)+'k'; return s+'S/ '+Math.round(a); };
+  const fmtP = n => n.toFixed(2)+'%';
+
+  // ── compute live values from sliders ──────────────────────────
+  let ceaO=24.75, ceaP=17.31, diffUsd=74470;
+  let turf1Sol=6747124, turf2Sol=7726807, tc=3.48;
+  let totalVend=20, cubreJun=true, cubreMar=false, saldoFinal=-1027372, totalIngr=16800000;
+
   try {
-    const v = getV();
-    const c = calcAll(v);
-    const oEl = document.getElementById('res-o-cea');
-    const pEl = document.getElementById('res-p-cea');
-    if(oEl) oEl.textContent = c.cea_o.toFixed(2)+'%';
-    if(pEl) pEl.textContent = c.cea_p.toFixed(2)+'%';
-
-    // Deuda TURF KPIs
+    const v = getV(); const c = calcAll(v);
+    ceaO=c.cea_o; ceaP=c.cea_p; diffUsd=c.diff;
     const pv = getPV();
-    const fmt2 = n => 'US$ '+Math.round(n).toLocaleString('es-PE');
-    const fmtS2 = n => { const a=Math.abs(n); if(a>=1000000) return 'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return 'S/ '+(a/1000).toFixed(0)+'k'; return 'S/ '+Math.round(a); };
-
-    const totalTurfSol = pv.turf1 + pv.turf2;
-    const totalTurfUsd = totalTurfSol / pv.tc;
-
-    document.getElementById('res-kpi-grid').innerHTML = [
-      {l:'Deuda TURF total',     v:fmt2(4159176),           s:'US$ 1.94M jun + US$ 2.22M mar27', cls:'los'},
-      {l:'Cuota junio 2026',     v:fmtS2(pv.turf1),         s:'50%+50% jun/jul pagadero',        cls:'los'},
-      {l:'Cuota marzo 2027',     v:fmtS2(pv.turf2),         s:'pago único mar27',                cls:'los'},
-      {l:'TC aplicado',          v:pv.tc.toFixed(2)+' S//$', s:'tipo de cambio proyección',      cls:''},
-      {l:'CEA Omaha (TIR)',       v:c.cea_o.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'los'},
-      {l:'CEA Prime (TIR)',       v:c.cea_p.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'win'},
-      {l:'Ahorro eligiendo Prime',v:fmt2(Math.round(c.diff/v.tc)), s:'diferencia a 12m equiv.',  cls:'win'},
-    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
-
-    // Proyección KPIs
+    turf1Sol=pv.turf1; turf2Sol=pv.turf2; tc=pv.tc;
     const rows = buildProy(pv);
-    const totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
-    const saldoFinal = rows[rows.length-1].saldoCaja;
-    const cubreJun = rows[2]&&rows[2].saldoCaja>0;
-    const cubreMar = rows[10]&&rows[10].saldoCaja>0;
-    const totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+    totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
+    saldoFinal = rows[rows.length-1].saldoCaja;
+    cubreJun  = rows[2]&&rows[2].saldoCaja>0;
+    cubreMar  = rows[10]&&rows[10].saldoCaja>0;
+    totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+  } catch(e){}
 
-    document.getElementById('res-proy-kpi').innerHTML = [
-      {l:'Dptos. vendidos proyectados', v:String(totalVend),         s:'según grilla de ventas',         cls:''},
-      {l:'Total cobranzas proyectadas', v:fmtS2(totalIngr),          s:'may26–ago27',                    cls:''},
-      {l:'Cubre cuota junio',           v:cubreJun?'✔ Sí':'✖ No',   s:fmtS2(rows[2]?rows[2].saldoCaja:0)+' saldo jul26', cls:cubreJun?'win':'los'},
-      {l:'Cubre cuota marzo 2027',      v:cubreMar?'✔ Sí':'✖ No',   s:fmtS2(rows[10]?rows[10].saldoCaja:0)+' saldo mar27',cls:cubreMar?'win':'los'},
-      {l:'Saldo caja final',            v:fmtS2(saldoFinal),         s:'ago 2027',                       cls:saldoFinal>=0?'win':'los'},
-    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
-  } catch(e){ console.error('updateResumen error:', e); }
+  // ── CEA badges ─────────────────────────────────────────────────
+  const oEl=document.getElementById('res-o-cea');
+  const pEl=document.getElementById('res-p-cea');
+  if(oEl) oEl.textContent=fmtP(ceaO);
+  if(pEl) pEl.textContent=fmtP(ceaP);
+
+  // ── Deuda TURF KPIs ────────────────────────────────────────────
+  const kpiEl = document.getElementById('res-kpi-grid');
+  if(kpiEl) kpiEl.innerHTML = [
+    {l:'Deuda TURF total (USD)',  v:'US$ 4,159,176',          s:'jun 26 + mar 27',             cls:'los'},
+    {l:'Cuota junio 2026 (S/)',   v:fmtS(turf1Sol),           s:'50%+50% jun/jul pagadero',    cls:'los'},
+    {l:'Cuota marzo 2027 (S/)',   v:fmtS(turf2Sol),           s:'pago único mar 27',           cls:'los'},
+    {l:'Tipo de cambio',          v:tc.toFixed(2)+' S//$',    s:'aplicado a la proyección',    cls:''},
+    {l:'CEA Omaha (TIR)',         v:fmtP(ceaO),               s:'tasa efectiva real anual',    cls:'los'},
+    {l:'CEA Prime (TIR)',         v:fmtP(ceaP),               s:'tasa efectiva real anual',    cls:'win'},
+    {l:'Ahorro eligiendo Prime',  v:fmtR(Math.abs(diffUsd/tc)),s:'diferencia costo 12m',       cls:'win'},
+  ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+  // ── Proyección KPIs ────────────────────────────────────────────
+  const proyEl = document.getElementById('res-proy-kpi');
+  if(proyEl) proyEl.innerHTML = [
+    {l:'Dptos. vendidos',        v:String(totalVend),         s:'total proyectados',           cls:''},
+    {l:'Total cobranzas',        v:fmtS(totalIngr),           s:'may 26 – ago 27',             cls:''},
+    {l:'Cubre cuota junio',      v:cubreJun?'✔ Sí':'✖ No',   s:'saldo disponible jul 26',     cls:cubreJun?'win':'los'},
+    {l:'Cubre cuota mar 2027',   v:cubreMar?'✔ Sí':'✖ No',   s:'saldo disponible mar 27',     cls:cubreMar?'win':'los'},
+    {l:'Saldo caja final',       v:fmtS(saldoFinal),          s:'ago 2027',                    cls:saldoFinal>=0?'win':'los'},
+  ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
 }
 
 document.querySelectorAll('input[type=range]').forEach(el=>{
@@ -1214,49 +1220,55 @@ function update(){
 }
 
 function updateResumen(){
-  // Pull CEA values from financing tab variables
+  const fmtR = n => { const a=Math.abs(n),s=n<0?'-':''; if(a>=1000000) return s+'US$ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return s+'US$ '+(a/1000).toFixed(0)+'k'; return s+'US$ '+Math.round(a); };
+  const fmtS = n => { const a=Math.abs(n),s=n<0?'-':''; if(a>=1000000) return s+'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return s+'S/ '+(a/1000).toFixed(0)+'k'; return s+'S/ '+Math.round(a); };
+  const fmtP = n => n.toFixed(2)+'%';
+
+  // ── compute live values from sliders ──────────────────────────
+  let ceaO=24.75, ceaP=17.31, diffUsd=74470;
+  let turf1Sol=6747124, turf2Sol=7726807, tc=3.48;
+  let totalVend=20, cubreJun=true, cubreMar=false, saldoFinal=-1027372, totalIngr=16800000;
+
   try {
-    const v = getV();
-    const c = calcAll(v);
-    const oEl = document.getElementById('res-o-cea');
-    const pEl = document.getElementById('res-p-cea');
-    if(oEl) oEl.textContent = c.cea_o.toFixed(2)+'%';
-    if(pEl) pEl.textContent = c.cea_p.toFixed(2)+'%';
-
-    // Deuda TURF KPIs
+    const v = getV(); const c = calcAll(v);
+    ceaO=c.cea_o; ceaP=c.cea_p; diffUsd=c.diff;
     const pv = getPV();
-    const fmt2 = n => 'US$ '+Math.round(n).toLocaleString('es-PE');
-    const fmtS2 = n => { const a=Math.abs(n); if(a>=1000000) return 'S/ '+(a/1000000).toFixed(2)+'M'; if(a>=1000) return 'S/ '+(a/1000).toFixed(0)+'k'; return 'S/ '+Math.round(a); };
-
-    const totalTurfSol = pv.turf1 + pv.turf2;
-    const totalTurfUsd = totalTurfSol / pv.tc;
-
-    document.getElementById('res-kpi-grid').innerHTML = [
-      {l:'Deuda TURF total',     v:fmt2(4159176),           s:'US$ 1.94M jun + US$ 2.22M mar27', cls:'los'},
-      {l:'Cuota junio 2026',     v:fmtS2(pv.turf1),         s:'50%+50% jun/jul pagadero',        cls:'los'},
-      {l:'Cuota marzo 2027',     v:fmtS2(pv.turf2),         s:'pago único mar27',                cls:'los'},
-      {l:'TC aplicado',          v:pv.tc.toFixed(2)+' S//$', s:'tipo de cambio proyección',      cls:''},
-      {l:'CEA Omaha (TIR)',       v:c.cea_o.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'los'},
-      {l:'CEA Prime (TIR)',       v:c.cea_p.toFixed(2)+'%',  s:'tasa efectiva real anual',       cls:'win'},
-      {l:'Ahorro eligiendo Prime',v:fmt2(Math.round(c.diff/v.tc)), s:'diferencia a 12m equiv.',  cls:'win'},
-    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
-
-    // Proyección KPIs
+    turf1Sol=pv.turf1; turf2Sol=pv.turf2; tc=pv.tc;
     const rows = buildProy(pv);
-    const totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
-    const saldoFinal = rows[rows.length-1].saldoCaja;
-    const cubreJun = rows[2]&&rows[2].saldoCaja>0;
-    const cubreMar = rows[10]&&rows[10].saldoCaja>0;
-    const totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+    totalIngr = rows.reduce((s,r)=>s+r.ingreso,0);
+    saldoFinal = rows[rows.length-1].saldoCaja;
+    cubreJun  = rows[2]&&rows[2].saldoCaja>0;
+    cubreMar  = rows[10]&&rows[10].saldoCaja>0;
+    totalVend = ventasPorMes.reduce((s,v)=>s+v,0);
+  } catch(e){}
 
-    document.getElementById('res-proy-kpi').innerHTML = [
-      {l:'Dptos. vendidos proyectados', v:String(totalVend),         s:'según grilla de ventas',         cls:''},
-      {l:'Total cobranzas proyectadas', v:fmtS2(totalIngr),          s:'may26–ago27',                    cls:''},
-      {l:'Cubre cuota junio',           v:cubreJun?'✔ Sí':'✖ No',   s:fmtS2(rows[2]?rows[2].saldoCaja:0)+' saldo jul26', cls:cubreJun?'win':'los'},
-      {l:'Cubre cuota marzo 2027',      v:cubreMar?'✔ Sí':'✖ No',   s:fmtS2(rows[10]?rows[10].saldoCaja:0)+' saldo mar27',cls:cubreMar?'win':'los'},
-      {l:'Saldo caja final',            v:fmtS2(saldoFinal),         s:'ago 2027',                       cls:saldoFinal>=0?'win':'los'},
-    ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
-  } catch(e){ console.error('updateResumen error:', e); }
+  // ── CEA badges ─────────────────────────────────────────────────
+  const oEl=document.getElementById('res-o-cea');
+  const pEl=document.getElementById('res-p-cea');
+  if(oEl) oEl.textContent=fmtP(ceaO);
+  if(pEl) pEl.textContent=fmtP(ceaP);
+
+  // ── Deuda TURF KPIs ────────────────────────────────────────────
+  const kpiEl = document.getElementById('res-kpi-grid');
+  if(kpiEl) kpiEl.innerHTML = [
+    {l:'Deuda TURF total (USD)',  v:'US$ 4,159,176',          s:'jun 26 + mar 27',             cls:'los'},
+    {l:'Cuota junio 2026 (S/)',   v:fmtS(turf1Sol),           s:'50%+50% jun/jul pagadero',    cls:'los'},
+    {l:'Cuota marzo 2027 (S/)',   v:fmtS(turf2Sol),           s:'pago único mar 27',           cls:'los'},
+    {l:'Tipo de cambio',          v:tc.toFixed(2)+' S//$',    s:'aplicado a la proyección',    cls:''},
+    {l:'CEA Omaha (TIR)',         v:fmtP(ceaO),               s:'tasa efectiva real anual',    cls:'los'},
+    {l:'CEA Prime (TIR)',         v:fmtP(ceaP),               s:'tasa efectiva real anual',    cls:'win'},
+    {l:'Ahorro eligiendo Prime',  v:fmtR(Math.abs(diffUsd/tc)),s:'diferencia costo 12m',       cls:'win'},
+  ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+  // ── Proyección KPIs ────────────────────────────────────────────
+  const proyEl = document.getElementById('res-proy-kpi');
+  if(proyEl) proyEl.innerHTML = [
+    {l:'Dptos. vendidos',        v:String(totalVend),         s:'total proyectados',           cls:''},
+    {l:'Total cobranzas',        v:fmtS(totalIngr),           s:'may 26 – ago 27',             cls:''},
+    {l:'Cubre cuota junio',      v:cubreJun?'✔ Sí':'✖ No',   s:'saldo disponible jul 26',     cls:cubreJun?'win':'los'},
+    {l:'Cubre cuota mar 2027',   v:cubreMar?'✔ Sí':'✖ No',   s:'saldo disponible mar 27',     cls:cubreMar?'win':'los'},
+    {l:'Saldo caja final',       v:fmtS(saldoFinal),          s:'ago 2027',                    cls:saldoFinal>=0?'win':'los'},
+  ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-lbl">${k.l}</div><div class="kpi-val">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
 }
 
 document.querySelectorAll('input[type=range]').forEach(el=>{
