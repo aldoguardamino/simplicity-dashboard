@@ -169,205 +169,218 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 
 <!-- TAB NAV -->
 <div style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--bdr)">
-  <button class="tab-btn active" onclick="switchTab('resumen')" id="tab-resumen">
-    &#9679; Resumen &amp; Estado
-  </button>
-  <button class="tab-btn" onclick="switchTab('financiamiento')" id="tab-financiamiento">
-    Comparativo de Financiamiento
-  </button>
-  <button class="tab-btn" onclick="switchTab('proyeccion')" id="tab-proyeccion">
-    Proyección de Ventas y Pago TURF
+  <button class="tab-btn active" id="tab-financiamiento">
+    Análisis de Financiamiento — Proyecto Simplicity
   </button>
 </div>
 
-<!-- TAB: RESUMEN & ESTADO -->
-<div id="panel-resumen">
 
-<div class="hdr" style="margin-top:1.75rem">
-  <div class="hdr-top">
-    <div>
-      <h1>Resumen ejecutivo — Financiamiento pago del terreno al TURF</h1>
-      <p>Proyecto Simplicity · Estado de avance y métricas clave · Junio 2026</p>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:2px">
-      <span class="tag t-warn">Vencimiento Jun 2026</span>
-      <span class="tag t-bad">Vencimiento Mar 2027</span>
-    </div>
-  </div>
-</div>
-
-<!-- HITOS -->
-<div class="sec">Hitos — estado de avance</div>
-<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:1.5rem">
-  <table style="width:100%;border-collapse:collapse;font-size:13px">
-    <thead>
-      <tr>
-        <th style="width:40px;padding:9px 14px;text-align:center;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">#</th>
-        <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Hito</th>
-        <th style="width:280px;padding:9px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">1</td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px">
-          Pago al TURF del 50% de la cuota de Junio — <strong>USD 1MM</strong>
-        </td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr)">
-          <span style="display:inline-flex;align-items:center;gap:7px;background:var(--am-bg);color:var(--am);border:1px solid var(--am);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--am);flex-shrink:0"></span>
-            Por realizar — 9 de Junio
-          </span>
-        </td>
-      </tr>
-      <tr style="background:var(--bg)">
-        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">2</td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px;background:var(--bg)">
-          DLA Piper en evaluación de los contratos de Fideicomisos y de las propuestas de los fondos
-        </td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);background:var(--bg)">
-          <span style="display:inline-flex;align-items:center;gap:7px;background:#EEF4FF;color:#2563EB;border:1px solid #93C5FD;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
-            <span style="width:7px;height:7px;border-radius:50%;background:#2563EB;flex-shrink:0;animation:pulse 1.5s infinite"></span>
-            En espera de evaluación
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">3</td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px">
-          Evaluación de propuestas OMAHA vs PRIME
-        </td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr)">
-          <span onclick="switchTab('financiamiento')" style="display:inline-flex;align-items:center;gap:7px;background:var(--o-lt);color:var(--o-dk);border:1px solid var(--o);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--o);flex-shrink:0"></span>
-            Ver pestaña Comparativo ↗
-          </span>
-        </td>
-      </tr>
-      <tr style="background:var(--bg)">
-        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:1px solid var(--bdr);color:var(--mu)">4</td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px;background:var(--bg)">
-          Proyección de pago al TURF
-        </td>
-        <td style="padding:12px 14px;border-bottom:1px solid var(--bdr);background:var(--bg)">
-          <span onclick="switchTab('proyeccion')" style="display:inline-flex;align-items:center;gap:7px;background:var(--gn-bg);color:var(--gn);border:1px solid var(--gn);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--gn);flex-shrink:0"></span>
-            Ver pestaña Proyección ↗
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:12px 14px;text-align:center;font-size:13px;font-weight:600;border-bottom:none;color:var(--mu)">5</td>
-        <td style="padding:12px 14px;border-bottom:none;font-size:13px">
-          Solicitud de préstamo directo al Interbank
-        </td>
-        <td style="padding:12px 14px;border-bottom:none">
-          <span style="display:inline-flex;align-items:center;gap:7px;background:#F0FDF4;color:#166534;border:1px solid #86EFAC;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500">
-            <span style="width:7px;height:7px;border-radius:50%;background:#22C55E;flex-shrink:0"></span>
-            Comunicado al Banco — 8 de Junio
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- MÉTRICAS CLAVE -->
-<div class="sec">Métricas clave — deuda TURF</div>
-<div class="kpi-grid" id="res-kpi-grid"></div>
-
-<!-- MINI COMPARATIVO -->
-<div class="sec">Resumen comparativo de propuestas</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem">
-
-  <div style="background:var(--sur);border:1.5px solid var(--o);border-radius:var(--rl);padding:1.25rem;position:relative;overflow:hidden">
-    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--o)"></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
-      <div style="width:10px;height:10px;border-radius:50%;background:var(--o)"></div>
-      <span style="font-size:14px;font-weight:600">Omaha Capital 2</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Monto</div>
-        <div style="font-size:18px;font-weight:600;font-family:monospace">US$1.5M</div>
-      </div>
-      <div style="background:var(--rd-bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">CEA (TIR)</div>
-        <div style="font-size:18px;font-weight:600;font-family:monospace;color:var(--rd)" id="res-o-cea">—</div>
-      </div>
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Tasa base</div>
-        <div style="font-size:15px;font-weight:500;font-family:monospace">15.5% TEA</div>
-      </div>
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Plazo</div>
-        <div style="font-size:15px;font-weight:500;font-family:monospace">12 meses</div>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--mu);line-height:1.5;padding:.6rem;background:var(--rd-bg);border-radius:var(--r)">
-      ⚠ Requiere ser <strong>primer beneficiario</strong> — exige carta de Interbank cediendo derechos Etapa 1. Intermediario Akamai +2.5% + IGV sobre intereses elevan costo real.
-    </div>
-  </div>
-
-  <div style="background:var(--sur);border:1.5px solid var(--p);border-radius:var(--rl);padding:1.25rem;position:relative;overflow:hidden">
-    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--p)"></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
-      <div style="width:10px;height:10px;border-radius:50%;background:var(--p)"></div>
-      <span style="font-size:14px;font-weight:600">Prime Gestora de Fondos</span>
-      <span style="margin-left:auto;font-size:11px;background:var(--gn-bg);color:var(--gn);border:1px solid var(--gn);border-radius:20px;padding:2px 8px;font-weight:500">✓ Recomendado</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Monto</div>
-        <div style="font-size:18px;font-weight:600;font-family:monospace">US$1–3M</div>
-      </div>
-      <div style="background:var(--gn-bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">CEA (TIR)</div>
-        <div style="font-size:18px;font-weight:600;font-family:monospace;color:var(--gn)" id="res-p-cea">—</div>
-      </div>
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Tasa all-in</div>
-        <div style="font-size:15px;font-weight:500;font-family:monospace">16.0%</div>
-      </div>
-      <div style="background:var(--bg);border-radius:var(--r);padding:10px">
-        <div style="font-size:10px;color:var(--mu);margin-bottom:2px">Plazo</div>
-        <div style="font-size:15px;font-weight:500;font-family:monospace">24 meses</div>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--mu);line-height:1.5;padding:.6rem;background:var(--gn-bg);border-radius:var(--r)">
-      ✓ Acepta <strong>Fideicomisario Junior</strong> — compatible con Interbank Senior. Respaldo legal: Numeral 19.1.25 CMO. US$74k más económico que Omaha.
-    </div>
-  </div>
-
-</div>
-
-<!-- MINI PROYECCIÓN -->
-<div class="sec">Resumen proyección de ventas — capacidad de pago TURF</div>
-<div class="kpi-grid" id="res-proy-kpi" style="margin-bottom:1.5rem"></div>
-
-<!-- PREGUNTA CLAVE -->
-<div style="background:var(--o-lt);border:1.5px solid var(--o);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.5rem">
-  <div style="font-size:13px;font-weight:600;color:var(--o-dk);margin-bottom:.5rem">Pregunta clave para el Directorio</div>
-  <div style="font-size:15px;font-weight:500;color:var(--o-dk);font-style:italic;line-height:1.5">
-    "¿Está Interbank dispuesto a aprobar el ingreso de un nuevo financiador que cancele a TURF y ocupe su posición dentro de la estructura fiduciaria?"
-  </div>
-  <div style="margin-top:.75rem;font-size:12px;color:var(--mu)">
-    Si la respuesta es <strong>afirmativa</strong> → la operación es plenamente estructurable bajo los escenarios A o B.<br>
-    Si la respuesta es <strong>negativa</strong> → se deberá evaluar alternativas fuera del fideicomiso.
-  </div>
-</div>
-
-<style>
-@keyframes pulse {
-  0%,100%{opacity:1} 50%{opacity:.4}
-}
-</style>
-
-</div><!-- end panel-resumen -->
 
 <!-- TAB: FINANCIAMIENTO -->
-<div id="panel-financiamiento" style="display:none">
+<div id="panel-financiamiento">
 
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN DLA PIPER                                            -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+
+<div class="sec">Análisis legal DLA Piper — Alternativas de financiamiento</div>
+
+<!-- ALERTA MAESTRA -->
+<div style="background:#FFF8E6;border:1px solid #D4A017;border-radius:var(--r);padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:1.4rem">
+  <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px">⚠️</span>
+  <p style="margin:0;font-size:12.5px;color:#5a3e00;line-height:1.55">
+    <strong>DLA Piper confirma (23 jun 2026):</strong> ninguna alternativa de financiamiento es ejecutable sin el <strong>consentimiento previo y escrito de Interbank</strong>.
+    Se requieren <strong>dos waivers</strong>: (1) dispensa para contratar nuevo financiamiento externo (Cl. 19.1.25 CMO); (2) dispensa de subordinación de deuda para poder pagar al TURF mientras existan obligaciones vigentes con IBK.
+  </p>
+</div>
+
+<!-- DOS ALTERNATIVAS -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.6rem">
+
+  <!-- ALT 1 -->
+  <div style="background:var(--sur);border:1.5px solid #185FA5;border-radius:var(--rl);overflow:hidden">
+    <div style="background:#1A2E4A;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="color:#fff;font-weight:600;font-size:13px">Alternativa 1 <span style="color:#34d399;font-size:11px;margin-left:6px">← Ruta recomendada</span></div>
+        <div style="color:#93c5fd;font-size:11px;margin-top:2px">Sub-cuenta segregada dentro del fideicomiso de flujos existente</div>
+      </div>
+      <span class="tag t-bad">Alta complejidad</span>
+    </div>
+    <div style="padding:14px 16px">
+      <p style="font-size:12px;color:var(--mu);margin:0 0 11px;line-height:1.55">El nuevo acreedor ingresa a través de <strong>ACRES como Representante de Obligacionistas y Fideicomisario Junior</strong> en ambos fideicomisos mediante adenda y Escritura Pública. La Pacífica emite un bono corporativo que Prime adquiere.</p>
+
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Fideicomiso de Activos:</strong> adenda identifica por número de unidad las ~20 unidades remanentes E1 como garantía de Prime/ACRES.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Fideicomiso de Flujos:</strong> sub-cuenta segregada donde los flujos de esas unidades específicas van a Prime con prioridad — antes de la prelación normal.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Waiver #1:</strong> IBK dispensa prohibición de nuevo financiamiento externo (Cl. 19.1.25 CMO).</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Waiver #2:</strong> IBK dispensa subordinación de deuda para autorizar pago al TURF.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Unanimidad EP:</strong> La Fiduciaria + IBK + TURF + Supervisor Técnico — todo por Escritura Pública. Plazo estimado: 3–6 semanas desde waiver IBK.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Garantías Prime:</strong> fianzas solidarias del holding y gerente + letras de cambio + DD corporativo e inmobiliario (US$ 6,000 + IGV).</span></div>
+      </div>
+
+      <!-- En la práctica -->
+      <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-top:12px;border-left:3px solid #185FA5">
+        <p style="font-size:11px;font-weight:600;color:#0C1F35;margin:0 0 5px;text-transform:uppercase;letter-spacing:.05em">En la práctica</p>
+        <p style="font-size:11.5px;color:#1e3a5f;margin:0;line-height:1.6">La Cuenta Recaudadora general ya existe — ahí entra el 100% de los flujos. La adenda instruye a La Fiduciaria a <strong>segregar los flujos por número de unidad</strong> de las ~20 remanentes de E1 en una sub-cuenta cuyo primer beneficiario es ACRES/Prime, antes del pool general. Prime no espera sobras — tiene flujos identificados que le pertenecen por contrato desde el primer sol que entra por esas ventas.</p>
+      </div>
+
+      <div style="margin-top:10px;background:#E8F5EE;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#1E7145">
+        ✅ <strong>Compatible con Prime.</strong> ACRES ingresa como fideicomisario junior. Alineada con Num. 19.1.25 CMO. Prime cobra primero de flujos identificados — posición ejecutable y predecible.
+      </div>
+    </div>
+  </div>
+
+  <!-- ALT 2 -->
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;opacity:0.88">
+    <div style="background:#374151;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="color:#fff;font-weight:600;font-size:13px">Alternativa 2</div>
+        <div style="color:#d1d5db;font-size:11px;margin-top:2px">Cesión del derecho al remanente de La Pacífica</div>
+      </div>
+      <span class="tag t-warn">Menor complejidad</span>
+    </div>
+    <div style="padding:14px 16px">
+      <p style="font-size:12px;color:var(--mu);margin:0 0 11px;line-height:1.55">La Pacífica cede irrevocablemente al financista su derecho al <strong>remanente de ambos fideicomisos</strong> hasta cubrir la deuda. Más económica en estructura legal, pero ofrece <strong>menor seguridad</strong> al acreedor.</p>
+
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Waivers #1 y #2:</strong> Igual que Alt. 1 — ambas dispensas de IBK son igualmente necesarias. No hay ventaja aquí.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Autorización de cesión:</strong> IBK y La Fiduciaria autorizan la cesión del derecho al remanente (Cl. 29 Fid. Flujos). TURF no necesita aprobar.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Contrato + carta instrucción:</strong> La Pacífica firma con financista; carta a La Fiduciaria instruyendo depósito del remanente a cuenta de Prime.</span></div>
+        <div style="display:flex;gap:9px;font-size:11.5px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>No requiere unanimidad EP:</strong> menor número de partes, pero Prime exigiría garantías adicionales sólidas para compensar el riesgo.</span></div>
+      </div>
+
+      <!-- En la práctica -->
+      <div style="background:#FFF8E6;border-radius:6px;padding:10px 13px;margin-top:12px;border-left:3px solid #D4A017">
+        <p style="font-size:11px;font-weight:600;color:#5a3e00;margin:0 0 5px;text-transform:uppercase;letter-spacing:.05em">En la práctica — ¿qué es el remanente?</p>
+        <p style="font-size:11.5px;color:#5a3e00;margin:0;line-height:1.6">El remanente es lo que queda para La Pacífica <em>después</em> de que todos cobran: tributos → La Fiduciaria → proveedores → <strong>IBK</strong> → TURF → <strong>recién entonces La Pacífica</strong>. La Pacífica cede ese derecho a Prime: en vez de que el sobrante vaya a La Pacífica, va a Prime. Si IBK o el TURF absorben más de lo esperado, puede no quedar nada. Prime estaría esperando sobras sin flujo garantizado ni fecha cierta de cobro.</p>
+      </div>
+
+      <div style="background:#F4F4F4;border-radius:6px;padding:10px 13px;margin-top:8px;border:1px solid var(--bdr)">
+        <p style="font-size:11px;font-weight:600;color:var(--mu);margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em">Por qué es estructuralmente más débil</p>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0">1.</span><span><strong>Flujo no garantizado:</strong> el remanente puede ser cero en meses donde IBK y TURF absorban todo.</span></div>
+          <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0">2.</span><span><strong>Sin posición en el fideicomiso:</strong> Prime quedaría fuera de la jerarquía formal — solo espera sobras.</span></div>
+          <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0">3.</span><span><strong>Difícil de ejecutar:</strong> si La Pacífica entra en problemas, un cesionario de remanentes tiene mucho menos poder de acción que un fideicomisario junior.</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;background:#FFECEC;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#9C0006">
+        ⚠️ <strong>Descartada en la práctica.</strong> Para un crédito de US$ 1.5M, Prime casi con certeza no aceptará una posición de último remanente sin garantía de flujo. La Alt. 1 ofrece la misma estructura de waivers con una posición mucho más sólida.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HITOS — RUTA EJECUTABLE -->
+<div class="sec">Ruta ejecutable — hitos y pasos a seguir · Prime + Alternativa 1 DLA Piper</div>
+
+<div style="position:relative;padding-left:0">
+  <!-- línea vertical conectora -->
+  <div style="position:absolute;left:27px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,#C0392B 0%,#185FA5 35%,#534AB7 60%,#1E7145 100%);border-radius:2px;z-index:0"></div>
+
+  <!-- PASO 1 -->
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#C0392B;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);box-shadow:0 0 0 2px #C0392B;font-size:1.2rem">🔑</div>
+    <div style="flex:1;background:var(--sur);border:1.5px solid #C0392B;border-radius:var(--rl);padding:13px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <strong style="font-size:13px">Paso 1 — Reunión con Interbank: obtener los dos waivers</strong>
+        <span class="tag t-bad">Sin esto, nada avanza</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 8px;line-height:1.55">Conseguir la <strong>declaración de voluntad escrita</strong> de IBK sobre dos puntos: (a) dispensa para que La Pacífica contrate nuevo financiamiento subordinado (Cl. 19.1.25 CMO); (b) dispensa de subordinación de deuda para autorizar el pago al TURF mientras las CF de Etapa 1 y la fianza solidaria estén vigentes. <strong>DLA Piper se ofrece a acompañar esta reunión.</strong></p>
+      <div style="background:#FEF2F2;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#7f1d1d;border-left:3px solid #C0392B">
+        ⚠️ <strong>El waiver no es la adenda.</strong> IBK autoriza en principio — no está aún modificando el fideicomiso. Eso ocurre en el Paso 3. Entre el waiver y la adenda, IBK puede imponer condiciones adicionales en la negociación.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);box-shadow:0 0 0 2px #9B59B6;font-size:1.2rem">📄</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <strong style="font-size:13px">Paso 2 — Carta de comfort de Interbank</strong>
+        <span class="tag" style="background:#F3E8FF;color:#6B21A8">Post-reunión IBK</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 8px;line-height:1.55">Formalizar por escrito la voluntad de IBK: una <strong>carta de comfort o autorización escrita</strong> que confirme explícitamente que (a) no se opone al nuevo financiamiento bajo la estructura propuesta, y (b) participará en la modificación de los fideicomisos bajo los términos que se acuerden. Este documento es el que le da a Prime la certeza suficiente para <strong>comprometer el Due Diligence y los honorarios de estructuración</strong> sin riesgo de que el proceso caiga.</p>
+      <div style="background:#F5F3FF;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#4C1D95;border-left:3px solid #9B59B6">
+        💡 IBK puede en este punto negociar condiciones adicionales sobre la estructura: qué unidades entran como garantía, el ratio de cobertura frente al saldo expuesto, o restricciones sobre la sub-cuenta. Esas condiciones se trasladan a la redacción de las adendas.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);box-shadow:0 0 0 2px #185FA5;font-size:1.2rem">🤝</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <strong style="font-size:13px">Paso 3 — Confirmar estructura formal con Prime</strong>
+        <span class="tag t-o">Con carta de comfort en mano</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">Con la carta de comfort de IBK, confirmar con Prime la estructura: <strong>bono corporativo + ACRES como Representante de Obligacionistas y Fideicomisario Junior</strong> en ambos fideicomisos, aceptando los 3 primeros órdenes de prelación. Acordar fianzas solidarias de holding y gerente, letras de cambio, y las condiciones que IBK haya incorporado en la carta de comfort.</p>
+    </div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);box-shadow:0 0 0 2px #534AB7;font-size:1.2rem">📋</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <strong style="font-size:13px">Paso 4 — Due Diligence y suscripción de adendas</strong>
+        <span class="tag t-warn">~3–6 semanas</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">Prime encarga DD corporativo e inmobiliario (US$ 6,000 + IGV). En paralelo, DLA Piper redacta las adendas a ambos fideicomisos incorporando las condiciones de IBK. Proceso formal con <strong>La Fiduciaria, IBK, TURF y La Pacífica</strong> — requiere unanimidad y <strong>Escritura Pública</strong>. Solo aquí IBK pasa de autorizar a comprometerse contractualmente. Estructuración legal Prime: US$ 5,500 + IGV. Emisión de bono corporativo con intervención de ACRES.</p>
+    </div>
+  </div>
+
+  <!-- PASO 5 -->
+  <div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#1E7145;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);box-shadow:0 0 0 2px #1E7145;font-size:1.2rem">✅</div>
+    <div style="flex:1;background:var(--sur);border:1.5px solid #1E7145;border-radius:var(--rl);padding:13px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <strong style="font-size:13px">Paso 5 — Desembolso Prime y pago TURF</strong>
+        <span class="tag t-ok">Objetivo final</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">Con fideicomisos modificados y EP suscrita, Prime desembolsa. Distribución: <strong>cheque de gerencia al TURF</strong> por cuota vencida (US$ 1,938,829) y cuota Oct-26 (US$ 2,220,347) según negociación; saldo a La Pacífica. Inicio del monitoreo por Prime con reportes financieros y comerciales periódicos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSIÓN ESTRATÉGICA -->
+<div style="background:linear-gradient(135deg,#0C1F35 0%,#0C1F35 55%,#0B3320 100%);border-radius:var(--rl);padding:22px;margin-top:2rem">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <span style="font-size:1.3rem">🎯</span>
+    <h3 style="margin:0;color:#fff;font-size:14px;font-weight:600">Conclusión — Ruta ejecutable recomendada: <span style="color:#34d399">Prime + Alternativa 1 DLA Piper</span></h3>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px">
+    <div>
+      <p style="color:#93c5fd;font-size:10px;font-weight:600;margin:0 0 7px;text-transform:uppercase;letter-spacing:.06em">¿Por qué Prime y no Omaha?</p>
+      <ul style="margin:0;padding-left:15px;color:#e5e7eb;font-size:12px;line-height:1.75">
+        <li>Omaha exige ser <strong style="color:#fca5a5">primer beneficiario sobre IBK</strong> — IBK nunca aceptará ceder su posición Senior con CF activas y crédito E2 aprobado.</li>
+        <li>Omaha pide carta IBK declarando que fondos E1 no pagarán deuda con ellos — imposible con subordinación vigente.</li>
+        <li>Prime acepta posición Junior a través de ACRES y referencia el Num. 19.1.25 CMO.</li>
+        <li>CEA real Prime (~17.3%) vs Omaha (~24.8%) — ahorro de <strong style="color:#6ee7b7">US$ 74k a 12 meses</strong>.</li>
+        <li>Plazo 24 meses de Prime da mayor holgura de caja frente al ciclo de ventas.</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:#6ee7b7;font-size:10px;font-weight:600;margin:0 0 7px;text-transform:uppercase;letter-spacing:.06em">¿Por qué Alt. 1 y no Alt. 2?</p>
+      <ul style="margin:0;padding-left:15px;color:#e5e7eb;font-size:12px;line-height:1.75">
+        <li>Alt. 2 (cesión de remanentes) ofrece menor seguridad jurídica al acreedor.</li>
+        <li>Prime requiere una posición fiduciaria formal y ejecutable — la posición de último remanente es insuficiente para un crédito de US$ 1.5M.</li>
+        <li>La Cuenta Recaudadora diseñada por DLA Piper en Alt. 1 da a ACRES/Prime una garantía de flujos ejecutable y predecible.</li>
+        <li>Ambas alternativas requieren los mismos 2 waivers IBK — no hay ventaja operativa en Alt. 2.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:12px 15px;border-left:3px solid #34d399">
+    <p style="margin:0;color:#d1fae5;font-size:12px;line-height:1.6">
+      <strong>Acción inmediata:</strong> Gestionar reunión con Interbank — con apoyo de DLA Piper — para obtener los dos waivers. Sin ese paso, Prime no puede avanzar, los fideicomisos no pueden modificarse, y el TURF sigue en mora acumulando intereses moratorios sobre US$ 1,938,829 vencidos desde el 01/06/2026.
+    </p>
+  </div>
+  <p style="margin:10px 0 0;color:#6b7280;font-size:10.5px">Fuente: DLA Piper Perú · Katia Pinedo / Hernán Velarde · Email y presentación 23 jun 2026 · Correos Prime (Hernán Valdivia, 2 jun 2026) y Omaha (Ana Paula Garcia, 28 may 2026)</p>
+</div>
+
+<!-- ══ ANÁLISIS COMPARATIVO OMAHA VS PRIME ══ -->
 <div class="hdr">
   <div class="hdr-top">
     <div>
@@ -606,149 +619,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 
 </div><!-- end panel-financiamiento -->
 
-<!-- TAB: PROYECCIÓN DE VENTAS Y PAGO TURF -->
-<div id="panel-proyeccion" style="display:none">
 
-<div class="hdr" style="margin-top:1.75rem">
-  <div class="hdr-top">
-    <div>
-      <h1>Proyección de ventas Etapa 1 — Capacidad de pago deuda TURF</h1>
-      <p>Simplicity Etapa 1 · Flujo de caja proyectado · Variables ajustables en tiempo real · Soles (S/)</p>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:2px">
-      <span class="tag t-ok">Stock disponible</span>
-      <span class="tag t-warn">Deuda TURF</span>
-    </div>
-  </div>
-</div>
-
-<!-- CONTROLES PROYECCIÓN — PANEL VENTAS -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem">
-
-  <!-- CUADRO VENTAS -->
-  <div class="ctrl-panel" style="margin-bottom:0">
-    <div class="ctrl-hdr" style="color:var(--gn);font-weight:600">&#9632; Proyección de Ventas — Etapa 1</div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Precio por dpto. (S/)</span>
-      <input type="range" class="sl-s" id="psl-px" min="300000" max="1200000" step="10000" value="650000" style="accent-color:var(--gn)">
-      <span class="ctrl-val" style="color:var(--gn)" id="plv-px">650,000</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">% cuota inicial s/ precio</span>
-      <input type="range" class="sl-s" id="psl-ci" min="5" max="30" step="1" value="10" style="accent-color:var(--gn)">
-      <span class="ctrl-val" style="color:var(--gn)" id="plv-ci">10%</span>
-    </div>
-    <div style="margin-top:.75rem;padding:.65rem;background:var(--gn-bg);border-radius:var(--r);font-size:11px">
-      <div style="font-weight:600;color:var(--gn);margin-bottom:6px">Resumen por dpto.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
-        <span style="color:var(--mu)">Cuota inicial / dpto:</span><span id="p-ci-dpto" style="font-family:monospace;color:var(--gn);font-weight:600">—</span>
-        <span style="color:var(--mu)">Saldo restante / dpto:</span><span id="p-saldo-dpto" style="font-family:monospace;color:var(--gn);font-weight:600">—</span>
-      </div>
-    </div>
-    <div style="margin-top:.75rem">
-      <div style="font-size:11px;font-weight:600;color:var(--gn);margin-bottom:6px">Unidades vendidas por mes <span style="font-weight:400;color:var(--fa)">(edita directamente)</span></div>
-      <div id="ventas-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px"></div>
-      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11px;color:var(--mu)">Relleno rápido:</span>
-        <button onclick="fillVentas(2)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--gn);background:var(--gn-bg);color:var(--gn);cursor:pointer">2/mes</button>
-        <button onclick="fillVentas(3)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--gn);background:var(--gn-bg);color:var(--gn);cursor:pointer">3/mes</button>
-        <button onclick="fillVentas(0)" style="font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);color:var(--mu);cursor:pointer">Limpiar</button>
-        <span style="font-size:11px;color:var(--mu);margin-left:4px">Total: <strong id="p-total-vendidos" style="color:var(--gn)">0</strong> dptos</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- CUADRO DEUDA TURF Y FONDEO -->
-  <div class="ctrl-panel" style="margin-bottom:0">
-    <div class="ctrl-hdr" style="color:var(--am);font-weight:600">&#9632; Deuda TURF & Fondeo</div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Tipo de cambio (S/ x US$)</span>
-      <input type="range" class="sl-s" id="psl-tc" min="3.20" max="4.00" step="0.01" value="3.48">
-      <span class="ctrl-val cv-s" id="plv-tc">3.48</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Saldo caja inicial (S/)</span>
-      <input type="range" class="sl-s" id="psl-caja" min="500000" max="5000000" step="50000" value="2027000">
-      <span class="ctrl-val cv-s" id="plv-caja">2,027,000</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Cuota TURF junio — total (S/)</span>
-      <input type="range" class="sl-s" id="psl-turf1" min="1000000" max="10000000" step="50000" value="6747124" style="accent-color:var(--am)">
-      <span class="ctrl-val" style="color:var(--am)" id="plv-turf1">6,747,124</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Cuota TURF mar27 (S/)</span>
-      <input type="range" class="sl-s" id="psl-turf2" min="3000000" max="12000000" step="50000" value="7726807" style="accent-color:var(--am)">
-      <span class="ctrl-val" style="color:var(--am)" id="plv-turf2">7,726,807</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-lbl">Monto del fondeo (S/)</span>
-      <input type="range" class="sl-s" id="psl-fondeo" min="1000000" max="8000000" step="100000" value="3500000" style="accent-color:var(--rd)">
-      <span class="ctrl-val" style="color:var(--rd)" id="plv-fondeo">3,500,000</span>
-    </div>
-    <div class="ctrl-row" style="border-bottom:none">
-      <span class="ctrl-lbl">TEA del fondeo (%)</span>
-      <input type="range" class="sl-s" id="psl-tea-fondeo" min="10" max="30" step="0.5" value="17" style="accent-color:var(--rd)">
-      <span class="ctrl-val" style="color:var(--rd)" id="plv-tea-fondeo">17.0%</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- KPIs PROYECCIÓN -->
-<div class="sec">Resumen del escenario</div>
-<div class="kpi-grid" id="pkpi-grid"></div>
-
-<!-- TABLA COBRANZAS -->
-<div class="sec">Proyección de cobranzas nuevas ventas — editable mes a mes</div>
-<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto;margin-bottom:.5rem">
-  <table id="cobr-table" style="min-width:700px;width:100%;border-collapse:collapse;font-size:11px"></table>
-  <p style="font-size:10px;color:var(--fa);margin-top:6px">
-    Cuota inicial = <span id="pct-ci-cobr">10</span>% cobrado en el mes de venta ·
-    Saldo restante = <span id="pct-sr-cobr">90</span>% cobrado el mes siguiente
-  </p>
-</div>
-
-<!-- TABLA DEUDA TURF -->
-<div class="sec">Deuda TURF contractual</div>
-<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:1rem">
-  <table style="width:100%;border-collapse:collapse;font-size:13px">
-    <thead>
-      <tr>
-        <th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Cuota</th>
-        <th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Fecha</th>
-        <th style="padding:8px 14px;text-align:right;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">USD</th>
-        <th style="padding:8px 14px;text-align:right;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);background:var(--bg);border-bottom:1px solid var(--bdr)">Soles (S/)</th>
-      </tr>
-    </thead>
-    <tbody id="turf-table"></tbody>
-  </table>
-</div>
-
-<!-- FLUJO DE CAJA PROYECCIÓN -->
-<div class="sec">Flujo de caja proyectado — Simplicity Etapa 1</div>
-<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto">
-  <table id="flujo-proy" style="min-width:900px;width:100%;border-collapse:collapse;font-size:11px"></table>
-  <p style="font-size:9px;color:var(--fa);margin-top:8px">Cuota inicial = <span id="pct-ci-lbl">20</span>% del precio · Saldo restante se cobra en la fecha de entrega del dpto. · Fondeo se desembolsa en mes 2</p>
-</div>
-
-<!-- GRÁFICAS PROYECCIÓN -->
-<div class="sec">Evolución del saldo de caja y capacidad de pago TURF</div>
-<div class="leg-row">
-  <span class="leg"><span class="leg-sq" style="background:#1E7145"></span>Saldo caja mensual</span>
-  <span class="leg"><span class="leg-sq" style="background:var(--am);opacity:.7"></span>Pagos TURF</span>
-  <span class="leg"><span class="leg-sq" style="background:var(--rd);opacity:.6"></span>Intereses fondeo</span>
-</div>
-<div class="chart-wrap" style="height:260px">
-  <canvas id="chartProy" role="img" aria-label="Saldo de caja y pagos TURF proyectados."></canvas>
-</div>
-
-<div class="sec">Cobranzas proyectadas por mes (S/)</div>
-<div class="chart-wrap" style="height:200px">
-  <canvas id="chartCobr" role="img" aria-label="Cobranzas proyectadas por mes."></canvas>
-</div>
-
-</div><!-- end panel-proyeccion -->
 
 <footer>
   <p>Fuente: correos Omaha Capital 2 (28 may 2026) y Prime Gestora de Fondos (2 jun 2026) · Modelo de flujo bullet (capital al vencimiento) · CEA calculado con TIR sobre flujos reales · IGV aplicado sobre intereses Omaha · ACRES Prime mensual desde mes 1 · Basado en contratos de Fideicomiso de Activos, Fideicomiso de Flujos y CMO Interbank (Num. 19.1.25) · Uso exclusivo de Directorio — Inmobiliaria La Pacífica S.A.C. · Junio 2026</p>
