@@ -169,21 +169,69 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
 
 <!-- TAB NAV -->
 <div style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--bdr)">
-  <button class="tab-btn active" id="tab-financiamiento">
-    Análisis de Financiamiento — Proyecto Simplicity
+  <button class="tab-btn" onclick="switchTab('financiamiento')" id="tab-financiamiento">
+    Análisis de Financiamiento
+  </button>
+  <button class="tab-btn active" onclick="switchTab('gantt')" id="tab-gantt">
+    Cronograma — Ruta al Desembolso
   </button>
 </div>
 
 
 
 <!-- TAB: FINANCIAMIENTO -->
-<div id="panel-financiamiento">
+<div id="panel-financiamiento" style="display:none">
 
 <!-- ══════════════════════════════════════════════════════════════ -->
 <!-- SECCIÓN DLA PIPER                                            -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 
 <div class="sec">Análisis legal DLA Piper — Alternativas de financiamiento</div>
+
+<!-- DOS CONCEPTOS CLAVE -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.2rem">
+
+  <!-- CONCEPTO 1: CL 19.1.25 -->
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden">
+    <div style="background:#1A2E4A;padding:11px 15px">
+      <div style="color:#fff;font-weight:600;font-size:12.5px">¿Qué es la Cl. 19.1.25 del Convenio Marco?</div>
+      <div style="color:#93c5fd;font-size:11px;margin-top:2px">La restricción contractual clave sobre nuevo financiamiento</div>
+    </div>
+    <div style="padding:13px 15px">
+      <p style="font-size:12px;color:var(--mu);margin:0 0 10px;line-height:1.6"><strong>CL.</strong> = Cláusula · <strong>19</strong> = Artículo 19 del Convenio Marco (agrupa todas las <em>obligaciones de no hacer</em> de La Pacífica) · <strong>1</strong> = Numeral 1 (lista de prohibiciones) · <strong>25</strong> = Inciso 25 de esa lista.</p>
+      <div style="background:#EFF6FF;border-radius:6px;padding:9px 12px;border-left:3px solid #185FA5;margin-bottom:8px">
+        <p style="font-size:11.5px;color:#1e3a5f;margin:0;line-height:1.6"><strong>Qué dice:</strong> todo préstamo externo que tome La Pacífica para financiar el Proyecto debe subordinarse en orden de prelación a favor de IBK. No prohíbe tomar financiamiento — exige que cualquier nuevo acreedor acepte estar <strong>por debajo de IBK</strong> en el orden de cobro.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#185FA5;flex-shrink:0">●</span><span><strong>Convenio Marco Cl. 19.1.25:</strong> prohíbe financiamiento externo sin subordinación a IBK.</span></div>
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#185FA5;flex-shrink:0">●</span><span><strong>Fid. Flujos Cl. 29:</strong> prohíbe ceder derechos sobre flujos sin autorización de IBK y La Fiduciaria.</span></div>
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#185FA5;flex-shrink:0">●</span><span><strong>Fid. Activos:</strong> prohíbe constituir garantías reales sobre bienes fideicometidos sin consentimiento de IBK.</span></div>
+      </div>
+      <div style="margin-top:10px;background:#FEF2F2;border-radius:6px;padding:8px 11px;font-size:11.5px;color:#7f1d1d">
+        Son <strong>tres candados distintos</strong> que apuntan al mismo resultado: ningún financiamiento externo entra sin que IBK lo autorice en las tres dimensiones.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPTO 2: POR QUÉ PRIME DEBE ENTRAR AL FIDEICOMISO -->
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden">
+    <div style="background:#374151;padding:11px 15px">
+      <div style="color:#fff;font-weight:600;font-size:12.5px">¿Por qué Prime debe entrar dentro del fideicomiso?</div>
+      <div style="color:#d1d5db;font-size:11px;margin-top:2px">No hay forma de estructurar el préstamo por fuera</div>
+    </div>
+    <div style="padding:13px 15px">
+      <p style="font-size:12px;color:var(--mu);margin:0 0 10px;line-height:1.6">La Pacífica no puede tomar el préstamo "fuera" del fideicomiso porque la estructura lo absorbe todo. No existe una vía paralela.</p>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>100% de flujos dentro:</strong> toda venta entra obligatoriamente a la Cuenta Recaudadora. La Pacífica no recibe dinero directamente — lo administra La Fiduciaria. Prime no puede cobrar sin estar dentro.</span></div>
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Activos fideicometidos:</strong> unidades, inmueble y obras están dentro del Fid. de Activos. La Pacífica no puede constituir garantías hipotecarias sobre ellos sin autorización de IBK.</span></div>
+        <div style="display:flex;gap:8px;font-size:11.5px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Préstamo corporativo puro no funciona:</strong> Prime podría prestar sin tocar el fideicomiso, pero quedaría sin respaldo real. Ningún fondo institucional acepta eso para US$ 1.5M a una inmobiliaria en mora.</span></div>
+      </div>
+      <div style="background:#E8F5EE;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#1E7145;border-left:3px solid #1E7145">
+        <strong>Conclusión:</strong> el fideicomiso es una jaula que protege a IBK y al TURF. Cualquier nuevo financista debe entrar dentro de ella para tener respaldo real. No hay forma de rodearla — por eso la Alternativa 1 (adenda) es la única viable.
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ALERTA MAESTRA -->
 <div style="background:#FFF8E6;border:1px solid #D4A017;border-radius:var(--r);padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:1.4rem">
@@ -1162,16 +1210,11 @@ function updateFill(el){
 
 // ── TAB SWITCH ────────────────────────────────────────────────────
 function switchTab(tab){
-  ['resumen','financiamiento','proyeccion'].forEach(t=>{
+  ['financiamiento','gantt'].forEach(t=>{
     document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
-  if(tab==='proyeccion'){
-    setTimeout(()=>{ buildVentasGrid(); updateProy(); }, 50);
-  }
-  if(tab==='resumen'){
-    setTimeout(()=>{ updateResumen(); }, 50);
-  }
+
 }
 
 // ── PROJECTION LOGIC ──────────────────────────────────────────────
@@ -1547,5 +1590,222 @@ document.querySelectorAll('.freq-btn').forEach(btn=>{
 
 update();
 </script>
+
+<!-- TAB: GANTT CRONOGRAMA -->
+<div id="panel-gantt">
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <h1>Cronograma — Ruta al desembolso · Proyecto Simplicity</h1>
+      <p>Hitos críticos desde asesoría DLA Piper hasta desembolso Prime · Inicio referencial: 30 jun 2026</p>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--mu)">Duración estimada</div>
+      <div style="font-size:22px;font-weight:700;color:var(--o)">~9 semanas</div>
+      <div style="font-size:11px;color:var(--mu)">Meta desembolso: 31 ago 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- LEYENDA -->
+<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:1.2rem;align-items:center">
+  <span style="font-size:11.5px;font-weight:600;color:var(--mu)">Responsable:</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:12px;height:12px;border-radius:2px;background:#1A2E4A;display:inline-block"></span>La Pacífica / Akamai</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:12px;height:12px;border-radius:2px;background:#185FA5;display:inline-block"></span>DLA Piper</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:12px;height:12px;border-radius:2px;background:#1E7145;display:inline-block"></span>Prime / ACRES</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:12px;height:12px;border-radius:2px;background:#C0392B;display:inline-block"></span>Interbank</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:12px;height:12px;border-radius:2px;background:#7B3F00;display:inline-block"></span>La Fiduciaria / TURF</span>
+  <div style="margin-left:auto;display:flex;gap:10px">
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#C0392B;display:inline-block"></span>Riesgo alto</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#D4A017;display:inline-block"></span>Riesgo medio</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#1E7145;display:inline-block"></span>Riesgo bajo</span>
+  </div>
+</div>
+
+<!-- GANTT TABLE -->
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:900px">
+  <thead>
+    <tr style="background:var(--sur);border-bottom:2px solid var(--bdr)">
+      <th style="text-align:left;padding:8px 10px;width:28px;font-size:11px;color:var(--mu)">#</th>
+      <th style="text-align:left;padding:8px 10px;min-width:220px;font-size:11px;color:var(--mu)">Actividad / Hito</th>
+      <th style="text-align:center;padding:8px 6px;width:70px;font-size:11px;color:var(--mu)">Resp.</th>
+      <th style="text-align:center;padding:8px 6px;width:55px;font-size:11px;color:var(--mu)">Días</th>
+      <th colspan="9" style="text-align:center;padding:8px 6px;font-size:11px;color:var(--mu)">Semanas · 30 jun → 31 ago 2026</th>
+    </tr>
+    <tr style="background:var(--sur);border-bottom:1px solid var(--bdr)">
+      <th colspan="4" style="padding:4px 10px"></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S1<br><span style="font-weight:400">30/6</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S2<br><span style="font-weight:400">7/7</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S3<br><span style="font-weight:400">14/7</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S4<br><span style="font-weight:400">21/7</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S5<br><span style="font-weight:400">28/7</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S6<br><span style="font-weight:400">4/8</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S7<br><span style="font-weight:400">11/8</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;color:var(--mu);min-width:36px">S8<br><span style="font-weight:400">18/8</span></th>
+      <th style="text-align:center;padding:4px 3px;font-size:10px;min-width:36px;background:#d1fae5;font-weight:700;color:#065f46">S9<br><span style="font-weight:700">31/8 ✅</span></th>
+    </tr>
+  </thead>
+  <tbody id="gantt-body">
+  </tbody>
+</table>
+</div>
+
+<!-- NOTAS DE RIESGO -->
+<div style="margin-top:1.5rem">
+<div class="sec">Riesgos y dependencias críticas</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;border-top:3px solid #C0392B">
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--tx)">🔴 Riesgo alto — IBK</div>
+    <div style="font-size:11.5px;color:var(--mu);line-height:1.6">La aprobación de IBK (Pasos 4, 6 y 7) es el único cuello de botella real. Sin su waiver y posterior aprobación formal, ninguna otra actividad puede concluirse. El tiempo de respuesta de IBK es impredecible — puede ser 2 semanas o 6. Toda la holgura del cronograma depende de este bloque.</div>
+  </div>
+
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;border-top:3px solid #D4A017">
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--tx)">🟡 Riesgo medio — TURF</div>
+    <div style="font-size:11.5px;color:var(--mu);line-height:1.6">El TURF debe firmar la adenda para que ACRES ingrese al fideicomiso. Su incentivo es claro (cobrar la deuda vencida), pero puede exigir condiciones sobre el timing del pago o el monto antes de firmar. Hay que trabajar en paralelo su conformidad desde el Paso 4.</div>
+  </div>
+
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:13px 15px;border-top:3px solid #1E7145">
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--tx)">🟢 Riesgo bajo — Prime / ACRES</div>
+    <div style="font-size:11.5px;color:var(--mu);line-height:1.6">Prime ya confirmó viabilidad legal. ACRES como Rep. de Obligacionistas es un proceso estándar para ellos. El DD está tasado (US$ 6k + IGV) y la estructuración (US$ 5.5k + IGV). El riesgo es que el DD revele contingencias no conocidas — poco probable dado que E1 ya está terminada y vendida en su mayoría.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- RESUMEN DE COSTOS DEL PROCESO -->
+<div style="margin-top:1.5rem">
+<div class="sec">Costos del proceso de estructuración</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:4px">DD Prime (corporativo + inmobiliario)</div>
+    <div style="font-size:18px;font-weight:700;color:var(--tx)">US$ 7,080</div>
+    <div style="font-size:10.5px;color:var(--mu)">US$ 6,000 + IGV 18%</div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:4px">Estructuración legal Prime / ACRES</div>
+    <div style="font-size:18px;font-weight:700;color:var(--tx)">US$ 6,490</div>
+    <div style="font-size:10.5px;color:var(--mu)">US$ 5,500 + IGV 18%</div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:4px">Nota informativa + letras de cambio</div>
+    <div style="font-size:18px;font-weight:700;color:var(--tx)">US$ 1,180</div>
+    <div style="font-size:10.5px;color:var(--mu)">US$ 1,000 + IGV 18%</div>
+  </div>
+  <div style="background:#1A2E4A;border-radius:var(--rl);padding:12px 14px">
+    <div style="font-size:11px;color:#93c5fd;margin-bottom:4px">Total costos estructuración</div>
+    <div style="font-size:18px;font-weight:700;color:#fff">US$ 14,750</div>
+    <div style="font-size:10.5px;color:#93c5fd">+ honorarios DLA Piper adendas (a cotizar)</div>
+  </div>
+</div>
+</div>
+
+</div><!-- end panel-gantt -->
+
+<script>
+// ── GANTT DATA ───────────────────────────────────────────────────────
+const ganttTasks = [
+  {fase:"FASE 1 — Alineamiento interno y legal (semana 1)", tasks:[
+    {n:1, name:"Reunión La Pacífica con DLA Piper — estrategia y alcance", resp:"LP + DLP", color:"#185FA5", dias:1, s:1, e:1, riesgo:"bajo", nota:"1 día. Confirmar estrategia de negociación con IBK, honorarios adendas y roles. DLA Piper tiene el análisis listo desde jun 2026."},
+    {n:2, name:"Reunión Prime–DLA Piper — abogados alinean estructura", resp:"DLP + Prime", color:"#185FA5", dias:2, s:1, e:1, riesgo:"bajo", nota:"1–2 días. Alinear: bono corporativo, rol ACRES, sub-cuenta segregada, garantías. Prime ya confirmó viabilidad legal."},
+    {n:3, name:"Carta de intención formal de Prime", resp:"Prime", color:"#1E7145", dias:1, s:1, e:1, riesgo:"bajo", nota:"1 día. Prime emite carta de intención formal. Documento clave para presentar a IBK como respaldo de la solicitud de waivers."},
+  ]},
+  {fase:"FASE 2 — Negociación con Interbank (semanas 1–5)", tasks:[
+    {n:4, name:"Reunión con IBK — presentar estructura y solicitar waivers", resp:"LP + DLP", color:"#C0392B", dias:1, s:1, e:1, riesgo:"alto", nota:"1 reunión. Presentar: carta de intención Prime, análisis DLA Piper, argumento waiver #2 (E1 cancelada, CF son contingentes, no hay pérdida económica para IBK). DLA Piper acompaña."},
+    {n:5, name:"Envío documentación requerida por IBK y seguimiento activo", resp:"LP + DLP", color:"#C0392B", dias:4, s:2, e:2, riesgo:"alto", nota:"Post reunión, IBK solicita documentos vía correo. Envío inmediato. Seguimiento semanal activo para acelerar revisión interna. Meta: IBK tiene todo antes del 7 jul."},
+    {n:6, name:"Revisión interna IBK — créditos y riesgos evalúan la operación", resp:"IBK", color:"#C0392B", dias:18, s:2, e:5, riesgo:"alto", nota:"3 semanas. IBK evalúa: impacto en garantías, ratio cobertura, política de terceros en fideicomiso. Meta: respuesta antes del 28 jul. DLA Piper disponible para absolver consultas del banco."},
+    {n:7, name:"Aprobación IBK — carta de comfort con waivers", resp:"IBK", color:"#C0392B", dias:3, s:5, e:5, riesgo:"alto", nota:"Meta: última semana de julio. IBK emite carta de comfort autorizando: (a) nuevo financiamiento subordinado; (b) pago al TURF pese a subordinación vigente. Activa todas las fases siguientes en paralelo."},
+  ]},
+  {fase:"FASE 3 — Due Diligence Prime (semanas 2–4, en paralelo con IBK)", tasks:[
+    {n:8, name:"Inicio DD Prime — corporativo e inmobiliario (US$ 6,000 + IGV)", resp:"Prime", color:"#1E7145", dias:1, s:2, e:2, riesgo:"medio", nota:"Inicia al día siguiente de aprobación interna de La Pacífica / Akamai de la propuesta de Prime. No espera carta de comfort IBK. Avanza en paralelo."},
+    {n:9, name:"Ejecución DD — revisión legal, títulos, contratos, permisos", resp:"Prime + estudio", color:"#1E7145", dias:14, s:2, e:4, riesgo:"medio", nota:"Máximo 2 semanas. Revisión corporativa La Pacífica, títulos inmueble, licencias, contratos compraventa, estado registral unidades remanentes E1. Riesgo de contingencias bajo — E1 terminada y mayoría vendida."},
+    {n:10, name:"Revisión informe DD — conformidad y condiciones adicionales", resp:"Prime + ACRES", color:"#1E7145", dias:3, s:4, e:5, riesgo:"medio", nota:"3 días. Prime y ACRES revisan informe de DD. Condiciones adicionales se comunican a La Pacífica. Respuesta inmediata para no frenar cronograma."},
+  ]},
+  {fase:"FASE 4 — Estructuración y adendas (semanas 5–7)", tasks:[
+    {n:11, name:"Preparación adendas a ambos fideicomisos por DLA Piper", resp:"DLP", color:"#185FA5", dias:10, s:5, e:7, riesgo:"medio", nota:"Inicia con carta de comfort IBK. DLA Piper redacta adenda Fid. Activos y Fid. Flujos: ingreso ACRES como fideicomisario junior, sub-cuenta segregada flujos unidades remanentes E1, condiciones IBK incorporadas."},
+    {n:12, name:"Coordinación TURF — conformidad para firma de adendas", resp:"LP + DLP", color:"#7B3F00", dias:5, s:5, e:6, riesgo:"medio", nota:"En paralelo desde carta de comfort IBK. TURF debe firmar las adendas. Su incentivo: cobrar deuda vencida. Negociar que el desembolso Prime se dirija directamente al TURF (cheque de gerencia)."},
+    {n:13, name:"Reuniones LP–DLP–Prime–ACRES — revisión borradores adendas y bono", resp:"LP+DLP+Prime+ACRES", color:"#534AB7", dias:5, s:6, e:7, riesgo:"medio", nota:"2–3 sesiones de trabajo. Revisar borradores adendas, afinar bono corporativo, letras de cambio, fianzas solidarias holding y gerente. Resolver observaciones en el momento."},
+    {n:14, name:"Reunión La Fiduciaria–IBK — operativizar sub-cuenta recaudadora", resp:"LP+DLP+Fiduc+IBK", color:"#7B3F00", dias:2, s:7, e:7, riesgo:"medio", nota:"La Fiduciaria confirma mecanismo de segregación de flujos por número de unidad. IBK instruye apertura sub-cuenta. Definir instructivo operativo. 1 reunión si todos están alineados."},
+  ]},
+  {fase:"FASE 5 — Formalización y desembolso (semanas 7–9)", tasks:[
+    {n:15, name:"Revisión y conformidad Prime y ACRES sobre adendas finales", resp:"Prime + ACRES", color:"#1E7145", dias:3, s:7, e:8, riesgo:"bajo", nota:"3 días. Prime y ACRES aprueban versión final de adendas. ACRES confirma aceptar rol de Representante de Obligacionistas y fideicomisario junior."},
+    {n:16, name:"Suscripción adendas por las 4 partes — Escritura Pública ante notario", resp:"Todas las partes", color:"#534AB7", dias:3, s:8, e:8, riesgo:"medio", nota:"La Fiduciaria + IBK + TURF + La Pacífica firman ambas adendas ante notario. Coordinación previa con notaría para reservar fecha. Holgura de 2 días para ajustes de último minuto."},
+    {n:17, name:"Emisión bono corporativo y firma contrato de financiamiento", resp:"LP + ACRES", color:"#1A2E4A", dias:2, s:8, e:9, riesgo:"bajo", nota:"La Pacífica emite bono corporativo. ACRES suscribe como Representante de Obligacionistas. Prime adquiere el bono. Firma letras de cambio y fianzas solidarias holding y gerente."},
+    {n:18, name:"✅ DESEMBOLSO 31 AGO — Prime transfiere · Pago cheque gerencia TURF", resp:"Prime → LP → TURF", color:"#1E7145", dias:1, s:9, e:9, riesgo:"bajo", nota:"META: 31 agosto 2026. Prime desembolsa US$ 1.5M. Pago al TURF: cheque de gerencia cuota vencida US$ 1,938,829 + negociación cuota oct-26 US$ 2,220,347. Inicio monitoreo periódico Prime."},
+  ]},
+];
+
+
+function buildGantt(){
+  const tbody = document.getElementById('gantt-body');
+  if(!tbody) return;
+  const WEEKS = 9;
+  const riskColor = {alto:'#C0392B', medio:'#D4A017', bajo:'#1E7145'};
+
+  ganttTasks.forEach(fase => {
+    // Phase header row
+    const faseRow = document.createElement('tr');
+    faseRow.style.cssText = 'background:var(--sur)';
+    faseRow.innerHTML = `<td colspan="${4+WEEKS}" style="padding:10px 10px 4px;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;border-top:2px solid var(--bdr)">${fase.fase}</td>`;
+    tbody.appendChild(faseRow);
+
+    fase.tasks.forEach(t => {
+      const tr = document.createElement('tr');
+      tr.style.cssText = 'border-bottom:1px solid var(--bdr);cursor:pointer';
+      tr.title = t.nota;
+
+      // Gantt bars
+      let bars = '';
+      for(let w=1; w<=WEEKS; w++){
+        if(w >= t.s && w <= t.e){
+          const isFirst = w===t.s, isLast = w===t.e;
+          const radius = isFirst&&isLast ? '4px' : isFirst ? '4px 0 0 4px' : isLast ? '0 4px 4px 0' : '0';
+          bars += `<td style="padding:4px 2px"><div style="height:20px;background:${t.color};border-radius:${radius};opacity:0.85"></div></td>`;
+        } else {
+          bars += `<td style="padding:4px 2px"><div style="height:20px"></div></td>`;
+        }
+      }
+
+      tr.innerHTML = `
+        <td style="padding:7px 8px;font-size:11px;color:var(--mu);vertical-align:middle;font-weight:600">${t.n}</td>
+        <td style="padding:7px 10px;font-size:11.5px;vertical-align:middle;line-height:1.4">
+          ${t.name}
+          <div style="font-size:10px;color:var(--mu);margin-top:2px;line-height:1.4">${t.nota}</div>
+        </td>
+        <td style="padding:7px 6px;text-align:center;vertical-align:middle">
+          <span style="font-size:10px;font-weight:600;color:${t.color}">${t.resp}</span>
+        </td>
+        <td style="padding:7px 6px;text-align:center;vertical-align:middle;font-size:11.5px;font-weight:600">${t.dias}d</td>
+        ${bars}
+      `;
+
+      // Tooltip on hover
+      tr.addEventListener('mouseenter', function(){
+        this.style.background = 'var(--sur)';
+      });
+      tr.addEventListener('mouseleave', function(){
+        this.style.background = '';
+      });
+
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+// Build when tab is switched to gantt
+const origSwitchTab = window.switchTab;
+window.switchTab = function(tab){
+  ['financiamiento','gantt'].forEach(t=>{
+    const p = document.getElementById('panel-'+t);
+    const b = document.getElementById('tab-'+t);
+    if(p) p.style.display = t===tab?'block':'none';
+    if(b) b.classList.toggle('active', t===tab);
+  });
+  if(tab==='gantt') setTimeout(buildGantt, 50);
+};
+</script>
+
 </body>
 </html>
