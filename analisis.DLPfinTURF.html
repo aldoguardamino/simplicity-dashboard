@@ -1806,8 +1806,13 @@ window.switchTab = function(tab){
   if(tab==='gantt') setTimeout(buildGantt, 50);
 };
 
-// Gantt is default tab — build on load
-document.addEventListener('DOMContentLoaded', function(){ buildGantt(); });
+// Gantt is default tab — build on load with retry
+function initGantt() {
+  var el = document.getElementById('gantt-body');
+  if (el) { buildGantt(); }
+  else { setTimeout(initGantt, 150); }
+}
+window.addEventListener('load', function(){ setTimeout(initGantt, 50); });
 </script>
 
 </body>
