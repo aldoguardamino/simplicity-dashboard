@@ -1800,7 +1800,7 @@ function buildGantt(){
 // Build when tab is switched to gantt
 const origSwitchTab = window.switchTab;
 window.switchTab = function(tab){
-  ['financiamiento','gantt'].forEach(t=>{
+  ['financiamiento','gantt','prime-qa'].forEach(t=>{
     const p = document.getElementById('panel-'+t);
     const b = document.getElementById('tab-'+t);
     if(p) p.style.display = t===tab?'block':'none';
