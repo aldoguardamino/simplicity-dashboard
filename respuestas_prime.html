@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Comparativo — Omaha vs Prime | Proyecto Simplicity</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --o:#185FA5;--o-lt:#D6EAF8;--o-dk:#0C447C;
+  --p:#534AB7;--p-lt:#EEEDFE;--p-dk:#3C3489;
+  --bg:#F7F6F2;--sur:#FFFFFF;--bdr:rgba(0,0,0,0.09);
+  --tx:#1A1916;--mu:#6B6A63;--fa:#ADACA5;
+  --gn:#1E7145;--gn-bg:#E8F5EE;
+  --rd:#9C0006;--rd-bg:#FFECEC;
+  --am:#7F6000;--am-bg:#FFF8E6;
+  --r:10px;--rl:14px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5;min-height:100vh}
+.page{max-width:1140px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hdr{margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--bdr)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.hdr h1{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.hdr p{font-size:12px;color:var(--mu);margin-top:3px}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.t-o{background:var(--o-lt);color:var(--o-dk)}.t-p{background:var(--p-lt);color:var(--p-dk)}
+.t-ok{background:var(--gn-bg);color:var(--gn)}.t-bad{background:var(--rd-bg);color:var(--rd)}.t-warn{background:var(--am-bg);color:var(--am)}
+.sec{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--fa);margin:2rem 0 .85rem;padding-top:1.4rem;border-top:1px solid var(--bdr)}
+
+/* CONTROLS */
+.ctrl-panel{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1.4rem;margin-bottom:1.4rem}
+.ctrl-hdr{font-size:12px;font-weight:500;color:var(--mu);margin-bottom:1rem}
+.ctrl-shared{margin-bottom:.25rem}
+.ctrl-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--bdr)}
+.ctrl-row:last-child{border-bottom:none}
+.ctrl-lbl{font-size:11px;color:var(--mu);flex:1;min-width:0;line-height:1.35}
+.ctrl-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:90px;text-align:right;flex-shrink:0}
+.cv-o{color:var(--o)}.cv-p{color:var(--p)}.cv-s{color:var(--tx)}
+.ctrl-funds{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--bdr);margin-top:1rem}
+.ctrl-fund-col{padding:1rem 1rem 0}
+.ctrl-fund-col:first-child{border-right:1px solid var(--bdr)}
+.ctrl-fund-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.65rem;padding-bottom:.45rem;border-bottom:1px solid var(--bdr)}
+input[type=range]{flex:1;height:4px;appearance:none;-webkit-appearance:none;border-radius:2px;outline:none;cursor:pointer;min-width:0;background:#DDD}
+input[type=range].sl-o{background:linear-gradient(to right,var(--o) 0%,var(--o) var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range].sl-p{background:linear-gradient(to right,var(--p) 0%,var(--p) var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range].sl-s{background:linear-gradient(to right,#888 0%,#888 var(--fill,50%),#DDD var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;cursor:pointer;border:2px solid #BBB;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-top:-5.5px}
+input[type=range].sl-o::-webkit-slider-thumb{border-color:var(--o)}
+input[type=range].sl-p::-webkit-slider-thumb{border-color:var(--p)}
+input[type=range].sl-s::-webkit-slider-thumb{border-color:#888}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#fff;cursor:pointer;border:2px solid #BBB}
+input[type=range].sl-o::-moz-range-thumb{border-color:var(--o)}
+input[type=range].sl-p::-moz-range-thumb{border-color:var(--p)}
+input[type=range].sl-s::-moz-range-thumb{border-color:#888}
+input[type=range].sl-o::-moz-range-progress{background:var(--o)}
+input[type=range].sl-p::-moz-range-progress{background:var(--p)}
+input[type=range].sl-s::-moz-range-progress{background:#888}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:9px}
+.kpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px}
+.kpi.win{background:var(--gn-bg);border-color:var(--gn)}.kpi.los{background:var(--rd-bg);border-color:var(--rd)}
+.kpi-lbl{font-size:10px;color:var(--mu);margin-bottom:3px}
+.kpi-val{font-size:20px;font-weight:600;letter-spacing:-.5px;line-height:1.1}
+.kpi-sub{font-size:10px;color:var(--fa);margin-top:2px}
+.kpi.win .kpi-val{color:var(--gn)}.kpi.los .kpi-val{color:var(--rd)}
+
+/* FUND CARDS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.fcard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1.1rem;position:relative;overflow:hidden}
+.fcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fcard.fc-o::before{background:var(--o)}.fcard.fc-p::before{background:var(--p)}
+.fcard-hdr{display:flex;align-items:center;gap:8px;margin-bottom:.75rem}
+.fdot{width:9px;height:9px;border-radius:50%}.fdot-o{background:var(--o)}.fdot-p{background:var(--p)}
+.fname{font-size:13px;font-weight:600}
+.ftotal{margin-left:auto;font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.fc-o .ftotal{color:var(--rd)}.fc-p .ftotal{color:var(--gn)}
+.cea-big{font-family:'DM Mono',monospace;font-size:28px;font-weight:600;line-height:1}
+.fc-o .cea-big{color:var(--rd)}.fc-p .cea-big{color:var(--gn)}
+.cea-sub{font-size:10px;color:var(--fa);margin-top:3px;margin-bottom:.65rem}
+.crow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.crow:last-child{border-bottom:none}
+.clbl{color:var(--mu)}.cval{font-family:'DM Mono',monospace;font-size:12px}
+.cval.ex{color:var(--rd)}.cval.ok{color:var(--gn)}
+.cost-section{margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--bdr)}
+.cost-sec-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--fa);margin-bottom:.45rem}
+.cost-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.cost-item:last-of-type{border-bottom:none}
+.cost-lbl{color:var(--mu);flex:1;padding-right:8px;line-height:1.35}
+.cost-val{font-family:'DM Mono',monospace;font-size:12px;flex-shrink:0;text-align:right}
+.cost-val.ci-ex{color:var(--rd)}.cost-val.ci-ok{color:var(--gn)}
+.cost-total{display:flex;justify-content:space-between;align-items:center;padding:8px 0 0;margin-top:4px;border-top:2px solid var(--bdr);font-size:13px;font-weight:600}
+.cost-total-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:600}
+.fc-o .cost-total-val{color:var(--rd)}.fc-p .cost-total-val{color:var(--gn)}
+
+/* FLUJO DE CAJA */
+.flujo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:640px){.flujo-wrap{grid-template-columns:1fr}}
+.flujo-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:1rem;overflow-x:auto}
+.flujo-card h3{font-size:12px;font-weight:600;margin-bottom:.75rem}
+.flujo-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:380px}
+.flujo-tbl th{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--fa);padding:4px 6px;text-align:right;border-bottom:1px solid var(--bdr);background:var(--bg)}
+.flujo-tbl th:first-child{text-align:left;position:sticky;left:0;background:var(--bg)}
+.flujo-tbl td{padding:4px 6px;text-align:right;border-bottom:1px solid var(--bdr);font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap}
+.flujo-tbl td:first-child{text-align:left;font-family:'DM Sans',sans-serif;color:var(--mu);font-size:10px;font-weight:500;position:sticky;left:0;background:var(--sur)}
+.flujo-tbl tr.flujo-total td{font-weight:600;background:var(--bg);border-top:2px solid var(--bdr)}
+.flujo-tbl tr.flujo-total td:first-child{background:var(--bg)}
+.flujo-tbl .neg{color:var(--rd)}.flujo-tbl .pos{color:var(--gn)}.flujo-tbl .zero{color:var(--fa)}
+.flujo-tbl tr.flujo-capital td{color:var(--o);font-weight:500}
+.flujo-card.fc-p .flujo-tbl tr.flujo-capital td{color:var(--p)}
+
+/* CEA HORIZONS TABLE */
+.cea-horizons{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden}
+.cea-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.cea-tbl th{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--fa);padding:8px 14px;text-align:left;border-bottom:1px solid var(--bdr);background:var(--bg)}
+.cea-tbl th.o-col{color:var(--o-dk);background:var(--o-lt)}
+.cea-tbl th.p-col{color:var(--p-dk);background:var(--p-lt)}
+.cea-tbl td{padding:9px 14px;border-bottom:1px solid var(--bdr);font-size:13px}
+.cea-tbl tr:last-child td{border-bottom:none}
+.cea-tbl tr:hover td{background:var(--bg)}
+.cea-tbl .hor{color:var(--mu);font-size:12px}
+.cea-tbl .o-val{font-family:'DM Mono',monospace;font-weight:600;color:var(--rd)}
+.cea-tbl .p-val{font-family:'DM Mono',monospace;font-weight:600;color:var(--gn)}
+.cea-tbl .diff-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--am)}
+.cea-tbl .winner{font-size:11px;padding:2px 7px;border-radius:20px}
+
+/* CHARTS */
+.chart-wrap{position:relative;width:100%}
+.leg-row{display:flex;gap:16px;margin-bottom:8px;font-size:11px;color:var(--mu);flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* MATRIZ */
+.matriz-wrap{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden}
+.mrow{display:grid;grid-template-columns:1.7fr 1fr 1fr;border-bottom:1px solid var(--bdr)}
+.mrow:last-child{border-bottom:none}
+.mrow.hdr-row{background:var(--bg)}.mrow.grp{background:var(--bg)}
+.mcell{padding:9px 12px;font-size:12px;display:flex;align-items:flex-start;gap:7px}
+.mcell:not(:last-child){border-right:1px solid var(--bdr)}
+.mcell.mhdr{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--fa)}
+.mcell.grp-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fa);grid-column:1/-1;border-right:none;padding:7px 12px}
+.crit-txt{color:var(--mu);font-size:11px;line-height:1.4}
+.detail{font-size:11px;color:var(--tx);line-height:1.45}
+.ind{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:12px;flex-shrink:0;margin-top:1px}
+.ind-ok{background:var(--gn-bg);color:var(--gn)}.ind-bad{background:var(--rd-bg);color:var(--rd)}.ind-warn{background:var(--am-bg);color:var(--am)}
+
+.freq-group{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.freq-btn{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--bg);color:var(--mu);cursor:pointer;transition:all .15s}
+.freq-btn:hover{border-color:var(--mu)}
+.freq-btn.active-o{background:var(--o-lt);border-color:var(--o);color:var(--o-dk)}
+.freq-btn.active-p{background:var(--p-lt);border-color:var(--p);color:var(--p-dk)}
+
+.tab-btn{
+  padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;
+  background:transparent;border:none;border-bottom:3px solid transparent;
+  color:var(--mu);transition:all .15s;margin-bottom:-2px;
+}
+.tab-btn:hover{color:var(--tx)}
+.tab-btn.active{color:var(--o);border-bottom-color:var(--o)}
+
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:11px;color:var(--fa)}
+</style>
+</head>
+<body>
+<div style="max-width:1200px;margin:0 auto;padding:24px">
+
+<div id="panel-prime-qa">
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <h1>Respuestas a consultas de Prime Gestora de Fondos</h1>
+      <p>Batería de preguntas previas a la reunión · Elaborado por Akamai S.A.C. con base en documentación SUNARP, TURF y proyecciones de ventas · Jun 2026</p>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--mu)">Preparado para reunión</div>
+      <div style="font-size:18px;font-weight:700;color:var(--o)">Jun 2026</div>
+      <div style="font-size:11px;color:var(--mu)">Inmobiliaria La Pacífica S.A.C.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LEYENDA ESTADO -->
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.4rem;align-items:center">
+  <span style="font-size:11.5px;font-weight:600;color:var(--mu)">Estado de respuesta:</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:10px;height:10px;border-radius:50%;background:#1E7145;display:inline-block"></span>Respondido con documentación</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:10px;height:10px;border-radius:50%;background:#D4A017;display:inline-block"></span>Respondido parcialmente / en trámite</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px"><span style="width:10px;height:10px;border-radius:50%;background:#C0392B;display:inline-block"></span>Pendiente / requiere acción</span>
+</div>
+
+<!-- PREGUNTA 1 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">1. Sociedad y accionariado de La Pacífica</span>
+    <span class="tag t-ok">✅ Respondido</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> Accionariado con % hasta beneficiario final, vigencia de poderes con facultades para emitir bono y constituir garantías, vínculo con Akamai y Paladin. ¿Existen limitaciones estatutarias al endeudamiento?
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Partida registral:</strong> Inmobiliaria La Pacífica S.A.C. — Partida N° 12710113, Zona Registral IX Lima. Certificado literal actualizado al 27/04/2026. Sin títulos pendientes, sin duplicidad de partidas, sin inmovilizaciones.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Gerente General:</strong> Akamai S.A.C., actuando a través de su representante <strong>Noel Alonso Granados Sáenz</strong> (DNI 43903530). Vigencia de poder certificada al 10/04/2026 — Asiento C00007, poderes amplios sin limitación, inscritos en Asiento B00001.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Vínculo corporativo:</strong> Paladin es el holding de inversión. Akamai S.A.C. es el brazo desarrollador/gestor de Paladin en Perú y ejerce la Gerencia General de La Pacífica. La Pacífica es el SPV constituido exclusivamente para el Proyecto Simplicity.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Facultades para el bono:</strong> La JGA del 16/10/2017 (Asiento C00003) aprobó la Primera Emisión de Bonos Corporativos de Oferta Privada hasta US$ 4M a 12 meses, con facultades delegadas para determinar condiciones, suscribir contratos de emisión, fideicomisos y garantías. Estas facultades aplican a la nueva emisión con Prime.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Limitaciones estatutarias al endeudamiento:</strong> El Artículo 25(B) del estatuto (modificado en 2017) establece que las operaciones de financiamiento y refinanciamiento requieren aprobación previa del Directorio cuando superen el 75% del capital social. <strong>No existe limitación absoluta al endeudamiento — requiere acuerdo de Directorio.</strong> La JGA tiene atribución para emitir bonos (Art. 20-E).</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Documentos disponibles para entregar:</strong> Copia literal Partida 12710113 (74 págs.), Vigencia de Poder Noel Granados, ficha RUC La Pacífica y presentación estructura Paladin.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 2 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">2. Respaldo / Fianzas solidarias</span>
+    <span class="tag t-ok">✅ Respondido</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> ¿Quién asume la fianza solidaria siendo La Pacífica un vehículo SPV? ¿Ingresan Akamai y/o Paladin? ¿El fiador tiene fianzas vigentes a terceros? El fiador debe ser persona natural o jurídica peruana o constituida en Perú.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Fiador corporativo:</strong> <strong>Akamai S.A.C.</strong> otorgará la fianza solidaria en su calidad de Gerente General y gestor del proyecto. Akamai está constituida en Perú — cumple el requisito de domiciliación.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Facultad registrada:</strong> La vigencia de poder de Noel Granados (Asiento C00007) incluye expresamente la facultad de "otorgar fianza simple y solidaria, incluso para garantizar obligaciones de terceros, sin reserva ni limitación alguna" — faculty 4 del régimen de poderes.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Fianzas vigentes a terceros:</strong> Akamai S.A.C. y Paladin <strong>no tienen fianzas vigentes a terceros</strong> que generen pasivos contingentes relevantes que afecten su capacidad de afianzar esta operación.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Vínculo fiador–deudor:</strong> Akamai S.A.C. es el Gerente General de La Pacífica S.A.C., gestiona el Proyecto Simplicity y tiene control operativo y comercial del proyecto. El interés económico del fiador está directamente alineado con el éxito del proyecto.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Gerente persona natural:</strong> Se coordinará si Prime requiere adicionalmente fianza del representante de Akamai (Noel Granados) como persona natural, conforme a lo indicado en su propuesta original.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 3 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">3. Fideicomisos existentes</span>
+    <span class="tag t-ok">✅ Respondido</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> Copia de fideicomisos vigentes. Confirmar que permiten incorporación de fideicomisario junior y dos modificaciones integrales. Confirmar si hay adendas posteriores a las compartidas. Libros societarios actualizados. ¿Limitaciones para celebrar JGA?
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Fideicomisos vigentes:</strong> Fideicomiso de Activos (mod. integral 2023, N° 0891) y Fideicomiso de Flujos (N° 1904), administrados por La Fiduciaria S.A. IBK es Fideicomisario Senior. TURF es Fideicomisario Junior. Ambos documentos ya fueron compartidos con Prime.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Viabilidad de modificación:</strong> DLA Piper confirmó que es posible incorporar a ACRES (Rep. Obligacionistas de Prime) como nuevo Fideicomisario Junior mediante dos adendas por Escritura Pública, con unanimidad de La Fiduciaria, IBK, TURF y La Pacífica. La JGA del 07/02/2023 (Asiento C00012) ya aprobó expresamente celebrar contratos de fideicomiso en cualquier modalidad.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Adendas posteriores:</strong> <strong>No existen adendas al CMO con IBK ni al Fideicomiso posteriores a los documentos ya compartidos.</strong> Se cuenta con todas las adendas al Mutuo TURF desde la Primera hasta la Sexta Adenda (vto. 31/10/2026).</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Libros societarios:</strong> Los libros de JGA están actualizados. El Libro de Actas N° 01 y el Libro de Actas N° 02 están legalizados. Las actas más recientes constan en copia certificada ante Notario Eduardo Laos de Lama.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>JGA sin limitaciones:</strong> El estatuto (Art. 12-18) permite JGA no presenciales por medios electrónicos con total validez. No existe limitación para celebrar JGA. El quórum requerido es 67% del capital suscrito. Paladin y Akamai controlan el 100% del capital — la JGA puede convocarse y celebrarse sin restricción.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 4 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">4. Interbank — primer rango</span>
+    <span class="tag t-warn">⚠️ En gestión</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> Estado actual del crédito constructor y línea IBK. ¿Requiere consentimiento o notificación previa? Alcance del Num. 19.1.25. Canal de coordinación. Confirmar si hay adendas o waivers previos de IBK.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Crédito constructor E1:</strong> US$ 6,574,102 — <strong>cancelado en su totalidad.</strong> Sin saldo pendiente ni pagarés vigentes por este concepto.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Crédito constructor E2:</strong> US$ 2,202,319 — aprobado pero sin desembolsos ni pagarés emitidos a la fecha.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Obligaciones vigentes con IBK:</strong> Línea de cartas fianza E1 (US$ 1M, activa mientras haya CF vigentes con adquirentes) y fianza solidaria frente a compradores con crédito hipotecario IBK. Son <strong>obligaciones contingentes</strong>, no deuda efectiva desembolsada.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Num. 19.1.25 CMO:</strong> Permite que La Pacífica tome financiamiento de terceros siempre que la acreencia de IBK se mantenga en primer rango de prelación. La estructura propuesta (ACRES como Fideicomisario Junior) respeta esta condición. <strong>Se requiere waiver de IBK</strong> para contratar el financiamiento y para pagar al TURF pese a la subordinación vigente.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Consentimiento requerido:</strong> Sí. IBK debe firmar las adendas a ambos fideicomisos. Sin su aprobación, la operación no puede ejecutarse. Este es el paso crítico del proceso — se está coordinando la reunión con IBK con apoyo de DLA Piper.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Adendas o waivers previos:</strong> <strong>No se han obtenido waivers previos de IBK</strong> para ninguna operación. No hay adendas posteriores al Convenio Marco original compartido.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Canal de coordinación:</strong> DLA Piper (Katia Pinedo / Hernán Velarde) acompañará la reunión con IBK. Contacto directo de La Pacífica con IBK a través de Akamai (Aldo Guardamino / Gustavo Sarco — Asientos C00010 y C00017).</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 5 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">5. Terreno y TURF — estado registral y cronograma</span>
+    <span class="tag t-bad">🔴 Pendiente acción</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> Estado del cronograma de pago al TURF. Situación registral del terreno y unidades (titularidad, independización, declaratoria de fábrica). Remitir partida registral del inmueble.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Deuda TURF — Sexta Adenda:</strong> Capital original US$ 6,244,250 · Tasa 8% TEA · <strong>Cuota 1: US$ 1,938,828.73 — vencida 01/06/2026 (EN MORA)</strong> · Cuota 2: US$ 2,220,346.97 — vence 31/10/2026 · Total pendiente: <strong>US$ 4,159,175.70</strong>. El financiamiento de Prime está destinado a cancelar estas cuotas.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Historial de pagos TURF:</strong> Se han pagado 10 cuotas semestrales de intereses (dic 2020 – dic 2024), amortizaciones adicionales en ene 2025 (US$ 150k), jun 2025 (US$ 2.2M capital) y ago 2025 (US$ 150k). El mutuo está subordinado a IBK por contrato de subordinación de deuda.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Declaratoria de fábrica y conformidad de obra E1:</strong> <strong>Pendiente.</strong> La Municipalidad de Surco observó la solicitud de conformidad parcial indicando que la licencia es integral por etapas. Akamai (con apoyo del Estudio Chehade) reingresó el Anexo II para reconformar que E1 tiene licencia independiente. Se espera respuesta municipal en los próximos días (correo Natalia Meléndez a IBK, 30 jun 2026).</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#C0392B;flex-shrink:0;margin-top:2px">●</span><span><strong>Independización registral de unidades E1:</strong> <strong>Pendiente</strong> — condicionada a la obtención de la conformidad de obra. Las unidades remanentes no están aún independizadas en RRPP. Este es un punto que DLA Piper tendrá que analizar para el diseño de la garantía en la adenda al Fideicomiso de Activos.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Partida registral del inmueble:</strong> Se remitirá la partida electrónica N° 44767155 del Registro de Predios de Lima (Av. Manuel Olguín 489, 485 y 481, Urb. Los Granados, Santiago de Surco). Titularidad a favor de La Pacífica inscrita en el fideicomiso de activos.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 6 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">6. Unidades en garantía, cobertura y remanente de flujos</span>
+    <span class="tag t-ok">✅ Respondido</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> ¿Existe hoy, tras la cascada de pagos, algún remanente de los flujos y cuál es su tratamiento?
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Stock remanente según cashflow (al 18 jun 2026):</strong></span></div>
+    </div>
+    <div style="margin:10px 0 10px 20px">
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+        <tr style="background:#1A2E4A;color:#fff">
+          <th style="padding:6px 10px;text-align:left">Tipo</th>
+          <th style="padding:6px 10px;text-align:center">Unid. por vender</th>
+          <th style="padding:6px 10px;text-align:center">Unid. vendidas</th>
+          <th style="padding:6px 10px;text-align:center">Total</th>
+          <th style="padding:6px 10px;text-align:right">Importe por vender</th>
+        </tr>
+        <tr style="border-bottom:1px solid var(--bdr)">
+          <td style="padding:6px 10px">Departamentos</td>
+          <td style="padding:6px 10px;text-align:center">192</td>
+          <td style="padding:6px 10px;text-align:center">183</td>
+          <td style="padding:6px 10px;text-align:center">375</td>
+          <td style="padding:6px 10px;text-align:right">S/ 91,382,963</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--bdr)">
+          <td style="padding:6px 10px">Estacionamientos</td>
+          <td style="padding:6px 10px;text-align:center">140</td>
+          <td style="padding:6px 10px;text-align:center">97</td>
+          <td style="padding:6px 10px;text-align:center">237</td>
+          <td style="padding:6px 10px;text-align:right">S/ 8,768,522</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--bdr)">
+          <td style="padding:6px 10px">Depósitos</td>
+          <td style="padding:6px 10px;text-align:center">12</td>
+          <td style="padding:6px 10px;text-align:center">23</td>
+          <td style="padding:6px 10px;text-align:center">35</td>
+          <td style="padding:6px 10px;text-align:right">S/ 152,905</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--bdr)">
+          <td style="padding:6px 10px">Locales comerciales</td>
+          <td style="padding:6px 10px;text-align:center">3</td>
+          <td style="padding:6px 10px;text-align:center">1</td>
+          <td style="padding:6px 10px;text-align:center">4</td>
+          <td style="padding:6px 10px;text-align:right">S/ 2,879,000</td>
+        </tr>
+        <tr style="background:var(--sur);font-weight:600">
+          <td style="padding:6px 10px">TOTAL</td>
+          <td style="padding:6px 10px;text-align:center">347</td>
+          <td style="padding:6px 10px;text-align:center">304</td>
+          <td style="padding:6px 10px;text-align:center">651</td>
+          <td style="padding:6px 10px;text-align:right">S/ 103,183,391</td>
+        </tr>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Remanente actual de flujos:</strong> Con el crédito E1 de IBK cancelado, los flujos de ventas que ingresan a la Cuenta Recaudadora siguen la prelación del fideicomiso: tributos → La Fiduciaria → proveedores/obra → IBK (CF vigentes) → TURF → La Pacífica. La cuota TURF vencida impide técnicamente la liberación de remanentes a La Pacífica por la subordinación vigente. <strong>El remanente acumulado en Cuenta Destino de La Pacífica es mínimo o nulo</strong> mientras la deuda TURF esté en mora.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Proyección de ventas para repago:</strong> 17 departamentos y 28 estacionamientos proyectados a vender en los próximos 15 meses (precio promedio US$ ~170k/dpto y US$ 16k/estac.), generando flujos suficientes para amortizar el bono de Prime (US$ 1.5M) en el plazo de 24 meses.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTA 7 -->
+<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;margin-bottom:14px">
+  <div style="background:#1A2E4A;padding:11px 16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="color:#fff;font-weight:600;font-size:13px">7. Condiciones del financiamiento y fuente de repago</span>
+    <span class="tag t-ok">✅ Respondido</span>
+  </div>
+  <div style="padding:14px 16px">
+    <div style="background:#EFF6FF;border-radius:6px;padding:10px 13px;margin-bottom:12px;border-left:3px solid #185FA5;font-size:11.5px;color:#1e3a5f">
+      <strong>Consulta Prime:</strong> Monto, moneda, plazo, destino y fuente de repago del financiamiento requerido. Cronograma de ventas y etapa actual del proyecto.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px">
+        <div style="font-size:11px;color:var(--mu);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Condiciones solicitadas</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Monto</span><span style="font-weight:600">US$ 1,500,000</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Moneda</span><span style="font-weight:600">USD</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Plazo</span><span style="font-weight:600">24 meses bullet</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Instrumento</span><span style="font-weight:600">Bono corporativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Tasa Prime</span><span style="font-weight:600">16% all-in anual</span></div>
+        </div>
+      </div>
+      <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px">
+        <div style="font-size:11px;color:var(--mu);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Destino del desembolso</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Cuota TURF vencida (jun-26)</span><span style="font-weight:600;color:#C0392B">US$ 1,938,829</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Cuota TURF oct-26 (parcial)</span><span style="font-weight:600;color:#D4A017">A negociar</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--mu)">Modalidad de pago</span><span style="font-weight:600">Cheque de gerencia directo al TURF</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Estado del proyecto:</strong> Etapa 1 terminada al 100%. En fase de ventas y entregas. 304 unidades vendidas de 651 totales (47%). Stock remanente valorizado en S/ 103,183,391.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Fuente de repago:</strong> Flujos de ventas de unidades remanentes canalizados a través de sub-cuenta segregada dentro del Fideicomiso de Flujos, con prelación preferente a favor de ACRES/Prime (diseño DLA Piper — Alternativa 1).</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#1E7145;flex-shrink:0;margin-top:2px">●</span><span><strong>Proyección de ventas:</strong> 17 departamentos a US$ ~170k promedio y 28 estacionamientos a US$ ~16k, proyectados en los próximos 15 meses. Flujos proyectados suficientes para cubrir US$ 1.5M de principal + intereses en 24 meses.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:#D4A017;flex-shrink:0;margin-top:2px">●</span><span><strong>Ratio de cobertura:</strong> El stock remanente (S/ 103M ≈ US$ ~29M al TC 3.45) cubre holgadamente el bono de US$ 1.5M a más de 19x. La cobertura específica sobre los flujos de ventas proyectadas es superior a 7x en el horizonte de 24 meses.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTA FINAL -->
+<div style="background:linear-gradient(135deg,#0C1F35 0%,#0B3320 100%);border-radius:var(--rl);padding:20px;margin-top:1rem">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="font-size:1.2rem">📋</span>
+    <h3 style="margin:0;color:#fff;font-size:13px;font-weight:600">Documentación pendiente de entregar a Prime</h3>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div>
+      <p style="color:#93c5fd;font-size:10px;font-weight:600;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em">Disponible inmediatamente</p>
+      <ul style="margin:0;padding-left:14px;color:#e5e7eb;font-size:11.5px;line-height:1.8">
+        <li>Copia literal Partida 12710113 (74 págs.) ✅</li>
+        <li>Vigencia de poder Noel Granados ✅</li>
+        <li>Estructura corporativa Paladin (PPT) ✅</li>
+        <li>Adendas 1ª a 6ª Mutuo TURF ✅</li>
+        <li>Cashflow proyectado (18 jun 2026) ✅</li>
+        <li>Contratos de fideicomiso (ya compartidos) ✅</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:#fca5a5;font-size:10px;font-weight:600;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em">En trámite / pendiente</p>
+      <ul style="margin:0;padding-left:14px;color:#e5e7eb;font-size:11.5px;line-height:1.8">
+        <li>Partida registral del inmueble (predio N° 44767155) 🔄</li>
+        <li>Conformidad de obra E1 — en trámite Municipio Surco 🔴</li>
+        <li>Independización registral unidades E1 — pendiente conformidad 🔴</li>
+        <li>Ficha RUC La Pacífica actualizada 🔄</li>
+        <li>Carta de comfort / waiver IBK — gestión en curso 🔴</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin:12px 0 0;color:#6b7280;font-size:10.5px">Fuente: Copia Literal SUNARP 27/04/2026 · Vigencia de Poder 10/04/2026 · Cashflow Simplicity 18/06/2026 · Análisis DLA Piper jun 2026 · Email Natalia Meléndez a IBK 30/06/2026</p>
+</div>
+
+</div><!-- end panel-prime-qa -->
+</div>
+</body>
+</html>
