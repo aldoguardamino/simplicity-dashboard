@@ -175,6 +175,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
   <button class="tab-btn" onclick="switchTab('prime-qa')" id="tab-prime-qa">
     Respuestas a Prime
   </button>
+  <button class="tab-btn" onclick="switchTab('ibk')" id="tab-ibk">
+    Presentación IBK
+  </button>
   <button class="tab-btn active" onclick="switchTab('gantt')" id="tab-gantt">
     Cronograma — Ruta al Desembolso
   </button>
@@ -1213,7 +1216,7 @@ function updateFill(el){
 
 // ── TAB SWITCH ────────────────────────────────────────────────────
 function switchTab(tab){
-  ['financiamiento','gantt','prime-qa'].forEach(t=>{
+  ['financiamiento','gantt','prime-qa','ibk'].forEach(t=>{
     document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
@@ -2153,6 +2156,306 @@ window.addEventListener('load', function(){ setTimeout(initGantt, 50); });
 </div>
 
 </div><!-- end panel-prime-qa -->
+
+
+<!-- TAB: PRESENTACIÓN IBK -->
+<div id="panel-ibk" style="display:none">
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <h1>Proyecto Simplicity — Presentación Interbank</h1>
+      <p>Solicitud de dispensa / waiver · Inmobiliaria La Pacífica S.A.C. · Jul 2026</p>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--mu)">Reunión con</div>
+      <div style="font-size:20px;font-weight:700;color:var(--o)">Interbank</div>
+      <div style="font-size:11px;color:var(--mu)">Jul 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJETIVO DE LA REUNIÓN -->
+<div style="background:linear-gradient(135deg,#1A2E4A,#0B3320);border-radius:var(--rl);padding:20px 24px;margin-bottom:1.4rem">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="font-size:1.3rem">🎯</span>
+    <h3 style="margin:0;color:#fff;font-size:14px;font-weight:600">Objetivo de la reunión</h3>
+  </div>
+  <p style="color:#e5e7eb;font-size:13px;line-height:1.7;margin:0 0 12px">Informar a Interbank el estado actual del Proyecto Simplicity, explicar el contexto que originó el desfase en el pago al TURF, y solicitar dos dispensas formales que permitan resolver la situación de forma eficiente utilizando recursos ya aprobados por el propio banco.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px;border-left:3px solid #C0392B">
+      <p style="color:#fca5a5;font-size:10.5px;font-weight:600;margin:0 0 5px;text-transform:uppercase;letter-spacing:.05em">Dispensa #1 — Nuevo financiamiento</p>
+      <p style="color:#e5e7eb;font-size:12px;margin:0;line-height:1.5">Waiver para que La Pacífica contrate financiamiento externo subordinado (Cl. 19.1.25 CMO) — o alternativamente usar la línea aprobada de crédito constructor E2.</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px;border-left:3px solid #D4A017">
+      <p style="color:#fde68a;font-size:10.5px;font-weight:600;margin:0 0 5px;text-transform:uppercase;letter-spacing:.05em">Dispensa #2 — Pago al TURF</p>
+      <p style="color:#e5e7eb;font-size:12px;margin:0;line-height:1.5">Waiver de la subordinación de deuda para autorizar el pago del saldo pendiente de la Cuota 1 al TURF (≈ US$ 969k), mientras existan obligaciones contingentes vigentes con IBK.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CAUSA DEL DESFASE -->
+<div class="sec">¿Por qué llegamos aquí? — Cronología del desfase</div>
+<div style="position:relative;padding-left:0;margin-bottom:1.4rem">
+  <div style="position:absolute;left:27px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,#C0392B,#D4A017,#1E7145);border-radius:2px"></div>
+
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#C0392B;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);font-size:1.1rem">⚠️</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <strong style="font-size:13px">May–Nov 2025 — Paralización de obra E1 por Municipalidad de Surco</strong>
+        <span class="tag t-bad">6 meses de paralización</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">La Municipalidad de Santiago de Surco paralizó la obra de Etapa 1 durante aproximadamente 6 meses (quincena de mayo a quincena de noviembre 2025), por causas ajenas a Akamai y a La Pacífica. Este retraso es exógeno y documentable ante la autoridad municipal. La obra, que ya venía con desfases acumulados desde el período de pandemia, se entregó finalmente en <strong>agosto 2025</strong> — con aproximadamente un año de retraso respecto a la proyección original.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#D4A017;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);font-size:1.1rem">⏳</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <strong style="font-size:13px">2024–Mar 2026 — Demora en aprobación del crédito constructor E2</strong>
+        <span class="tag t-warn">~1 año de desfase</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">El crédito constructor de Etapa 2 fue aprobado por Interbank recién en <strong>marzo 2026</strong>, con aproximadamente un año de retraso respecto a la proyección original. Este desfase en la activación de E2 postergó el inicio de obra y las ventas de E2, desplazando la fecha proyectada de entrega a <strong>marzo 2027</strong>. Las utilidades de E2 que estaban proyectadas para cubrir parcialmente las cuotas al TURF en 2025–2026 no estuvieron disponibles.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);font-size:1.1rem">🔗</div>
+    <div style="flex:1;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <strong style="font-size:13px">Efecto cascada — Descalce en el pago al TURF</strong>
+        <span class="tag" style="background:#ede9fe;color:#6B21A8">Consecuencia directa</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">Ambos retrasos — la paralización de E1 y la demora en la aprobación de E2 — son <strong>ajenos a la gestión de Akamai</strong> y generaron en conjunto un descalce de caja que impide cubrir el 100% de la Cuota 1 al TURF (vencida jun-26). Se ha pagado el 50% (≈ US$ 969k). El saldo pendiente (≈ US$ 969k) es el objeto de la solicitud de hoy.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1">
+    <div style="width:56px;height:56px;border-radius:50%;background:#1E7145;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--bg);font-size:1.1rem">✅</div>
+    <div style="flex:1;background:var(--sur);border:1.5px solid #1E7145;border-radius:var(--rl);padding:12px 15px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <strong style="font-size:13px">Hoy — El proyecto está sólido y las ventas se han recuperado</strong>
+        <span class="tag t-ok">Situación actual</span>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin:0;line-height:1.55">A pesar de los contratiempos, E1 cerró exitosamente: deuda a proveedores pagada íntegramente (incluyendo mediante factoring), ventas recuperadas al 84.2% de avance. E2 avanza con solidez desde marzo 2026. La situación actual es un descalce temporal, no un problema de viabilidad del proyecto.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ETAPA 1 — CIERRE -->
+<div class="sec">Etapa 1 — Cierre exitoso a pesar de los contratiempos</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.2rem">
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:6px">Línea aprobada IBK E1</div>
+    <div style="font-size:22px;font-weight:700;color:var(--tx)">US$ 6,574,102</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:2px">Crédito constructor aprobado</div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:6px">Monto efectivamente usado</div>
+    <div style="font-size:22px;font-weight:700;color:#1E7145">US$ 2,506,240</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:2px">38% de la línea aprobada — <strong>cancelado</strong></div>
+  </div>
+  <div style="background:#E8F5EE;border:1px solid #1E7145;border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:#1E7145;margin-bottom:6px">Línea no utilizada E1</div>
+    <div style="font-size:22px;font-weight:700;color:#1E7145">US$ 4,067,862</div>
+    <div style="font-size:11px;color:#1E7145;margin-top:2px">62% no fue necesario</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.4rem">
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px">
+    <p style="font-size:11px;font-weight:600;color:var(--mu);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em">Hitos de cierre E1</p>
+    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Obra terminada y entregada — agosto 2025</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Deuda a proveedores cancelada íntegramente (factoring + flujos)</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Crédito constructor IBK E1 cancelado en su totalidad</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>255 unidades vendidas de 303 (84.2% de avance)</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Stock remanente: 48 unidades / S/ 12.67M (≈ US$ 3.7M)</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#D4A017">⏳</span><span>Conformidad de obra en trámite ante Municipio de Surco</span></div>
+    </div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px">
+    <p style="font-size:11px;font-weight:600;color:var(--mu);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em">Stock remanente E1 (garantía)</p>
+    <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+      <tr style="background:#1A2E4A;color:#fff">
+        <th style="padding:5px 8px;text-align:left">Tipo</th>
+        <th style="padding:5px 8px;text-align:center">Stock</th>
+        <th style="padding:5px 8px;text-align:right">Valor (S/)</th>
+        <th style="padding:5px 8px;text-align:center">Avance</th>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Departamentos</td>
+        <td style="padding:5px 8px;text-align:center">17</td>
+        <td style="padding:5px 8px;text-align:right">10,889,956</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-size:10.5px">89.7%</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Estacionamientos</td>
+        <td style="padding:5px 8px;text-align:center">28</td>
+        <td style="padding:5px 8px;text-align:right">1,745,000</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:3px;font-size:10.5px">75.2%</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Depósitos</td>
+        <td style="padding:5px 8px;text-align:center">3</td>
+        <td style="padding:5px 8px;text-align:right">37,090</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-size:10.5px">87.5%</span></td>
+      </tr>
+      <tr style="background:#dbeafe;font-weight:700">
+        <td style="padding:5px 8px">TOTAL E1</td>
+        <td style="padding:5px 8px;text-align:center">48</td>
+        <td style="padding:5px 8px;text-align:right">S/ 12,672,046</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#1A2E4A;color:#fff;padding:1px 6px;border-radius:3px;font-size:10.5px">84.2%</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ETAPA 2 — ESTADO ACTUAL -->
+<div class="sec">Etapa 2 — En marcha y con sólido avance comercial</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.2rem">
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:6px">Línea aprobada IBK E2</div>
+    <div style="font-size:22px;font-weight:700;color:var(--tx)">US$ 2,611,818</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:2px">≈ S/ 9,010,771 al TC 3.45</div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:var(--mu);margin-bottom:6px">Uso proyectado máximo</div>
+    <div style="font-size:22px;font-weight:700;color:#D4A017">S/ 4,500,000</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:2px">~50% de la línea aprobada</div>
+  </div>
+  <div style="background:#E8F5EE;border:1px solid #1E7145;border-radius:var(--rl);padding:14px">
+    <div style="font-size:11px;color:#1E7145;margin-bottom:6px">Línea disponible no utilizada</div>
+    <div style="font-size:22px;font-weight:700;color:#1E7145">≈ S/ 4,510,771</div>
+    <div style="font-size:11px;color:#1E7145;margin-top:2px">Holgura para cubrir pago TURF</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.4rem">
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px">
+    <p style="font-size:11px;font-weight:600;color:var(--mu);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em">Hitos E2</p>
+    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Aprobación crédito constructor IBK — <strong>marzo 2026</strong></span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Inicio de obra — marzo 2026</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>49 unidades vendidas de 178 (28.1% de avance comercial)</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#1E7145">✅</span><span>Ticket promedio departamentos: S/ 600k</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#D4A017">⏳</span><span>Primer desembolso crédito constructor proyectado — agosto 2026</span></div>
+      <div style="display:flex;gap:8px"><span style="color:#D4A017">⏳</span><span>Entrega proyectada — <strong>marzo 2027</strong></span></div>
+    </div>
+  </div>
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px">
+    <p style="font-size:11px;font-weight:600;color:var(--mu);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em">Stock E2 (al 18 jun 2026)</p>
+    <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+      <tr style="background:#374151;color:#fff">
+        <th style="padding:5px 8px;text-align:left">Tipo</th>
+        <th style="padding:5px 8px;text-align:center">Stock</th>
+        <th style="padding:5px 8px;text-align:right">Valor (S/)</th>
+        <th style="padding:5px 8px;text-align:center">Avance</th>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Departamentos</td>
+        <td style="padding:5px 8px;text-align:center">70</td>
+        <td style="padding:5px 8px;text-align:right">28,614,313</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:3px;font-size:10.5px">33.3%</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Estacionamientos</td>
+        <td style="padding:5px 8px;text-align:center">47</td>
+        <td style="padding:5px 8px;text-align:right">2,655,522</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-size:10.5px">20.3%</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--bdr)">
+        <td style="padding:5px 8px">Locales com.</td>
+        <td style="padding:5px 8px;text-align:center">3</td>
+        <td style="padding:5px 8px;text-align:right">2,879,000</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-size:10.5px">0%</span></td>
+      </tr>
+      <tr style="background:#F3F4F6;font-weight:700">
+        <td style="padding:5px 8px">TOTAL E2</td>
+        <td style="padding:5px 8px;text-align:center">120</td>
+        <td style="padding:5px 8px;text-align:right">S/ 34,148,835</td>
+        <td style="padding:5px 8px;text-align:center"><span style="background:#374151;color:#fff;padding:1px 6px;border-radius:3px;font-size:10.5px">28.1%</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- PROPUESTA A IBK -->
+<div class="sec">Propuesta a Interbank — La solución más eficiente</div>
+
+<div style="background:#FFF8E6;border:1px solid #D4A017;border-radius:var(--rl);padding:14px 18px;margin-bottom:1.2rem;display:flex;gap:12px">
+  <span style="font-size:1.1rem;flex-shrink:0">💡</span>
+  <p style="margin:0;font-size:12.5px;color:#5a3e00;line-height:1.6">El patrón se repite: en <strong>E1 solo se usó el 38% de la línea aprobada</strong>. En <strong>E2 se proyecta usar máximo el 50%</strong>. La línea disponible no utilizada de E2 (≈ S/ 4.5M) puede cubrir holgadamente el saldo pendiente al TURF (≈ US$ 969k ≈ S/ 3.3M), <strong>sin necesidad de recurrir a financiamiento externo de terceros</strong>.</p>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.4rem">
+
+  <div style="background:var(--sur);border:2px solid #1E7145;border-radius:var(--rl);overflow:hidden">
+    <div style="background:#1E7145;padding:11px 15px">
+      <div style="color:#fff;font-weight:600;font-size:13px">✅ Opción preferida — Usar línea IBK E2</div>
+      <div style="color:#a7f3d0;font-size:11px;margin-top:2px">Más simple, más barata, sin partes adicionales</div>
+    </div>
+    <div style="padding:14px 15px">
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;margin-bottom:12px">
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Línea de crédito constructor E2 aprobada: US$ 2,611,818 (≈ S/ 9M)</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Uso proyectado para obra E2: S/ 4,500,000 (máx. S/ 5,000,000)</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Holgura disponible: <strong>≈ S/ 4,010,771–4,510,771</strong></span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Saldo TURF a cubrir: ≈ US$ 969k (≈ S/ 3,343,000)</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Tasa IBK estimada: <strong>11%–12% anual</strong> vs. 16–17% de terceros</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Sin necesidad de adendas a fideicomisos ni partes adicionales</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#1E7145">●</span><span>Repago: flujos de ventas E2 dentro de la estructura fiduciaria existente</span></div>
+      </div>
+      <div style="background:#E8F5EE;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#1E7145">
+        <strong>Ahorro estimado vs. Prime:</strong> ≈ 5pp de tasa × US$ 969k × 24 meses = <strong>US$ ~97k de ahorro en intereses</strong>, más la eliminación de costos de estructuración (US$ ~14,750) y de toda la complejidad legal adicional.
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;opacity:0.85">
+    <div style="background:#374151;padding:11px 15px">
+      <div style="color:#fff;font-weight:600;font-size:13px">⚠️ Alternativa — Financiamiento externo (Prime)</div>
+      <div style="color:#d1d5db;font-size:11px;margin-top:2px">Solo si IBK no puede ampliar la línea E2</div>
+    </div>
+    <div style="padding:14px 15px">
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;margin-bottom:12px">
+        <div style="display:flex;gap:8px"><span style="color:#C0392B">●</span><span>Requiere 2 waivers de IBK + adendas a ambos fideicomisos</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#C0392B">●</span><span>Unanimidad de 4 partes (IBK, TURF, La Fiduciaria, La Pacífica) por EP</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#C0392B">●</span><span>Tasa efectiva Prime: 16–17% all-in anual</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#C0392B">●</span><span>Costos de estructuración: US$ ~14,750 adicionales</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#C0392B">●</span><span>Plazo de implementación: 6–9 semanas adicionales</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#D4A017">●</span><span>IBK mantiene su posición Senior — Prime ingresa como Junior</span></div>
+      </div>
+      <div style="background:#FEF2F2;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#991b1b">
+        Mayor complejidad, mayor costo y mayor tiempo. Se plantea solo si la línea E2 no puede redirigirse.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LO QUE SE SOLICITA A IBK -->
+<div style="background:linear-gradient(135deg,#0C1F35,#0B3320);border-radius:var(--rl);padding:22px 24px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <span style="font-size:1.3rem">📋</span>
+    <h3 style="margin:0;color:#fff;font-size:14px;font-weight:600">Lo que solicitamos a Interbank en esta reunión</h3>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;border-left:3px solid #1E7145">
+      <p style="color:#6ee7b7;font-size:10.5px;font-weight:600;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em">Solicitud principal</p>
+      <p style="color:#e5e7eb;font-size:12px;margin:0;line-height:1.6">Autorización para utilizar la holgura de la línea de crédito constructor E2 (≈ S/ 4M disponibles) para cubrir el saldo pendiente de la Cuota 1 al TURF (≈ US$ 969k). Esto resuelve el problema sin involucrar a terceros, sin modificar los fideicomisos y a una tasa significativamente menor.</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;border-left:3px solid #D4A017">
+      <p style="color:#fde68a;font-size:10.5px;font-weight:600;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em">Solicitud alternativa (si la principal no procede)</p>
+      <p style="color:#e5e7eb;font-size:12px;margin:0;line-height:1.6">Otorgamiento de los dos waivers que permiten: (1) contratar financiamiento externo subordinado con Prime/ACRES; (2) pagar al TURF pese a la subordinación de deuda vigente. DLA Piper acompaña y puede absolver consultas del banco en el acto.</p>
+    </div>
+  </div>
+  <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:12px 15px;border-top:1px solid rgba(255,255,255,0.1)">
+    <p style="margin:0;color:#9ca3af;font-size:11px;line-height:1.6">Fuente: Primera Modificación al Convenio Marco Operativo (Escritura Pública 2023) · Cashflow E2 Simplicity (18 jun 2026) · Cashflow E1 Simplicity (18 jun 2026) · Análisis DLA Piper jun 2026 · Certificado Literal La Pacífica SUNARP 27/04/2026</p>
+  </div>
+</div>
+
+</div><!-- end panel-ibk -->
 
 </body>
 </html>
