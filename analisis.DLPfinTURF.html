@@ -1217,9 +1217,12 @@ function updateFill(el){
 // ── TAB SWITCH ────────────────────────────────────────────────────
 function switchTab(tab){
   ['financiamiento','gantt','prime-qa','ibk'].forEach(t=>{
-    document.getElementById('panel-'+t).style.display = t===tab?'block':'none';
-    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    var p = document.getElementById('panel-'+t);
+    var b = document.getElementById('tab-'+t);
+    if(p) p.style.display = t===tab?'block':'none';
+    if(b) b.classList.toggle('active', t===tab);
   });
+  if(tab==='gantt') setTimeout(buildGantt, 50);
 
 }
 
@@ -1801,16 +1804,7 @@ function buildGantt(){
 }
 
 // Build when tab is switched to gantt
-const origSwitchTab = window.switchTab;
-window.switchTab = function(tab){
-  ['financiamiento','gantt','prime-qa','ibk'].forEach(t=>{
-    const p = document.getElementById('panel-'+t);
-    const b = document.getElementById('tab-'+t);
-    if(p) p.style.display = t===tab?'block':'none';
-    if(b) b.classList.toggle('active', t===tab);
-  });
-  if(tab==='gantt') setTimeout(buildGantt, 50);
-};
+// switchTab handled above
 
 // Gantt is default tab — build on load with retry
 function initGantt() {
