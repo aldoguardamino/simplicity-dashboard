@@ -175,10 +175,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--bdr);font-siz
   <button class="tab-btn" onclick="switchTab('prime-qa')" id="tab-prime-qa">
     Respuestas a Prime
   </button>
-  <button class="tab-btn" onclick="switchTab('ibk')" id="tab-ibk">
+  <button class="tab-btn active" onclick="switchTab('ibk')" id="tab-ibk">
     Presentación IBK
   </button>
-  <button class="tab-btn active" onclick="switchTab('gantt')" id="tab-gantt">
+  <button class="tab-btn" onclick="switchTab('gantt')" id="tab-gantt">
     Cronograma — Ruta al Desembolso
   </button>
 </div>
@@ -1601,7 +1601,7 @@ update();
 </script>
 
 <!-- TAB: GANTT CRONOGRAMA -->
-<div id="panel-gantt">
+<div id="panel-gantt" style="display:none">
 
 <div class="hdr">
   <div class="hdr-top">
@@ -2153,7 +2153,7 @@ window.addEventListener('load', function(){ setTimeout(initGantt, 50); });
 
 
 <!-- TAB: PRESENTACIÓN IBK -->
-<div id="panel-ibk" style="display:none">
+<div id="panel-ibk">
 
 <div class="hdr">
   <div class="hdr-top">
